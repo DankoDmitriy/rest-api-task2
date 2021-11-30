@@ -1,0 +1,6 @@
+.idea
+src
+model/src/main/webapp
+persistence/src/main/webapp
+service/src/main/webapp
+.gitignore
