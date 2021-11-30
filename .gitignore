@@ -1,6 +1,10 @@
 .idea
 src/main/webapp
 model/src/main/webapp
+model/target
 persistence/src/main/webapp
+persistence/target
 service/src/main/webapp
+service/target
+web/target
 .gitignore
