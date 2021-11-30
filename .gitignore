@@ -1,5 +1,5 @@
 .idea
-src
+src/main/webapp
 model/src/main/webapp
 persistence/src/main/webapp
 service/src/main/webapp
