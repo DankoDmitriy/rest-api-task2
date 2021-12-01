@@ -26,7 +26,7 @@ public class TagController {
 
     @GetMapping("/{id}")
     public Tag getTagById(@PathVariable("id") long id) {
-        return tagService.findById(id);
+        return tagService.findById(id).orElse(null);
     }
 
     @PostMapping
@@ -43,7 +43,6 @@ public class TagController {
 
     @PatchMapping("/{id}")
     public String updateTagById(@RequestBody Tag tag, @PathVariable("id") long id) {
-        tagService.update(id, tag);
         return "update";
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class TagServiceImpl implements TagService {
@@ -22,22 +23,17 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findById(Long id) {
-        return tagDao.findById(id).orElse(null);
+    public Optional<Tag> findById(Long id) {
+        return tagDao.findById(id);
     }
 
     @Override
-    public void save(Tag tag) {
-        tagDao.save(tag);
+    public Tag save(Tag tag) {
+        return tagDao.save(tag);
     }
 
     @Override
     public void delete(Long id) {
         tagDao.delete(id);
-    }
-
-    @Override
-    public void update(Long id, Tag tag) {
-//        tagDao.update(tag);
     }
 }
