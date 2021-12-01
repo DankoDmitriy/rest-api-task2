@@ -40,9 +40,4 @@ public class TagController {
         tagService.delete(id);
         return "delete";
     }
-
-    @PatchMapping("/{id}")
-    public String updateTagById(@RequestBody Tag tag, @PathVariable("id") long id) {
-        return "update";
-    }
 }
