@@ -3,10 +3,12 @@ package com.epam.esm.impl;
 import com.epam.esm.GiftCertificateDao;
 import com.epam.esm.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao giftCertificateDao;
 

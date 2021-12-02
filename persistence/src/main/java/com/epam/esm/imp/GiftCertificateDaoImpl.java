@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "SELECT * FROM gift_certificate";
     private static final String SQL_FIND_BY_GIFT_CERTIFICATE = "SELECT * From gift_certificate WHERE id=?";
