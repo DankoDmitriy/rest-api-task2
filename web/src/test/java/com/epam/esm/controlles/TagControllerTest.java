@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
@@ -32,6 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {SpringConfig.class})
 @TestPropertySource("/mysql-test.properties")
 @WebAppConfiguration
+/*TODO - Read about this annotation in tests - in spring boot.
+ *https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/boot-features-testing.html
+ */
+//@Transactional
 public class TagControllerTest {
     private static final String SINGLE_TAG_RESULT = "{\"id\":1,\"name\":\"tag1\"}";
     private static final String SINGLE_TAG_REQUEST_URL = "/tags/1";
