@@ -7,6 +7,7 @@ import com.epam.esm.TagDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +33,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return giftCertificateDao.findById(id);
     }
 
+    //    TODO - add transactions
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
         giftCertificate = giftCertificateDao.save(giftCertificate);
+        giftCertificate.setCreateDate(LocalDateTime.now());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         List<Tag> tagItems = giftCertificate.getTagItems();
         for (Tag tagItem : tagItems) {
             tagItem = tagDao.save(tagItem);
