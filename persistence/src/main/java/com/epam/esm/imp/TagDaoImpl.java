@@ -18,7 +18,7 @@ import java.util.Optional;
 public class TagDaoImpl implements TagDao {
     private static final String SQL_FIND_ALL_TAGS = "SELECT * FROM Tag";
     private static final String SQL_FIND_BY_ID_TAG = "SELECT * From Tag WHERE id=?";
-    private static final String SQL_SAVE_TAG = "INSERT INTO tag (name) VALUES(?)";
+    private static final String SQL_SAVE_TAG = "INSERT INTO tag (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
     private static final String SQL_DELETE_TAG = "DELETE FROM tag WHERE id=?";
 
     private JdbcTemplate jdbcTemplate;

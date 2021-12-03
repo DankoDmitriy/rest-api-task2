@@ -3,12 +3,14 @@ package com.epam.esm;
 import com.epam.esm.impl.GiftCertificate;
 import com.epam.esm.impl.Tag;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
     private static final String GIFT_ID = "gift_id";
     private static final String GIFT_NAME = "gift_name";
