@@ -2,6 +2,9 @@ package com.epam.esm.impl;
 
 import com.epam.esm.TagDao;
 import com.epam.esm.TagService;
+import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.validator.TagValidator;
+import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +14,12 @@ import java.util.Optional;
 @Component
 public class TagServiceImpl implements TagService {
     private TagDao tagDao;
+    private TagValidator validator;
 
     @Autowired
-    public TagServiceImpl(TagDao tagDao) {
+    public TagServiceImpl(TagDao tagDao, TagValidator validator) {
         this.tagDao = tagDao;
+        this.validator = validator;
     }
 
     @Override
@@ -29,6 +34,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag save(Tag tag) {
+        List<ValidationError> validationErrors = validator.validateTagName(tag.getName());
+        if (!validationErrors.isEmpty()) {
+            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+        }
         return tagDao.save(tag);
     }
 

@@ -3,7 +3,11 @@ package com.epam.esm.impl;
 import com.epam.esm.GiftCertificateDao;
 import com.epam.esm.GiftCertificateService;
 import com.epam.esm.TagDao;
+import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
+import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.TagValidator;
+import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +20,22 @@ import java.util.Optional;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao giftCertificateDao;
     private TagDao tagDao;
-    private GiftCertificateSearchParamsValidator validator;
+    private GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator;
+    private GiftCertificateValidator giftCertificateValidator;
+    private TagValidator tagValidator;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao, GiftCertificateSearchParamsValidator inputDataValidator) {
+    public GiftCertificateServiceImpl(
+            GiftCertificateDao giftCertificateDao,
+            TagDao tagDao,
+            GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator,
+            GiftCertificateValidator giftCertificateValidator,
+            TagValidator tagValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
-        this.validator = inputDataValidator;
+        this.giftCertificateSearchParamsValidator = giftCertificateSearchParamsValidator;
+        this.giftCertificateValidator = giftCertificateValidator;
+        this.tagValidator = tagValidator;
     }
 
     @Override
@@ -38,6 +51,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     //    TODO - add transactions
     @Override
     public GiftCertificate save(GiftCertificate giftCertificate) {
+        List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
+        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
+
+        if (!validationErrors.isEmpty()) {
+            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+        }
+
         giftCertificate = giftCertificateDao.save(giftCertificate);
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -53,6 +73,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     //    TODO add Transactions and TEST this method
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
+        List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
+        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
+        if (!validationErrors.isEmpty()) {
+            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+        }
+
         GiftCertificate certificateFromDB = giftCertificateDao.findById(giftCertificate.getId()).get();
 
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
