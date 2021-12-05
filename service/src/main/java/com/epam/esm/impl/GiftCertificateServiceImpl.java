@@ -1,7 +1,6 @@
 package com.epam.esm.impl;
 
 import com.epam.esm.GiftCertificateDao;
-import com.epam.esm.GiftCertificateRowMapper;
 import com.epam.esm.GiftCertificateService;
 import com.epam.esm.TagDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import java.util.Optional;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao giftCertificateDao;
     private TagDao tagDao;
-    private GiftCertificateRowMapper giftCertificateRowMapper;
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
@@ -39,11 +37,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificate = giftCertificateDao.save(giftCertificate);
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
-        List<Tag> tagItems = giftCertificate.getTagItems();
-        for (Tag tagItem : tagItems) {
-            tagItem = tagDao.save(tagItem);
-            giftCertificateDao.attachTag(giftCertificate.getId(), tagItem.getId());
-        }
+        attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTagItems());
         return giftCertificate;
     }
 
@@ -52,8 +46,28 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDao.delete(id);
     }
 
+    //    TODO add Transactions and TEST this method
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        return giftCertificateDao.update(giftCertificate);
+        GiftCertificate certificateFromDB = giftCertificateDao.findById(giftCertificate.getId()).get();
+
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
+        giftCertificate = giftCertificateDao.update(giftCertificate);
+        attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTagItems());
+
+        List<Tag> tagItemsFromDb = certificateFromDB.getTagItems();
+        for (Tag tag : tagItemsFromDb) {
+            if (!giftCertificate.getTagItems().contains(tag)) {
+                giftCertificateDao.detachTag(giftCertificate.getId(), tag.getId());
+            }
+        }
+        return giftCertificate;
+    }
+
+    private void attachTagToGiftCertificate(Long giftCertificateId, List<Tag> tagItems) {
+        for (Tag tag : tagItems) {
+            tag = tagDao.save(tag);
+            giftCertificateDao.attachTag(giftCertificateId, tag.getId());
+        }
     }
 }
