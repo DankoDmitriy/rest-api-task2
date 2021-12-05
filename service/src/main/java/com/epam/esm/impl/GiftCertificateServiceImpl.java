@@ -63,10 +63,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
         }
 
+        LocalDateTime time = LocalDateTime.now();
+        giftCertificate.setCreateDate(time);
+        giftCertificate.setLastUpdateDate(time);
         giftCertificate = giftCertificateDao.save(giftCertificate);
-        giftCertificate.setCreateDate(LocalDateTime.now());
-        giftCertificate.setLastUpdateDate(LocalDateTime.now());
-        attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTagItems());
+        if (giftCertificate.getTagItems() != null) {
+            attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTagItems());
+        }
         return giftCertificate;
     }
 

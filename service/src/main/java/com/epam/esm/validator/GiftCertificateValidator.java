@@ -9,11 +9,11 @@ import java.util.List;
 
 @Component
 public class GiftCertificateValidator {
-    private static final String GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP = "^[a-zA-ZА-Яа-я\\s]{2,255}$";
+    private static final String GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP = "^[a-zA-ZА-Яа-я0-9\\s]{2,255}$";
     private static final int GIFT_CERTIFICATE_NAME_MIN_LENGTH = 2;
     private static final int GIFT_CERTIFICATE_NAME_MAX_LENGTH = 255;
 
-    private static final String GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP = "^[a-zA-ZА-Яа-я,.:;!?\\s]{2,255}$";
+    private static final String GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP = "^[a-zA-ZА-Яа-я0-9,.:;!?\\s]{2,255}$";
     private static final int GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH = 2;
     private static final int GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH = 255;
 

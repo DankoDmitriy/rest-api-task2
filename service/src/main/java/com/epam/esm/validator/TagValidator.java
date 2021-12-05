@@ -31,6 +31,9 @@ public class TagValidator {
 
     public List<ValidationError> validateTagNameList(List<Tag> tagItems) {
         List<ValidationError> validationErrors = new ArrayList<>();
+        if (tagItems == null || tagItems.isEmpty()) {
+            return validationErrors;
+        }
         for (Tag tagItem : tagItems) {
             validationErrors.addAll(validateTagName(tagItem.getName()));
         }
