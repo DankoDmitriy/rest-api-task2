@@ -3,6 +3,7 @@ package com.epam.esm.impl;
 import com.epam.esm.GiftCertificateDao;
 import com.epam.esm.GiftCertificateService;
 import com.epam.esm.TagDao;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
@@ -45,7 +46,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public Optional<GiftCertificate> findById(Long id) {
-        return giftCertificateDao.findById(id);
+        Optional<GiftCertificate> optionalGiftCertificate = giftCertificateDao.findById(id);
+        if (!optionalGiftCertificate.isPresent()) {
+            throw new EntityNotFoundException("Gift certificate had not found by id.", id);
+        }
+        return optionalGiftCertificate;
     }
 
     //    TODO - add transactions

@@ -2,6 +2,7 @@ package com.epam.esm.impl;
 
 import com.epam.esm.TagDao;
 import com.epam.esm.TagService;
+import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
@@ -29,6 +30,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Optional<Tag> findById(Long id) {
+        Optional<Tag> optionalTag = tagDao.findById(id);
+        if (!optionalTag.isPresent()) {
+            throw new EntityNotFoundException("Tag had not found by id.", id);
+        }
         return tagDao.findById(id);
     }
 
