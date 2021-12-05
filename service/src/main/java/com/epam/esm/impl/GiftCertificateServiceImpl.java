@@ -96,6 +96,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> searchGiftCertificate(Map<String, String[]> searchParams) {
+        List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
+        if (!validationErrors.isEmpty()) {
+            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+        }
         return giftCertificateDao.search(searchParams);
     }
 
