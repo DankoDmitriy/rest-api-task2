@@ -5,8 +5,10 @@ import com.epam.esm.impl.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/gift", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,5 +45,11 @@ public class GiftCertificateController {
     @PatchMapping("/{id}")
     public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate, @PathVariable("id") long id) {
         return giftCertificateService.update(giftCertificate);
+    }
+
+    @GetMapping(value = "/search")
+    public List<GiftCertificate> searchGiftCertificate(WebRequest request) {
+        Map<String, String[]> searchParams = request.getParameterMap();
+        return giftCertificateService.searchGiftCertificate(searchParams);
     }
 }

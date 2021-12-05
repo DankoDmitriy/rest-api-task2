@@ -3,22 +3,26 @@ package com.epam.esm.impl;
 import com.epam.esm.GiftCertificateDao;
 import com.epam.esm.GiftCertificateService;
 import com.epam.esm.TagDao;
+import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao giftCertificateDao;
     private TagDao tagDao;
+    private GiftCertificateSearchParamsValidator validator;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao, GiftCertificateSearchParamsValidator inputDataValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
+        this.validator = inputDataValidator;
     }
 
     @Override
@@ -62,6 +66,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             }
         }
         return giftCertificate;
+    }
+
+    @Override
+    public List<GiftCertificate> searchGiftCertificate(Map<String, String[]> searchParams) {
+        return giftCertificateDao.search(searchParams);
     }
 
     private void attachTagToGiftCertificate(Long giftCertificateId, List<Tag> tagItems) {
