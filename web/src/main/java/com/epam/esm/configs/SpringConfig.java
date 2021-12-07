@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,6 +20,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:mysql.properties")
 @EnableWebMvc
 public class SpringConfig {
+    private final static String LOCALIZATION_PATCH = "localization/error_messages";
     private final ApplicationContext applicationContext;
 
     @Value("${mysql.driver}")
@@ -53,15 +56,17 @@ public class SpringConfig {
         return new JdbcTemplate(dataSource());
     }
 
-/*
-    TODO - BEAN FOR LOCALIZATION: make properties at first!!!
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("errorMessage");
+        messageSource.setBasename(LOCALIZATION_PATCH);
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
-*/
 }
