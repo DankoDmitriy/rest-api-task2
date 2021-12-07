@@ -34,7 +34,7 @@ public class ControllerAdvice {
     public ResponseEntity<ExceptionResponse> handlerException(IncorrectEntityException exception) {
         return new ResponseEntity<ExceptionResponse>(
                 new ExceptionResponse(
-                        exception.getMessage(),
+                        enumToStringLocaleMessage(exception.getErrorMessage()),
                         enumListToStringList(exception.getValidationErrors()),
                         LocalDateTime.now().toString(),
                         ERROR_CODE_0001)
@@ -45,7 +45,7 @@ public class ControllerAdvice {
     public ResponseEntity<ExceptionResponse> handlerException(EntityNotFoundException exception) {
         return new ResponseEntity<ExceptionResponse>(
                 new ExceptionResponse(
-                        exception.getMessage(),
+                        enumToStringLocaleMessage(exception.getErrorMessage()),
                         Arrays.asList(exception.getId().toString()),
                         LocalDateTime.now().toString(),
                         ERROR_CODE_0002)
@@ -54,10 +54,14 @@ public class ControllerAdvice {
 
     private List<String> enumListToStringList(List<ValidationError> validationErrors) {
         List<String> strings = new ArrayList<>();
-        Locale locale = LocaleContextHolder.getLocale();
         for (ValidationError error : validationErrors) {
-            strings.add(messageSource.getMessage(error.toString(), null, locale));
+            strings.add(enumToStringLocaleMessage(error));
         }
         return strings;
+    }
+
+    private String enumToStringLocaleMessage(ValidationError error) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return messageSource.getMessage(error.toString(), null, locale);
     }
 }

@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Component
 public class TagDaoImpl implements TagDao {
+    private static final int TAG_NAME_INDEX = 1;
     private static final String SQL_FIND_ALL_TAGS = "SELECT * FROM Tag";
     private static final String SQL_FIND_BY_ID_TAG = "SELECT * From Tag WHERE id=?";
     private static final String SQL_SAVE_TAG = "INSERT INTO tag (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
@@ -45,7 +46,7 @@ public class TagDaoImpl implements TagDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement(SQL_SAVE_TAG, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, tag.getName());
+            ps.setString(TAG_NAME_INDEX, tag.getName());
             return ps;
         }, keyHolder);
         tag.setId(keyHolder.getKey().longValue());

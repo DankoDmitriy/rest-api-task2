@@ -48,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public Optional<GiftCertificate> findById(Long id) {
         Optional<GiftCertificate> optionalGiftCertificate = giftCertificateDao.findById(id);
         if (!optionalGiftCertificate.isPresent()) {
-            throw new EntityNotFoundException("Gift certificate had not found by id.", id);
+            throw new EntityNotFoundException(ValidationError.GIFT_CERTIFICATE_NOT_FOUND_BY_ID, id);
         }
         return optionalGiftCertificate;
     }
@@ -60,7 +60,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
 
         if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
         }
 
         LocalDateTime time = LocalDateTime.now();
@@ -84,7 +84,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
         validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
         if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
         }
 
         GiftCertificate certificateFromDB = giftCertificateDao.findById(giftCertificate.getId()).get();
@@ -106,7 +106,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificate> searchGiftCertificate(Map<String, String[]> searchParams) {
         List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
         if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
         }
         return giftCertificateDao.search(searchParams);
     }

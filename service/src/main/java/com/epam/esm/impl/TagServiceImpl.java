@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
     public Optional<Tag> findById(Long id) {
         Optional<Tag> optionalTag = tagDao.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new EntityNotFoundException("Tag had not found by id.", id);
+            throw new EntityNotFoundException(ValidationError.TAG_NOT_FOUND_BY_ID, id);
         }
         return tagDao.findById(id);
     }
@@ -41,7 +41,7 @@ public class TagServiceImpl implements TagService {
     public Tag save(Tag tag) {
         List<ValidationError> validationErrors = validator.validateTagName(tag.getName());
         if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException("You have problem with input parameters.", validationErrors);
+            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
         }
         return tagDao.save(tag);
     }

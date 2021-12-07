@@ -5,10 +5,11 @@ import com.epam.esm.validator.ValidationError;
 import java.util.List;
 
 public class IncorrectEntityException extends RuntimeException {
+    private ValidationError errorMessage;
     private List<ValidationError> validationErrors;
 
-    public IncorrectEntityException(String message, List<ValidationError> validationErrors) {
-        super(message);
+    public IncorrectEntityException(ValidationError errorMessage, List<ValidationError> validationErrors) {
+        this.errorMessage = errorMessage;
         this.validationErrors = validationErrors;
     }
 
@@ -16,4 +17,7 @@ public class IncorrectEntityException extends RuntimeException {
         return validationErrors;
     }
 
+    public ValidationError getErrorMessage() {
+        return errorMessage;
+    }
 }

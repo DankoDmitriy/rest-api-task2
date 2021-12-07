@@ -16,14 +16,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.epam.esm.SearchParameters.SEARCH_TAG_NAME;
-import static com.epam.esm.SearchParameters.SEARCH_SORT_BY_GIFT_CREATE_DATE;
-import static com.epam.esm.SearchParameters.SEARCH_GIFT_NAME;
 import static com.epam.esm.SearchParameters.SEARCH_GIFT_DESCRIPTION;
+import static com.epam.esm.SearchParameters.SEARCH_GIFT_NAME;
+import static com.epam.esm.SearchParameters.SEARCH_SORT_BY_GIFT_CREATE_DATE;
 import static com.epam.esm.SearchParameters.SEARCH_SORT_BY_GIFT_NAME;
+import static com.epam.esm.SearchParameters.SEARCH_TAG_NAME;
 
 @Component
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
+    private final static int GIFT_CERTIFICATE_NAME_INDEX = 1;
+    private final static int GIFT_CERTIFICATE_DESCRIPTION_INDEX = 2;
+    private final static int GIFT_CERTIFICATE_PRICE_INDEX = 3;
+    private final static int GIFT_CERTIFICATE_DURATION_INDEX = 4;
+    private final static int GIFT_CERTIFICATE_CREATE_DATE_INDEX = 5;
+    private final static int GIFT_CERTIFICATE_UPDATE_DATE_INDEX = 6;
+
     private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "SELECT gift.id as gift_id, gift.name as gift_name,"
             + " gift.description, gift.price, gift.duration, gift.create_date, gift.last_update_date,"
             + " tag.id as tag_id, tag.name as tag_name FROM gift_certificate as gift LEFT JOIN certificate_tag as link"
@@ -95,12 +102,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement(SQL_SAVE_GIFT_CERTIFICATE, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, giftCertificate.getName());
-            ps.setString(2, giftCertificate.getDescription());
-            ps.setBigDecimal(3, giftCertificate.getPrice());
-            ps.setInt(4, giftCertificate.getDuration());
-            ps.setTimestamp(5, Timestamp.valueOf(giftCertificate.getCreateDate()));
-            ps.setTimestamp(6, Timestamp.valueOf(giftCertificate.getLastUpdateDate()));
+            ps.setString(GIFT_CERTIFICATE_NAME_INDEX, giftCertificate.getName());
+            ps.setString(GIFT_CERTIFICATE_DESCRIPTION_INDEX, giftCertificate.getDescription());
+            ps.setBigDecimal(GIFT_CERTIFICATE_PRICE_INDEX, giftCertificate.getPrice());
+            ps.setInt(GIFT_CERTIFICATE_DURATION_INDEX, giftCertificate.getDuration());
+            ps.setTimestamp(GIFT_CERTIFICATE_CREATE_DATE_INDEX, Timestamp.valueOf(giftCertificate.getCreateDate()));
+            ps.setTimestamp(GIFT_CERTIFICATE_UPDATE_DATE_INDEX, Timestamp.valueOf(giftCertificate.getLastUpdateDate()));
             return ps;
         }, keyHolder);
         giftCertificate.setId(keyHolder.getKey().longValue());
