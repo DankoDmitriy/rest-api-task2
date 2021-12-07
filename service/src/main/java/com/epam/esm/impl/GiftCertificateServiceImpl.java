@@ -11,6 +11,7 @@ import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,8 +54,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return optionalGiftCertificate;
     }
 
-    //    TODO - add transactions
     @Override
+    @Transactional
     public GiftCertificate save(GiftCertificate giftCertificate) {
         List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
         validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
@@ -78,8 +79,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDao.delete(id);
     }
 
-    //    TODO add Transactions and TEST this method
     @Override
+    @Transactional
     public GiftCertificate update(GiftCertificate giftCertificate) {
         List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
         validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));

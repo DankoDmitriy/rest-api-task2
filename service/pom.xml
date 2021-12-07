@@ -36,6 +36,12 @@
             <artifactId>persistence</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>5.3.12</version>
+        </dependency>
     </dependencies>
 
 </project>

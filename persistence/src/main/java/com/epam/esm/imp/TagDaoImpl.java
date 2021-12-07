@@ -19,8 +19,12 @@ public class TagDaoImpl implements TagDao {
     private static final int TAG_NAME_INDEX = 1;
     private static final String SQL_FIND_ALL_TAGS = "SELECT * FROM Tag";
     private static final String SQL_FIND_BY_ID_TAG = "SELECT * From Tag WHERE id=?";
-    private static final String SQL_SAVE_TAG = "INSERT INTO tag (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
-    private static final String SQL_DELETE_TAG = "DELETE FROM tag WHERE id=?";
+    private static final String SQL_SAVE_TAG = "INSERT INTO tag (name) VALUES(?) "
+            + " ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)";
+
+    private static final String SQL_DELETE_TAG = "DELETE certificate_tag, tag "
+            + "FROM certificate_tag LEFT JOIN tag ON tag.id=certificate_tag.tag_id "
+            + "WHERE certificate_tag.tag_id=?";
 
     private JdbcTemplate jdbcTemplate;
 
