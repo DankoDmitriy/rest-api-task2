@@ -16,15 +16,16 @@ public class TagValidator {
         List<ValidationError> validationErrors = new ArrayList<>();
         if (tagName == null) {
             validationErrors.add(ValidationError.TAG_NAME_IS_EMPTY_OR_NULL);
-        }
-        if (tagName.length() < TAG_NAME_MIN_LENGTH) {
-            validationErrors.add(ValidationError.TAG_NAME_LENGTH_IS_SHORT);
-        }
-        if (tagName.length() > TAG_NAME_MAX_LENGTH) {
-            validationErrors.add(ValidationError.TAG_NAME_LENGTH_IS_LONG);
-        }
-        if (!tagName.matches(TAG_NAME_SYMBOL_REGEXP)) {
-            validationErrors.add(ValidationError.TAG_NAME_HAVE_NOT_CORRECT_SYMBOLS);
+        } else {
+            if (tagName.length() < TAG_NAME_MIN_LENGTH) {
+                validationErrors.add(ValidationError.TAG_NAME_LENGTH_IS_SHORT);
+            }
+            if (tagName.length() > TAG_NAME_MAX_LENGTH) {
+                validationErrors.add(ValidationError.TAG_NAME_LENGTH_IS_LONG);
+            }
+            if (!tagName.matches(TAG_NAME_SYMBOL_REGEXP)) {
+                validationErrors.add(ValidationError.TAG_NAME_HAVE_NOT_CORRECT_SYMBOLS);
+            }
         }
         return validationErrors;
     }

@@ -27,42 +27,49 @@ public class GiftCertificateValidator {
         List<ValidationError> validationErrors = new ArrayList<>();
         if (certificate.getName() == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_IS_EMPTY_OR_NULL);
+        } else {
+            if (certificate.getName().length() < GIFT_CERTIFICATE_NAME_MIN_LENGTH) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_SHORT);
+            }
+            if (certificate.getName().length() > GIFT_CERTIFICATE_NAME_MAX_LENGTH) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_LONG);
+            }
+            if (!certificate.getName().matches(GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP)) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS);
+            }
         }
-        if (certificate.getName().length() < GIFT_CERTIFICATE_NAME_MIN_LENGTH) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_SHORT);
-        }
-        if (certificate.getName().length() > GIFT_CERTIFICATE_NAME_MAX_LENGTH) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_LONG);
-        }
-        if (!certificate.getName().matches(GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP)) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS);
-        }
-
         if (certificate.getDescription() == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_IS_EMPTY_OR_NULL);
+        } else {
+            if (certificate.getDescription().length() < GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG);
+            }
+            if (certificate.getDescription().length() > GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT);
+            }
+            if (!certificate.getDescription().matches(GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP)) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS);
+            }
         }
-        if (certificate.getDescription().length() < GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG);
+        if (certificate.getDuration() == null) {
+            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_IS_EMPTY_OR_NULL);
+        } else {
+            if (certificate.getDuration() < GIFT_CERTIFICATE_DURATION_MIN) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_LESS_THAN_ALLOWED_VALUE);
+            }
+            if (certificate.getDuration() > GIFT_CERTIFICATE_DURATION_MAX) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_MORE_THAN_ALLOWED_VALUE);
+            }
         }
-        if (certificate.getDescription().length() > GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT);
-        }
-        if (!certificate.getName().matches(GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP)) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS);
-        }
-
-        if (certificate.getDuration() < GIFT_CERTIFICATE_DURATION_MIN) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_LESS_THAN_ALLOWED_VALUE);
-        }
-        if (certificate.getDuration() > GIFT_CERTIFICATE_DURATION_MAX) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_MORE_THAN_ALLOWED_VALUE);
-        }
-
-        if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MIN_PRICE) == -1) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_LESS_THAN_ALLOWED_VALUE);
-        }
-        if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MAX_PRICE) == 1) {
-            validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_MORE_THAN_ALLOWED_VALUE);
+        if (certificate.getPrice() == null) {
+            validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_EMPTY_OR_NULL);
+        } else {
+            if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MIN_PRICE) == -1) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_LESS_THAN_ALLOWED_VALUE);
+            }
+            if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MAX_PRICE) == 1) {
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_MORE_THAN_ALLOWED_VALUE);
+            }
         }
         return validationErrors;
     }
