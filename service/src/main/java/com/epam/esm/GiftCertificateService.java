@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface GiftCertificateService extends BaseService<GiftCertificate> {
-    GiftCertificate update(GiftCertificate giftCertificate);
+    GiftCertificate update(Long id, GiftCertificate giftCertificate);
 
     List<GiftCertificate> searchGiftCertificate(Map<String, String[]> searchParams);
 }

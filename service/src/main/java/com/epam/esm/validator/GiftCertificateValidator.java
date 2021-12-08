@@ -23,54 +23,74 @@ public class GiftCertificateValidator {
     private static final BigDecimal GIFT_CERTIFICATE_MIN_PRICE = new BigDecimal("0.01");
     private static final BigDecimal GIFT_CERTIFICATE_MAX_PRICE = new BigDecimal("1000");
 
-    public List<ValidationError> validateCertificate(GiftCertificate certificate) {
-        List<ValidationError> validationErrors = new ArrayList<>();
-        if (certificate.getName() == null) {
+    public List<ValidationError> validateName(String name, List<ValidationError> validationErrors) {
+        if (name == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_IS_EMPTY_OR_NULL);
         } else {
-            if (certificate.getName().length() < GIFT_CERTIFICATE_NAME_MIN_LENGTH) {
+            if (name.length() < GIFT_CERTIFICATE_NAME_MIN_LENGTH) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_SHORT);
             }
-            if (certificate.getName().length() > GIFT_CERTIFICATE_NAME_MAX_LENGTH) {
+            if (name.length() > GIFT_CERTIFICATE_NAME_MAX_LENGTH) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_LONG);
             }
-            if (!certificate.getName().matches(GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP)) {
+            if (!name.matches(GIFT_CERTIFICATE_NAME_SYMBOL_REGEXP)) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS);
             }
         }
-        if (certificate.getDescription() == null) {
+        return validationErrors;
+    }
+
+    public List<ValidationError> validateDescription(String description, List<ValidationError> validationErrors) {
+        if (description == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_IS_EMPTY_OR_NULL);
         } else {
-            if (certificate.getDescription().length() < GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH) {
+            if (description.length() < GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG);
             }
-            if (certificate.getDescription().length() > GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH) {
+            if (description.length() > GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT);
             }
-            if (!certificate.getDescription().matches(GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP)) {
+            if (!description.matches(GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP)) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS);
             }
         }
-        if (certificate.getDuration() == null) {
+        return validationErrors;
+    }
+
+    public List<ValidationError> validateDuration(Integer duration, List<ValidationError> validationErrors) {
+        if (duration == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_IS_EMPTY_OR_NULL);
         } else {
-            if (certificate.getDuration() < GIFT_CERTIFICATE_DURATION_MIN) {
+            if (duration < GIFT_CERTIFICATE_DURATION_MIN) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_LESS_THAN_ALLOWED_VALUE);
             }
-            if (certificate.getDuration() > GIFT_CERTIFICATE_DURATION_MAX) {
+            if (duration > GIFT_CERTIFICATE_DURATION_MAX) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DURATION_MORE_THAN_ALLOWED_VALUE);
             }
         }
-        if (certificate.getPrice() == null) {
+        return validationErrors;
+    }
+
+    public List<ValidationError> validatePrice(BigDecimal price, List<ValidationError> validationErrors) {
+        if (price == null) {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_EMPTY_OR_NULL);
         } else {
-            if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MIN_PRICE) == -1) {
+            if (price.compareTo(GIFT_CERTIFICATE_MIN_PRICE) == -1) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_LESS_THAN_ALLOWED_VALUE);
             }
-            if (certificate.getPrice().compareTo(GIFT_CERTIFICATE_MAX_PRICE) == 1) {
+            if (price.compareTo(GIFT_CERTIFICATE_MAX_PRICE) == 1) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_PRICE_IS_MORE_THAN_ALLOWED_VALUE);
             }
         }
+        return validationErrors;
+    }
+
+    public List<ValidationError> validateCertificate(GiftCertificate certificate) {
+        List<ValidationError> validationErrors = new ArrayList<>();
+        validateName(certificate.getName(), validationErrors);
+        validateDescription(certificate.getDescription(), validationErrors);
+        validateDuration(certificate.getDuration(), validationErrors);
+        validatePrice(certificate.getPrice(), validationErrors);
         return validationErrors;
     }
 }

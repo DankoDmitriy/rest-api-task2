@@ -44,7 +44,7 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate, @PathVariable("id") long id) {
-        return giftCertificateService.update(giftCertificate);
+        return giftCertificateService.update(id, giftCertificate);
     }
 
     @GetMapping(value = "/search")
