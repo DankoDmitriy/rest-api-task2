@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -42,8 +41,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return giftCertificateDao.findAll();
+    public List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams) {
+        List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
+        if (validationErrors.contains(ValidationError.FIND_ALL)) {
+            return giftCertificateDao.findAll();
+        } else {
+            return giftCertificateDao.search(searchParams);
+        }
     }
 
     @Override
@@ -108,21 +112,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 attachTagToGiftCertificate(id, newTagsItems);
                 for (Tag tag : oldTagsItemsOld) {
                     if (!newTagsItems.contains(tag)) {
-                    giftCertificateDao.detachTag(id, tag.getId());
+                        giftCertificateDao.detachTag(id, tag.getId());
                     }
                 }
             }
         }
         return giftCertificate;
-    }
-
-    @Override
-    public List<GiftCertificate> searchGiftCertificate(Map<String, String[]> searchParams) {
-        List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
-        if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
-        }
-        return giftCertificateDao.search(searchParams);
     }
 
     private void attachTagToGiftCertificate(Long giftCertificateId, List<Tag> tagItems) {

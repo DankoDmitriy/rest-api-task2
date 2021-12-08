@@ -1,57 +1,52 @@
 package com.epam.esm.validator;
 
+import com.epam.esm.impl.GiftCertificateSearchParams;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static com.epam.esm.SearchParameters.*;
 
 @Component
 public class GiftCertificateSearchParamsValidator {
     private static final String TAG_NAME_REGEX = "^[a-zA-ZА-Яа-я\\s]{2,255}$";
     private static final String GIFT_CERTIFICATE_NAME_REGEX = "^[a-zA-ZА-Яа-я\\s]{2,255}$";
     private static final String GIFT_CERTIFICATE_DESCRIPTION_REGEX = "^[a-zA-ZА-Яа-я,.:;!?\\s]{2,255}$";
-    private static final String SORT_ASC_REGEX = "^ASC$";
-    private static final String SORT_DESC_REGEX = "^DESC$";
 
-    public List<ValidationError> validateSearchParams(Map<String, String[]> searchParams) {
+    public List<ValidationError> validateSearchParams(GiftCertificateSearchParams searchParams) {
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        String[] tagName = searchParams.get(SEARCH_TAG_NAME);
-        if (tagName != null) {
-            if (!tagName[0].matches(TAG_NAME_REGEX)) {
-                validationErrors.add(ValidationError.SEARCH_TAG_NAME_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+        if (searchParams.getTagName() == null
+                && searchParams.getGiftCertificateName() == null
+                && searchParams.getGiftCertificateDescription() == null
+                && searchParams.getSort() == null) {
+            validationErrors.add(ValidationError.FIND_ALL);
+        } else {
+
+            if (searchParams.getTagName() != null) {
+                if (!searchParams.getTagName().matches(TAG_NAME_REGEX)) {
+                    validationErrors.add(ValidationError.SEARCH_TAG_NAME_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+                }
             }
-        }
-        String[] giftName = searchParams.get(SEARCH_GIFT_NAME);
-        if (giftName != null) {
-            if (!giftName[0].matches(GIFT_CERTIFICATE_NAME_REGEX)) {
-                validationErrors.add(ValidationError.SEARCH_GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+
+            if (searchParams.getGiftCertificateName() != null) {
+                if (searchParams.getGiftCertificateName().matches(GIFT_CERTIFICATE_NAME_REGEX)) {
+                    validationErrors.add(ValidationError.SEARCH_GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+                }
             }
-        }
-        String[] giftDescription = searchParams.get(SEARCH_GIFT_DESCRIPTION);
-        if (giftDescription != null) {
-            if (!giftDescription[0].matches(GIFT_CERTIFICATE_DESCRIPTION_REGEX)) {
-                validationErrors.add(
-                        ValidationError.SEARCH_GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+
+            if (searchParams.getGiftCertificateDescription() != null) {
+                if (!searchParams.getGiftCertificateDescription().matches(GIFT_CERTIFICATE_DESCRIPTION_REGEX)) {
+                    validationErrors.add(
+                            ValidationError.SEARCH_GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+                }
             }
-        }
-        String[] giftSortByName = searchParams.get(SEARCH_SORT_BY_GIFT_NAME);
-        if (giftSortByName != null) {
-            if (!giftSortByName[0].toUpperCase().matches(SORT_ASC_REGEX) &&
-                    !giftSortByName[0].matches(SORT_DESC_REGEX)) {
-                validationErrors.add(
-                        ValidationError.SEARCH_GIFT_CERTIFICATE_NAME_FOR_SORT_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
-            }
-        }
-        String[] giftSortByCreateDate = searchParams.get(SEARCH_SORT_BY_GIFT_CREATE_DATE);
-        if (giftSortByCreateDate != null) {
-            if (!giftSortByCreateDate[0].toUpperCase().matches(SORT_ASC_REGEX) &&
-                    !giftSortByCreateDate[0].matches(SORT_DESC_REGEX)) {
-                validationErrors.add(
-                        ValidationError.SEARCH_GIFT_CERTIFICATE_CREATE_DATE_FOR_SORT_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
+            if (searchParams.getSort() != null) {
+                for (String s : searchParams.getSort()) {
+                    if (!searchParams.getSortTypes().contains(s)) {
+                        validationErrors.add(
+                                ValidationError.SEARCH_GIFT_CERTIFICATE_SORT_TYPE_IS_NOT_CORRECT);
+                    }
+                }
             }
         }
         return validationErrors;

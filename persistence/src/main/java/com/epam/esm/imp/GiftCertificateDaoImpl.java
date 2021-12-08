@@ -3,6 +3,7 @@ package com.epam.esm.imp;
 import com.epam.esm.GiftCertificateDao;
 import com.epam.esm.GiftCertificateRowMapper;
 import com.epam.esm.impl.GiftCertificate;
+import com.epam.esm.impl.GiftCertificateSearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,14 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import static com.epam.esm.SearchParameters.SEARCH_GIFT_DESCRIPTION;
-import static com.epam.esm.SearchParameters.SEARCH_GIFT_NAME;
-import static com.epam.esm.SearchParameters.SEARCH_SORT_BY_GIFT_CREATE_DATE;
-import static com.epam.esm.SearchParameters.SEARCH_SORT_BY_GIFT_NAME;
-import static com.epam.esm.SearchParameters.SEARCH_TAG_NAME;
+import java.util.Set;
 
 @Component
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
@@ -45,8 +40,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             + " duration, create_date, last_update_date) VALUES(?,?,?,?,?,?)";
 
     private static final String SQL_DELETE_GIFT_CERTIFICATE = "DELETE certificate_tag, gift_certificate"
-            + " FROM certificate_tag LEFT JOIN gift_certificate ON gift_certificate.id=certificate_tag.gift_certificate_id"
+            + " FROM certificate_tag LEFT JOIN "
+            + "gift_certificate ON gift_certificate.id=certificate_tag.gift_certificate_id"
             + " WHERE certificate_tag.gift_certificate_id=?";
+
+    private static final String SQL_DELETE_GIFT_CERTIFICATE_WITH_OUT_TAGS = "DELETE FROM gift_certificate where id=?";
 
     private static final String SQL_UPDATE_GIFT_CERTIFICATE = "UPDATE gift_certificate SET name=?, description=?,"
             + " price=?, duration=?, create_date=?, last_update_date=? WHERE id=?";
@@ -60,21 +58,23 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String SQL_FIND_GIFT_CERTIFICATE = "SELECT gift.id as gift_id, gift.name as gift_name,"
             + " gift.description, gift.price, gift.duration, gift.create_date, gift.last_update_date,"
             + " tag.id as tag_id, tag.name as tag_name FROM gift_certificate as gift LEFT JOIN certificate_tag as link "
-            + " ON link.gift_certificate_id = gift.id LEFT JOIN tag ON link.tag_id=tag.id WHERE ";
+            + " ON link.gift_certificate_id = gift.id LEFT JOIN tag ON link.tag_id=tag.id ";
 
-    private static final String COLLUM_TAG_NAME = "tag.name";
-    private static final String COLLUM_GIFT_CERTIFICATE_NAME = "gift.name";
-    private static final String COLLUM_GIFT_CERTIFICATE_DESCRIPTION = "description";
-    private static final String COLLUM_GIFT_CERTIFICATE_ID = "gift.id";
-    private static final String COLLUM_GIFT_CERTIFICATE_CREATE_DATE = "gift.create_date";
-    private static final String SQL_LIKE = "LIKE";
-    private static final String SQL_PERCENT = "%";
-    private static final String SQL_SPACE = " ";
-    private static final String SQL_QUOTE = "'";
-    private static final String SQl_COMMA = ",";
-    private static final String SQL_AND = "and";
-    private static final String SQl_ORDER = " ORDER BY";
-    private static final String SQl_ORDER_ASC = " ASC";
+    private static final String SEARCH_BY_END = "%' ";
+    private final static String SEARCH_BY_TAG_NAME = " tag.name LIKE '%";
+    private final static String SEARCH_BY_GIFT_CERTIFICATE_NAME = " gift.name LIKE '%";
+    private final static String SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION = " description LIKE '%";
+
+    private final static String ORDER_BY_GIFT_CERTIFICATE_NAME_DESC = " gift.name DESC ";
+    private final static String ORDER_BY_GIFT_CERTIFICATE_NAME_ASC = " gift.name ASC ";
+    private final static String ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_DESC = " gift.create_date DESC ";
+    private final static String ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_ASC = " gift.create_date ASC ";
+    private final static String ORDER_BY_GIFT_CERTIFICATE_ID = " gift.id ASC ";
+
+    private static final String SQl_COMMA = ", ";
+    private static final String SQL_AND = " and ";
+    private static final String SQl_ORDER = " ORDER BY ";
+    private static final String SQL_WHERE = " WHERE ";
 
     private JdbcTemplate jdbcTemplate;
     private GiftCertificateRowMapper giftCertificateRowMapper;
@@ -117,6 +117,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public void delete(Long id) {
         jdbcTemplate.update(SQL_DELETE_GIFT_CERTIFICATE, id);
+        jdbcTemplate.update(SQL_DELETE_GIFT_CERTIFICATE_WITH_OUT_TAGS, id);
     }
 
     @Override
@@ -143,81 +144,71 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> search(Map<String, String[]> parameters) {
-        return jdbcTemplate.query(generateSearchSqlCriteria(parameters), giftCertificateRowMapper);
+    public List<GiftCertificate> search(GiftCertificateSearchParams searchParams) {
+        return jdbcTemplate.query(generateSearchSqlCriteria(searchParams), giftCertificateRowMapper);
     }
 
-    private String generateSearchSqlCriteria(Map<String, String[]> inputCriteriaMap) {
-        String tagName = inputCriteriaMap.containsKey(SEARCH_TAG_NAME) ?
-                inputCriteriaMap.get(SEARCH_TAG_NAME)[0] : null;
-        String giftCertificateName = inputCriteriaMap.containsKey(SEARCH_GIFT_NAME) ?
-                inputCriteriaMap.get(SEARCH_GIFT_NAME)[0] : null;
-        String giftCertificateDescription = inputCriteriaMap.containsKey(SEARCH_GIFT_DESCRIPTION) ?
-                inputCriteriaMap.get(SEARCH_GIFT_DESCRIPTION)[0] : null;
-        String sortByGiftCertificateName = inputCriteriaMap.containsKey(SEARCH_SORT_BY_GIFT_NAME) ?
-                inputCriteriaMap.get(SEARCH_SORT_BY_GIFT_NAME)[0] : null;
-        String sortByGiftCertificateCreateDate = inputCriteriaMap.containsKey(SEARCH_SORT_BY_GIFT_CREATE_DATE) ?
-                inputCriteriaMap.get(SEARCH_SORT_BY_GIFT_CREATE_DATE)[0] : null;
-        boolean andAdd = false;
-        boolean commaFlag = false;
+    private String generateSearchSqlCriteria(GiftCertificateSearchParams searchParams) {
         StringBuilder sb = new StringBuilder();
+        sb.append(SQL_FIND_GIFT_CERTIFICATE);
+        boolean putSqlWhere = false;
+        if (searchParams.getTagName() != null) {
+            sb.append(SQL_WHERE).append(SEARCH_BY_TAG_NAME).append(searchParams.getTagName()).append(SEARCH_BY_END);
+            putSqlWhere = true;
+        }
+        if (searchParams.getGiftCertificateName() != null) {
+            if (putSqlWhere) {
+                sb.append(SQL_AND)
+                        .append(SEARCH_BY_GIFT_CERTIFICATE_NAME)
+                        .append(searchParams.getGiftCertificateName())
+                        .append(SEARCH_BY_END);
+            } else {
+                sb.append(SQL_WHERE)
+                        .append(SEARCH_BY_GIFT_CERTIFICATE_NAME)
+                        .append(searchParams.getGiftCertificateName())
+                        .append(SEARCH_BY_END);
+                putSqlWhere = true;
+            }
+        }
+        if (searchParams.getGiftCertificateDescription() != null) {
+            if (putSqlWhere) {
+                sb.append(SQL_AND)
+                        .append(SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION)
+                        .append(searchParams.getGiftCertificateDescription())
+                        .append(SEARCH_BY_END);
+            } else {
+                sb.append(SQL_WHERE)
+                        .append(SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION)
+                        .append(searchParams.getGiftCertificateDescription())
+                        .append(SEARCH_BY_END);
+            }
+        }
 
-        if (tagName != null) {
-            addCriteriaParameter(andAdd, sb, COLLUM_TAG_NAME, tagName);
-            andAdd = true;
+        sb.append(SQl_ORDER);
+        if (searchParams.getSort() != null && searchParams.getSort().size() > 0) {
+            Set<String> sort = searchParams.getSort();
+            for (String s : sort) {
+                switch (s) {
+                    case "giftCertificateName-":
+                        sb.append(ORDER_BY_GIFT_CERTIFICATE_NAME_DESC)
+                                .append(SQl_COMMA);
+                        break;
+                    case "giftCertificateName+":
+                        sb.append(ORDER_BY_GIFT_CERTIFICATE_NAME_ASC)
+                                .append(SQl_COMMA);
+                        break;
+                    case "sortByCreateDate+":
+                        sb.append(ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_ASC)
+                                .append(SQl_COMMA);
+                        break;
+                    case "sortByCreateDate-":
+                        sb.append(ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_DESC)
+                                .append(SQl_COMMA);
+                        break;
+                }
+            }
         }
-        if (giftCertificateName != null) {
-            addCriteriaParameter(andAdd, sb, COLLUM_GIFT_CERTIFICATE_NAME, giftCertificateName);
-            andAdd = true;
-        }
-        if (giftCertificateDescription != null) {
-            addCriteriaParameter(andAdd, sb, COLLUM_GIFT_CERTIFICATE_DESCRIPTION, giftCertificateDescription);
-            andAdd = true;
-        }
-        sb.append(SQl_ORDER).append(SQL_SPACE);
-
-        if (sortByGiftCertificateName != null) {
-            addSearchParameter(sb, commaFlag, COLLUM_GIFT_CERTIFICATE_NAME, sortByGiftCertificateName);
-            commaFlag = true;
-        }
-
-        if (sortByGiftCertificateCreateDate != null) {
-            addSearchParameter(sb, commaFlag, COLLUM_GIFT_CERTIFICATE_CREATE_DATE, sortByGiftCertificateCreateDate);
-            commaFlag = true;
-        }
-        addSearchParameter(sb, commaFlag, COLLUM_GIFT_CERTIFICATE_ID, SQl_ORDER_ASC);
-        if (andAdd) {
-            return SQL_FIND_GIFT_CERTIFICATE + sb.toString();
-        } else {
-            return null;
-        }
-    }
-
-    private void addCriteriaParameter(boolean andAdd, StringBuilder sb, String columnName, String searchRex) {
-        if (andAdd) {
-            sb.append(SQL_SPACE)
-                    .append(SQL_AND);
-        }
-        sb.append(SQL_SPACE)
-                .append(columnName)
-                .append(SQL_SPACE)
-                .append(SQL_LIKE)
-                .append(SQL_SPACE)
-                .append(SQL_QUOTE)
-                .append(SQL_PERCENT)
-                .append(searchRex)
-                .append(SQL_PERCENT)
-                .append(SQL_QUOTE)
-                .append(SQL_SPACE);
-    }
-
-    private void addSearchParameter(StringBuilder sb, boolean commaFlag, String columnName, String sortType) {
-        if (commaFlag) {
-            sb.append(SQL_SPACE).append(SQl_COMMA);
-        }
-        sb.append(SQL_SPACE)
-                .append(columnName)
-                .append(SQL_SPACE)
-                .append(sortType);
+        sb.append(ORDER_BY_GIFT_CERTIFICATE_ID);
+        return sb.toString();
     }
 }
