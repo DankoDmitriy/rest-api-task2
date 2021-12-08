@@ -3,7 +3,9 @@ package com.epam.esm.contollers;
 import com.epam.esm.TagService;
 import com.epam.esm.impl.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,25 +27,23 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> getAllTags() {
-        List<Tag> tagItems = tagService.findAll();
-        return tagItems;
+    public ResponseEntity<List<Tag>> getAllTags() {
+        return new ResponseEntity<>(tagService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Tag getTagById(@PathVariable("id") long id) {
-        return tagService.findById(id).orElse(null);
+    public ResponseEntity<Tag> getTagById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(tagService.findById(id).orElse(null), HttpStatus.OK);
     }
 
     @PostMapping
-    public Tag addTag(@RequestBody Tag tag) {
-        tagService.save(tag);
-        return tag;
+    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
+        return new ResponseEntity<>(tagService.save(tag), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTagById(@PathVariable("id") long id) {
+    public ResponseEntity<Void> deleteTagById(@PathVariable("id") long id) {
         tagService.delete(id);
-        return "delete";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

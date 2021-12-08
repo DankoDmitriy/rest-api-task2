@@ -46,6 +46,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (validationErrors.contains(ValidationError.FIND_ALL)) {
             return giftCertificateDao.findAll();
         } else {
+            if (!validationErrors.isEmpty()) {
+                throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
+            }
             return giftCertificateDao.search(searchParams);
         }
     }

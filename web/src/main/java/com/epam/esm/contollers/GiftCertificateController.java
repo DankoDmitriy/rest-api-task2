@@ -4,7 +4,9 @@ import com.epam.esm.GiftCertificateService;
 import com.epam.esm.impl.GiftCertificate;
 import com.epam.esm.impl.GiftCertificateSearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,30 +29,30 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public List<GiftCertificate> getAllGiftCertificates(GiftCertificateSearchParams searchParams) {
+    public ResponseEntity<List<GiftCertificate>> getAllGiftCertificates(GiftCertificateSearchParams searchParams) {
         List<GiftCertificate> giftCertificateListItems = giftCertificateService.findAll(searchParams);
-        return giftCertificateListItems;
+        return new ResponseEntity<>(giftCertificateListItems, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate getGiftCertificateById(@PathVariable("id") long id) {
-        return giftCertificateService.findById(id).orElse(null);
+    public ResponseEntity<GiftCertificate> getGiftCertificateById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(giftCertificateService.findById(id).get(), HttpStatus.OK);
     }
 
     @PostMapping
-    public GiftCertificate addGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
-        return giftCertificateService.save(giftCertificate);
+    public ResponseEntity<GiftCertificate> addGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+        return new ResponseEntity<>(giftCertificateService.save(giftCertificate), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteGiftCertificateById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteGiftCertificateById(@PathVariable("id") Long id) {
         giftCertificateService.delete(id);
-        return "delete";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{id}")
-    public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificate giftCertificate,
-                                                 @PathVariable("id") long id) {
-        return giftCertificateService.update(id, giftCertificate);
+    public ResponseEntity<GiftCertificate> updateGiftCertificate(@RequestBody GiftCertificate giftCertificate,
+                                                                 @PathVariable("id") long id) {
+        return new ResponseEntity<>(giftCertificateService.update(id, giftCertificate), HttpStatus.OK);
     }
 }
