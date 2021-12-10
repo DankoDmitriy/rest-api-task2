@@ -1,7 +1,6 @@
 package com.epam.esm.impl;
 
 import com.epam.esm.AbstractEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class GiftCertificateSearchParams implements AbstractEntity {
     private String tagName;
     private String giftCertificateName;
@@ -23,4 +21,14 @@ public class GiftCertificateSearchParams implements AbstractEntity {
                     "giftCertificateName+",
                     "sortByCreateDate+",
                     "sortByCreateDate-"));
+
+    public GiftCertificateSearchParams(String tagName,
+                                       String giftCertificateName,
+                                       String giftCertificateDescription,
+                                       Set<String> sort) {
+        this.tagName = tagName;
+        this.giftCertificateName = giftCertificateName;
+        this.giftCertificateDescription = giftCertificateDescription;
+        this.sort = sort;
+    }
 }

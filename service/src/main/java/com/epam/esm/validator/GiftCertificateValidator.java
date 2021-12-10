@@ -45,10 +45,10 @@ public class GiftCertificateValidator {
             validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_IS_EMPTY_OR_NULL);
         } else {
             if (description.length() < GIFT_CERTIFICATE_DESCRIPTION_MIN_LENGTH) {
-                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG);
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT);
             }
             if (description.length() > GIFT_CERTIFICATE_DESCRIPTION_MAX_LENGTH) {
-                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT);
+                validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG);
             }
             if (!description.matches(GIFT_CERTIFICATE_DESCRIPTION_SYMBOL_REGEXP)) {
                 validationErrors.add(ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS);

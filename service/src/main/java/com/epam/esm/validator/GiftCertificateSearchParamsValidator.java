@@ -29,7 +29,7 @@ public class GiftCertificateSearchParamsValidator {
             }
 
             if (searchParams.getGiftCertificateName() != null) {
-                if (searchParams.getGiftCertificateName().matches(GIFT_CERTIFICATE_NAME_REGEX)) {
+                if (!searchParams.getGiftCertificateName().matches(GIFT_CERTIFICATE_NAME_REGEX)) {
                     validationErrors.add(ValidationError.SEARCH_GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
                 }
             }
@@ -40,6 +40,7 @@ public class GiftCertificateSearchParamsValidator {
                             ValidationError.SEARCH_GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS_OR_LENGTH);
                 }
             }
+
             if (searchParams.getSort() != null) {
                 for (String s : searchParams.getSort()) {
                     if (!searchParams.getSortTypes().contains(s)) {

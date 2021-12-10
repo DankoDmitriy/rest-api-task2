@@ -110,14 +110,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             }
         } else {
             if (giftCertificate.getTagItems() != null) {
-                List<Tag> newTagsItems = giftCertificate.getTagItems();
-                List<Tag> oldTagsItemsOld = certificateFromDB.getTagItems();
-                attachTagToGiftCertificate(id, newTagsItems);
-                for (Tag tag : oldTagsItemsOld) {
-                    if (!newTagsItems.contains(tag)) {
-                        giftCertificateDao.detachTag(id, tag.getId());
-                    }
+                List<Tag> oldTagsItems = certificateFromDB.getTagItems();
+                for (Tag tag : oldTagsItems) {
+                    giftCertificateDao.detachTag(id, tag.getId());
                 }
+                List<Tag> newTagsItems = giftCertificate.getTagItems();
+                attachTagToGiftCertificate(id, newTagsItems);
             }
         }
         return giftCertificate;
@@ -135,29 +133,25 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             GiftCertificate giftCertificate,
             List<ValidationError> validationErrors) {
         if (giftCertificate.getName() != null) {
-            validationErrors.addAll(giftCertificateValidator.validateName(
-                    giftCertificate.getName(), validationErrors));
+            giftCertificateValidator.validateName(giftCertificate.getName(), validationErrors);
         } else {
             giftCertificate.setName(certificateFromDB.getName());
         }
 
         if (giftCertificate.getDescription() != null) {
-            validationErrors.addAll(giftCertificateValidator.validateDescription(
-                    giftCertificate.getDescription(), validationErrors));
+            giftCertificateValidator.validateDescription(giftCertificate.getDescription(), validationErrors);
         } else {
             giftCertificate.setDescription(certificateFromDB.getDescription());
         }
 
         if (giftCertificate.getDuration() != null) {
-            validationErrors.addAll(giftCertificateValidator.validateDuration(
-                    giftCertificate.getDuration(), validationErrors));
+            giftCertificateValidator.validateDuration(giftCertificate.getDuration(), validationErrors);
         } else {
             giftCertificate.setDuration(certificateFromDB.getDuration());
         }
 
         if (giftCertificate.getPrice() != null) {
-            validationErrors.addAll(giftCertificateValidator.validatePrice(
-                    giftCertificate.getPrice(), validationErrors));
+            giftCertificateValidator.validatePrice(giftCertificate.getPrice(), validationErrors);
         } else {
             giftCertificate.setPrice(certificateFromDB.getPrice());
         }

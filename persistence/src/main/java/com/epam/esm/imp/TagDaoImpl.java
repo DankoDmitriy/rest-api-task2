@@ -25,6 +25,7 @@ public class TagDaoImpl implements TagDao {
     private static final String SQL_DELETE_TAG = "DELETE certificate_tag, tag "
             + "FROM certificate_tag LEFT JOIN tag ON tag.id=certificate_tag.tag_id "
             + "WHERE certificate_tag.tag_id=?";
+    private static final String SQL_DELETE_TAG_WITH_OUT_GIFT_CERTIFICATE = "DELETE FROM tag where id=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -60,5 +61,6 @@ public class TagDaoImpl implements TagDao {
     @Override
     public void delete(Long id) {
         jdbcTemplate.update(SQL_DELETE_TAG, id);
+        jdbcTemplate.update(SQL_DELETE_TAG_WITH_OUT_GIFT_CERTIFICATE, id);
     }
 }
