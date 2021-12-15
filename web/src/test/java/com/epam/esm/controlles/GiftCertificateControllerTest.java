@@ -1,6 +1,5 @@
 package com.epam.esm.controlles;
 
-import com.epam.esm.configs.SpringConfig;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SpringConfig.class})
+//@ContextConfiguration(classes = {SpringConfig.class})
 @TestPropertySource("/mysql-test.properties")
 @WebAppConfiguration
 @Sql(value = {"/database-data-initialization.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)

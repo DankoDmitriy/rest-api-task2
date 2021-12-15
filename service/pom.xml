@@ -17,12 +17,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <!--Model dependency-->
         <dependency>
@@ -35,12 +29,6 @@
             <groupId>com.epam.esm</groupId>
             <artifactId>persistence</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>5.3.12</version>
         </dependency>
     </dependencies>
 
