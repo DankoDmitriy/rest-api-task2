@@ -1,7 +1,7 @@
-package com.epam.esm;
+package com.epam.esm.repository;
 
-import com.epam.esm.impl.GiftCertificate;
-import com.epam.esm.impl.Tag;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.Tag;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

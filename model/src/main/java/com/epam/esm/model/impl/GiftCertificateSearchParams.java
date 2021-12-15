@@ -1,6 +1,6 @@
-package com.epam.esm.impl;
+package com.epam.esm.model.impl;
 
-import com.epam.esm.AbstractEntity;
+import com.epam.esm.model.AbstractEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

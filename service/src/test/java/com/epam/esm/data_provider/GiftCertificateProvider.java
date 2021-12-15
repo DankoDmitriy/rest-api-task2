@@ -1,6 +1,6 @@
 package com.epam.esm.data_provider;
 
-import com.epam.esm.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

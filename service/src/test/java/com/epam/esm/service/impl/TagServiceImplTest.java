@@ -1,11 +1,13 @@
-package com.epam.esm.impl;
+package com.epam.esm.service.impl;
 
-import com.epam.esm.TagDao;
-import com.epam.esm.TagService;
+import com.epam.esm.model.impl.Tag;
+import com.epam.esm.repository.TagDao;
+import com.epam.esm.service.TagService;
 import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.service.impl.TagServiceImpl;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;

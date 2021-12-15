@@ -1,6 +1,6 @@
 package com.epam.esm.validator;
 
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

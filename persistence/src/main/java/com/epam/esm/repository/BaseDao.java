@@ -1,4 +1,6 @@
-package com.epam.esm;
+package com.epam.esm.repository;
+
+import com.epam.esm.model.AbstractEntity;
 
 import java.util.List;
 import java.util.Optional;

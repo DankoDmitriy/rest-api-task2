@@ -1,9 +1,9 @@
-package com.epam.esm.imp;
+package com.epam.esm.repository.imp;
 
-import com.epam.esm.GiftCertificateDao;
-import com.epam.esm.GiftCertificateRowMapper;
-import com.epam.esm.impl.GiftCertificate;
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.repository.GiftCertificateDao;
+import com.epam.esm.repository.GiftCertificateRowMapper;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

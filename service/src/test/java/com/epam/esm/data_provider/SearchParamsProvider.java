@@ -1,6 +1,6 @@
 package com.epam.esm.data_provider;
 
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 
 public class SearchParamsProvider {
 

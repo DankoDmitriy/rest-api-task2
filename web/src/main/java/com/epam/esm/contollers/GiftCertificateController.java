@@ -1,8 +1,8 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.GiftCertificateService;
-import com.epam.esm.impl.GiftCertificate;
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

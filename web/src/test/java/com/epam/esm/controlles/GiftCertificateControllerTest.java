@@ -1,7 +1,7 @@
 package com.epam.esm.controlles;
 
 import com.epam.esm.configs.SpringConfig;
-import com.epam.esm.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

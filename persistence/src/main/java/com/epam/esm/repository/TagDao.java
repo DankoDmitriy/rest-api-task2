@@ -1,6 +1,6 @@
-package com.epam.esm;
+package com.epam.esm.repository;
 
-import com.epam.esm.impl.Tag;
+import com.epam.esm.model.impl.Tag;
 
 /**
  * The interface Tag dao.

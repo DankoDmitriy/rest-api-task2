@@ -1,6 +1,6 @@
 package com.epam.esm.validator;
 
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

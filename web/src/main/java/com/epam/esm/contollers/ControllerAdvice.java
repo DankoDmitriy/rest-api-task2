@@ -2,7 +2,7 @@ package com.epam.esm.contollers;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.impl.ExceptionResponse;
+import com.epam.esm.model.impl.ExceptionResponse;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;

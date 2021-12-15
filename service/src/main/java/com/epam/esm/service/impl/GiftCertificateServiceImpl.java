@@ -1,10 +1,13 @@
-package com.epam.esm.impl;
+package com.epam.esm.service.impl;
 
-import com.epam.esm.GiftCertificateDao;
-import com.epam.esm.GiftCertificateService;
-import com.epam.esm.TagDao;
+import com.epam.esm.repository.GiftCertificateDao;
+import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.repository.TagDao;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
+import com.epam.esm.model.impl.Tag;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
 import com.epam.esm.validator.TagValidator;

@@ -1,7 +1,7 @@
-package com.epam.esm;
+package com.epam.esm.service;
 
-import com.epam.esm.impl.GiftCertificate;
-import com.epam.esm.impl.GiftCertificateSearchParams;
+import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.model.impl.GiftCertificateSearchParams;
 
 import java.util.List;
 

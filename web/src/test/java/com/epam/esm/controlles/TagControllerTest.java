@@ -1,7 +1,7 @@
 package com.epam.esm.controlles;
 
 import com.epam.esm.configs.SpringConfig;
-import com.epam.esm.impl.Tag;
+import com.epam.esm.model.impl.Tag;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

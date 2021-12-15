@@ -1,7 +1,7 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.TagService;
-import com.epam.esm.impl.Tag;
+import com.epam.esm.service.TagService;
+import com.epam.esm.model.impl.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

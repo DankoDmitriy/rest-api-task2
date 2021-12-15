@@ -1,6 +1,6 @@
 package com.epam.esm.data_provider;
 
-import com.epam.esm.impl.Tag;
+import com.epam.esm.model.impl.Tag;
 
 import java.util.Arrays;
 import java.util.List;
