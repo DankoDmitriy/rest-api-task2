@@ -22,6 +22,8 @@ import java.util.Locale;
 public class ControllerAdvice {
     private static final String ERROR_CODE_0001 = "Error: 0001";
     private static final String ERROR_CODE_0002 = "Error: 0002";
+    private static final String ERROR_CODE_0404 = "Error: 0404";
+    private static final String ERROR_CODE_0404_MESSAGE = "The resource can not be found ";
 
     private ResourceBundleMessageSource messageSource;
 
@@ -49,6 +51,17 @@ public class ControllerAdvice {
                         Arrays.asList(exception.getId().toString()),
                         LocalDateTime.now().toString(),
                         ERROR_CODE_0002)
+                , HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+        return new ResponseEntity<ExceptionResponse>(
+                new ExceptionResponse(
+                        ERROR_CODE_0404_MESSAGE,
+                        null,
+                        LocalDateTime.now().toString(),
+                        ERROR_CODE_0404)
                 , HttpStatus.NOT_FOUND);
     }
 

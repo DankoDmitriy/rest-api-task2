@@ -32,5 +32,5 @@ public enum ValidationError {
     PROBLEM_WITH_INPUT_PARAMETERS,
     GIFT_CERTIFICATE_NOT_FOUND_BY_ID,
     TAG_NOT_FOUND_BY_ID,
-    FIND_ALL;
+    FIND_ALL
 }

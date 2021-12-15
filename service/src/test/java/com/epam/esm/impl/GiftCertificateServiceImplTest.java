@@ -114,7 +114,7 @@ public class GiftCertificateServiceImplTest {
         Tag tag = tagProvider.getTag();
         Mockito.when(certificateValidatorMock.validateCertificate(expected))
                 .thenReturn(validationErrors);
-        Mockito.when(tagValidatorMock.validateTagNameList(expected.getTagItems()))
+        Mockito.when(tagValidatorMock.validateTagNameList(expected.getTags()))
                 .thenReturn(validationErrors);
         Mockito.when(certificateDaoMock.save(expected))
                 .thenReturn(expected);

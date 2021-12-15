@@ -29,7 +29,7 @@ public class GiftCertificateProvider {
         certificate.setPrice(new BigDecimal(100));
         certificate.setCreateDate(LocalDateTime.of(2021, 1, 1, 1, 1));
         certificate.setLastUpdateDate(LocalDateTime.of(2021, 1, 1, 1, 1));
-        certificate.setTagItems(tagProvider.getTagList());
+        certificate.setTags(tagProvider.getTagList());
         return certificate;
     }
 

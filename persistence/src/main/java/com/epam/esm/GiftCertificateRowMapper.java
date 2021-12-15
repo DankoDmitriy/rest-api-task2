@@ -27,7 +27,7 @@ public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
         GiftCertificate certificate = new GiftCertificate();
         List<Tag> tags = new ArrayList<>();
 
-        certificate.setTagItems(tags);
+        certificate.setTags(tags);
         certificate.setId(rs.getLong(GIFT_ID));
         certificate.setName(rs.getString(GIFT_NAME));
         certificate.setDescription(rs.getString(GIFT_DESCRIPTION));

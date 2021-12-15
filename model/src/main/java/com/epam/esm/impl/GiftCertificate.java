@@ -18,5 +18,5 @@ public class GiftCertificate implements AbstractEntity {
     private Integer duration;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
-    private List<Tag> tagItems;
+    private List<Tag> tags;
 }

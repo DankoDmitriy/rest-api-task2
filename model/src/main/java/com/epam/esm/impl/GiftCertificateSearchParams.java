@@ -17,8 +17,8 @@ public class GiftCertificateSearchParams implements AbstractEntity {
     private Set<String> sort;
     private Set<String> sortTypes = new HashSet<>(
             Arrays.asList(
-                    "giftCertificateName-",
-                    "giftCertificateName+",
+                    "sortByGiftCertificateName-",
+                    "sortByGiftCertificateName+",
                     "sortByCreateDate+",
                     "sortByCreateDate-"));
 

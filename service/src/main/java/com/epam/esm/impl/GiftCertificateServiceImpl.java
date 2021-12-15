@@ -66,7 +66,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificate save(GiftCertificate giftCertificate) {
         List<ValidationError> validationErrors = giftCertificateValidator.validateCertificate(giftCertificate);
-        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
+        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTags()));
 
         if (!validationErrors.isEmpty()) {
             throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
@@ -76,8 +76,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificate.setCreateDate(time);
         giftCertificate.setLastUpdateDate(time);
         giftCertificate = giftCertificateDao.save(giftCertificate);
-        if (giftCertificate.getTagItems() != null) {
-            attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTagItems());
+        if (giftCertificate.getTags() != null) {
+            attachTagToGiftCertificate(giftCertificate.getId(), giftCertificate.getTags());
         }
         return giftCertificate;
     }
@@ -104,17 +104,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
         giftCertificate = giftCertificateDao.update(giftCertificate);
 
-        if (giftCertificate.getTagItems() != null && giftCertificate.getTagItems().size() == 0) {
-            for (Tag tagItem : certificateFromDB.getTagItems()) {
+        if (giftCertificate.getTags() != null && giftCertificate.getTags().size() == 0) {
+            for (Tag tagItem : certificateFromDB.getTags()) {
                 giftCertificateDao.detachTag(id, tagItem.getId());
             }
         } else {
-            if (giftCertificate.getTagItems() != null) {
-                List<Tag> oldTagsItems = certificateFromDB.getTagItems();
+            if (giftCertificate.getTags() != null) {
+                List<Tag> oldTagsItems = certificateFromDB.getTags();
                 for (Tag tag : oldTagsItems) {
                     giftCertificateDao.detachTag(id, tag.getId());
                 }
-                List<Tag> newTagsItems = giftCertificate.getTagItems();
+                List<Tag> newTagsItems = giftCertificate.getTags();
                 attachTagToGiftCertificate(id, newTagsItems);
             }
         }
@@ -155,6 +155,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         } else {
             giftCertificate.setPrice(certificateFromDB.getPrice());
         }
-        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTagItems()));
+        validationErrors.addAll(tagValidator.validateTagNameList(giftCertificate.getTags()));
     }
 }
