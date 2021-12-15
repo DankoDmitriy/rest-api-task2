@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/giftCertificates", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GiftCertificateController {
-    private GiftCertificateService giftCertificateService;
+    private final GiftCertificateService giftCertificateService;
 
     @Autowired
     public GiftCertificateController(GiftCertificateService giftCertificateService) {

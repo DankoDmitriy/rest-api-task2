@@ -7,7 +7,7 @@ import java.util.Optional;
 
 /**
  * The interface Base dao is used for inheritance by interfaces that work with a database.
- * Specifies the minimum required set of methods.
+ * Specifies the minimum required to be set of methods.
  *
  * @param <E> the type parameter
  */

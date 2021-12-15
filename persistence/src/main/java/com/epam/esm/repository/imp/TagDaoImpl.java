@@ -27,7 +27,7 @@ public class TagDaoImpl implements TagDao {
             + "WHERE certificate_tag.tag_id=?";
     private static final String SQL_DELETE_TAG_WITH_OUT_GIFT_CERTIFICATE = "DELETE FROM tag where id=?";
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {

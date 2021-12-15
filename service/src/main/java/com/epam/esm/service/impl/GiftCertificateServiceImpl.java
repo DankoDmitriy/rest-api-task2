@@ -23,11 +23,11 @@ import java.util.Optional;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private GiftCertificateDao giftCertificateDao;
-    private TagDao tagDao;
-    private GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator;
-    private GiftCertificateValidator giftCertificateValidator;
-    private TagValidator tagValidator;
+    private final GiftCertificateDao giftCertificateDao;
+    private final TagDao tagDao;
+    private final GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator;
+    private final GiftCertificateValidator giftCertificateValidator;
+    private final TagValidator tagValidator;
 
     @Autowired
     public GiftCertificateServiceImpl(

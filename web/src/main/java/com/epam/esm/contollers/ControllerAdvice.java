@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +26,7 @@ public class ControllerAdvice {
     private static final String ERROR_CODE_0404 = "Error: 0404";
     private static final String ERROR_CODE_0404_MESSAGE = "The resource can not be found ";
 
-    private ResourceBundleMessageSource messageSource;
+    private final ResourceBundleMessageSource messageSource;
 
     @Autowired
     public ControllerAdvice(ResourceBundleMessageSource messageSource) {
@@ -34,7 +35,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(IncorrectEntityException.class)
     public ResponseEntity<ExceptionResponse> handlerException(IncorrectEntityException exception) {
-        return new ResponseEntity<ExceptionResponse>(
+        return new ResponseEntity<>(
                 new ExceptionResponse(
                         enumToStringLocaleMessage(exception.getErrorMessage()),
                         enumListToStringList(exception.getValidationErrors()),
@@ -45,10 +46,10 @@ public class ControllerAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handlerException(EntityNotFoundException exception) {
-        return new ResponseEntity<ExceptionResponse>(
+        return new ResponseEntity<>(
                 new ExceptionResponse(
                         enumToStringLocaleMessage(exception.getErrorMessage()),
-                        Arrays.asList(exception.getId().toString()),
+                        Collections.singletonList(exception.getId().toString()),
                         LocalDateTime.now().toString(),
                         ERROR_CODE_0002)
                 , HttpStatus.NOT_FOUND);
@@ -56,7 +57,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
-        return new ResponseEntity<ExceptionResponse>(
+        return new ResponseEntity<>(
                 new ExceptionResponse(
                         ERROR_CODE_0404_MESSAGE,
                         null,

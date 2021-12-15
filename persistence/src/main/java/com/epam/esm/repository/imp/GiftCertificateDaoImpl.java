@@ -76,8 +76,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String SQl_ORDER = " ORDER BY ";
     private static final String SQL_WHERE = " WHERE ";
 
-    private JdbcTemplate jdbcTemplate;
-    private GiftCertificateRowMapper giftCertificateRowMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final GiftCertificateRowMapper giftCertificateRowMapper;
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateRowMapper giftCertificateRowMapper) {

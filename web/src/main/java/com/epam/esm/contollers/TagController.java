@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
-    private TagService tagService;
+    private final TagService tagService;
 
     @Autowired
     public TagController(TagService tagService) {

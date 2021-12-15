@@ -25,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTest {
-    private Long testTagId = 1L;
-    private String testIncorrectName = ".,-*";
-    private String testCorrectName = "Tag name";
+    private final Long testTagId = 1L;
+    private final String testIncorrectName = ".,-*";
+    private final String testCorrectName = "Tag name";
 
     @InjectMocks
     private TagServiceImpl service;

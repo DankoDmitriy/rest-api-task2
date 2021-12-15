@@ -3,6 +3,7 @@ package com.epam.esm.data_provider;
 import com.epam.esm.model.impl.Tag;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TagProvider {
@@ -20,7 +21,7 @@ public class TagProvider {
     }
 
     public List<Tag> getTagList() {
-        return Arrays.asList(getTag());
+        return Collections.singletonList(getTag());
     }
 
 }

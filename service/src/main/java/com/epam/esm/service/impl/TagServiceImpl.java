@@ -15,8 +15,8 @@ import java.util.Optional;
 
 @Service
 public class TagServiceImpl implements TagService {
-    private TagDao tagDao;
-    private TagValidator validator;
+    private final TagDao tagDao;
+    private final TagValidator validator;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao, TagValidator validator) {
