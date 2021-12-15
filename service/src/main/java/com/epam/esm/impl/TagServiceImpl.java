@@ -7,12 +7,12 @@ import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class TagServiceImpl implements TagService {
     private TagDao tagDao;
     private TagValidator validator;

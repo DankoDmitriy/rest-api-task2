@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
+@Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final static int GIFT_CERTIFICATE_NAME_INDEX = 1;
     private final static int GIFT_CERTIFICATE_DESCRIPTION_INDEX = 2;

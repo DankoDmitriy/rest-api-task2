@@ -7,14 +7,14 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class TagDaoImpl implements TagDao {
     private static final int TAG_NAME_INDEX = 1;
     private static final String SQL_FIND_ALL_TAGS = "SELECT * FROM Tag";
