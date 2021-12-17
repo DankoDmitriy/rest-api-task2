@@ -38,7 +38,7 @@ public interface BaseDao<E extends AbstractEntity> {
     /**
      * Delete.
      *
-     * @param id the id
+     * @param <E> the e
      */
-    void delete(Long id);
+    void delete(E e);
 }

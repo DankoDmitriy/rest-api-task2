@@ -18,22 +18,6 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
     GiftCertificate update(GiftCertificate giftCertificate);
 
     /**
-     * Attach tag.
-     *
-     * @param certificateId the certificate id
-     * @param tagId         the tag id
-     */
-    void attachTag(Long certificateId, Long tagId);
-
-    /**
-     * Detach tag.
-     *
-     * @param certificateId the certificate id
-     * @param tagId         the tag id
-     */
-    void detachTag(Long certificateId, Long tagId);
-
-    /**
      * Search Entities.
      *
      * @param parameters the parameters

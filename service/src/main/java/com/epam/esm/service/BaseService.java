@@ -2,8 +2,6 @@ package com.epam.esm.service;
 
 import com.epam.esm.model.AbstractEntity;
 
-import java.util.Optional;
-
 /**
  * The interface Base service is used for inheritance by interfaces that work with a database.
  * Specifies the minimum required to be set of methods.
@@ -15,9 +13,9 @@ public interface BaseService<E extends AbstractEntity> {
      * Find by id optional.
      *
      * @param id the id
-     * @return the optional
+     * @return the E
      */
-    Optional<E> findById(Long id);
+    E findById(Long id);
 
     /**
      * Save e.

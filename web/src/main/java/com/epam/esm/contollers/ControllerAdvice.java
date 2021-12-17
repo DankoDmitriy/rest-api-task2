@@ -2,6 +2,7 @@ package com.epam.esm.contollers;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.ExceptionResponse;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +23,7 @@ import java.util.Locale;
 public class ControllerAdvice {
     private static final String ERROR_CODE_0001 = "Error: 0001";
     private static final String ERROR_CODE_0002 = "Error: 0002";
+    private static final String ERROR_CODE_0003 = "Error: 0003";
     private static final String ERROR_CODE_0404 = "Error: 0404";
     private static final String ERROR_CODE_0404_MESSAGE = "The resource can not be found ";
 
@@ -55,16 +56,27 @@ public class ControllerAdvice {
                 , HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+    @ExceptionHandler(UsedEntityException.class)
+    public ResponseEntity<ExceptionResponse> handlerException(UsedEntityException exception) {
         return new ResponseEntity<>(
                 new ExceptionResponse(
-                        ERROR_CODE_0404_MESSAGE,
-                        null,
+                        enumToStringLocaleMessage(ValidationError.ENTITY_USED_IN_SYSTEM),
+                        Collections.singletonList(exception.getId().toString()),
                         LocalDateTime.now().toString(),
-                        ERROR_CODE_0404)
-                , HttpStatus.NOT_FOUND);
+                        ERROR_CODE_0003)
+                , HttpStatus.CONFLICT);
     }
+
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+//        return new ResponseEntity<>(
+//                new ExceptionResponse(
+//                        ERROR_CODE_0404_MESSAGE,
+//                        null,
+//                        LocalDateTime.now().toString(),
+//                        ERROR_CODE_0404)
+//                , HttpStatus.NOT_FOUND);
+//    }
 
     private List<String> enumListToStringList(List<ValidationError> validationErrors) {
         List<String> strings = new ArrayList<>();

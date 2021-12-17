@@ -36,7 +36,7 @@ public class GiftCertificateController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificate> getGiftCertificateById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(giftCertificateService.findById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<>(giftCertificateService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping

@@ -98,7 +98,7 @@ public class GiftCertificateServiceImplTest {
         Long id = expected.getId();
         Mockito.when(certificateDaoMock.findById(id))
                 .thenReturn(Optional.of(expected));
-        GiftCertificate actual = service.findById(id).get();
+        GiftCertificate actual = service.findById(id);
         assertEquals(expected, actual);
     }
 
