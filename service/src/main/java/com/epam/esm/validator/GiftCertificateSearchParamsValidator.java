@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class GiftCertificateSearchParamsValidator {
-    private static final String TAG_NAME_REGEX = "^[a-zA-ZА-Яа-я\\s]{2,255}$";
+    private static final String TAG_NAME_REGEX = "^[a-zA-ZА-Яа-я0-9\\s]{2,255}$";
     private static final String GIFT_CERTIFICATE_NAME_REGEX = "^[a-zA-ZА-Яа-я0-9\\s]{2,255}$";
     private static final String GIFT_CERTIFICATE_DESCRIPTION_REGEX = "^[a-zA-ZА-Яа-я,.:;!?\\s]{2,255}$";
 

@@ -67,17 +67,16 @@ public class ControllerAdvice {
                 , HttpStatus.CONFLICT);
     }
 
-//    TODO - uncomment
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
-//        return new ResponseEntity<>(
-//                new ExceptionResponse(
-//                        ERROR_CODE_0404_MESSAGE,
-//                        null,
-//                        LocalDateTime.now().toString(),
-//                        ERROR_CODE_0404)
-//                , HttpStatus.NOT_FOUND);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(
+                        ERROR_CODE_0404_MESSAGE,
+                        null,
+                        LocalDateTime.now().toString(),
+                        ERROR_CODE_0404)
+                , HttpStatus.NOT_FOUND);
+    }
 
     private List<String> enumListToStringList(List<ValidationError> validationErrors) {
         List<String> strings = new ArrayList<>();

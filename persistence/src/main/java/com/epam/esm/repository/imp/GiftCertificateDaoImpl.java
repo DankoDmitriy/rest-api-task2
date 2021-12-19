@@ -3,9 +3,7 @@ package com.epam.esm.repository.imp;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.repository.GiftCertificateDao;
-import com.epam.esm.repository.GiftCertificateRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,40 +18,17 @@ import java.util.Set;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    //    private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "FROM GiftCertificate";
+    private static final String GIFT_CERTIFICATE_NAME = "name";
+    private static final String GIFT_CERTIFICATE_DESCRIPTION = "description";
+    private static final String GIFT_CERTIFICATE_TAGS = "tags";
+    private static final String GIFT_CERTIFICATE_CREATE_DATE = "createDate";
+    private static final String TAG_NAME = "name";
     private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "SELECT g FROM GiftCertificate g";
 
-    private static final String SQL_FIND_GIFT_CERTIFICATE = "SELECT gift.id as gift_id, gift.name as gift_name,"
-            + " gift.description, gift.price, gift.duration, gift.create_date, gift.last_update_date,"
-            + " tag.id as tag_id, tag.name as tag_name FROM gift_certificate as gift LEFT JOIN certificate_tag as link "
-            + " ON link.gift_certificate_id = gift.id LEFT JOIN tag ON link.tag_id=tag.id ";
-
-    private static final String SEARCH_BY_END = "%' ";
-    private final static String SEARCH_BY_TAG_NAME = " tag.name LIKE '%";
-    private final static String SEARCH_BY_GIFT_CERTIFICATE_NAME = " gift.name LIKE '%";
-    private final static String SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION = " description LIKE '%";
-
-    private final static String ORDER_BY_GIFT_CERTIFICATE_NAME_DESC = " gift.name DESC ";
-    private final static String ORDER_BY_GIFT_CERTIFICATE_NAME_ASC = " gift.name ASC ";
-    private final static String ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_DESC = " gift.create_date DESC ";
-    private final static String ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_ASC = " gift.create_date ASC ";
-    private final static String ORDER_BY_GIFT_CERTIFICATE_ID = " gift.id ASC ";
-
-    private static final String SQl_COMMA = ", ";
-    private static final String SQL_AND = " and ";
-    private static final String SQl_ORDER = " ORDER BY ";
-    private static final String SQL_WHERE = " WHERE ";
-
-    private final JdbcTemplate jdbcTemplate;
-    private final GiftCertificateRowMapper giftCertificateRowMapper;
     private final EntityManager entityManager;
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate,
-                                  GiftCertificateRowMapper giftCertificateRowMapper,
-                                  EntityManager entityManager) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.giftCertificateRowMapper = giftCertificateRowMapper;
+    public GiftCertificateDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -85,83 +60,47 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> search(GiftCertificateSearchParams searchParams) {
-//TODO
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> cQuery = cb.createQuery(GiftCertificate.class);
         Root<GiftCertificate> root = cQuery.from(GiftCertificate.class);
 
-        String giftCertificateName = searchParams.getGiftCertificateName();
-        String giftCertificateDescription = searchParams.getGiftCertificateDescription();
+        List<Predicate> searchByParameters = new ArrayList<>();
 
-
-        List<Predicate> searchParam = new ArrayList<>();
-//        searchParam.add(cb.equal(root.get("name"), giftCertificateName));
-        searchParam.add(cb.like(root.get("name"), "%" + giftCertificateName + "%"));
-        cQuery.select(root).where(cb.and(searchParam.toArray(new Predicate[searchParam.size()])));
-        return entityManager.createQuery(cQuery).getResultList();
-    }
-
-    private String generateSearchSqlCriteria(GiftCertificateSearchParams searchParams) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SQL_FIND_GIFT_CERTIFICATE);
-        boolean putSqlWhere = false;
-        if (searchParams.getTagName() != null) {
-            sb.append(SQL_WHERE).append(SEARCH_BY_TAG_NAME).append(searchParams.getTagName()).append(SEARCH_BY_END);
-            putSqlWhere = true;
+        if (searchParams.getGiftCertificateName() != null && !searchParams.getGiftCertificateName().isEmpty()) {
+            searchByParameters.add(cb.like(
+                    root.get(GIFT_CERTIFICATE_NAME), "%" + searchParams.getGiftCertificateName() + "%"));
         }
-        if (searchParams.getGiftCertificateName() != null) {
-            if (putSqlWhere) {
-                sb.append(SQL_AND)
-                        .append(SEARCH_BY_GIFT_CERTIFICATE_NAME)
-                        .append(searchParams.getGiftCertificateName())
-                        .append(SEARCH_BY_END);
-            } else {
-                sb.append(SQL_WHERE)
-                        .append(SEARCH_BY_GIFT_CERTIFICATE_NAME)
-                        .append(searchParams.getGiftCertificateName())
-                        .append(SEARCH_BY_END);
-                putSqlWhere = true;
-            }
+        if (searchParams.getGiftCertificateDescription() != null
+                && !searchParams.getGiftCertificateDescription().isEmpty()) {
+            searchByParameters.add(cb.like(
+                    root.get(GIFT_CERTIFICATE_DESCRIPTION), "%" + searchParams.getGiftCertificateDescription() + "%")
+            );
         }
-        if (searchParams.getGiftCertificateDescription() != null) {
-            if (putSqlWhere) {
-                sb.append(SQL_AND)
-                        .append(SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION)
-                        .append(searchParams.getGiftCertificateDescription())
-                        .append(SEARCH_BY_END);
-            } else {
-                sb.append(SQL_WHERE)
-                        .append(SEARCH_BY_GIFT_CERTIFICATE_DESCRIPTION)
-                        .append(searchParams.getGiftCertificateDescription())
-                        .append(SEARCH_BY_END);
-            }
+        if (searchParams.getTagName() != null && !searchParams.getTagName().isEmpty()) {
+            searchByParameters.add(cb.equal(root.join(GIFT_CERTIFICATE_TAGS).get(TAG_NAME), searchParams.getTagName()));
         }
 
-        sb.append(SQl_ORDER);
+        cQuery.select(root).where(cb.and(searchByParameters.toArray(new Predicate[searchByParameters.size()])));
+
         if (searchParams.getSort() != null && searchParams.getSort().size() > 0) {
             Set<String> sort = searchParams.getSort();
             for (String s : sort) {
                 switch (s) {
-                    case "giftCertificateName-":
-                        sb.append(ORDER_BY_GIFT_CERTIFICATE_NAME_DESC)
-                                .append(SQl_COMMA);
+                    case "sortByGiftCertificateName-":
+                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_NAME)));
                         break;
-                    case "giftCertificateName+":
-                        sb.append(ORDER_BY_GIFT_CERTIFICATE_NAME_ASC)
-                                .append(SQl_COMMA);
+                    case "sortByGiftCertificateName+":
+                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_NAME)));
                         break;
                     case "sortByCreateDate+":
-                        sb.append(ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_ASC)
-                                .append(SQl_COMMA);
+                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
                         break;
                     case "sortByCreateDate-":
-                        sb.append(ORDER_BY_GIFT_CERTIFICATE_CREATE_DATE_DESC)
-                                .append(SQl_COMMA);
+                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
                         break;
                 }
             }
         }
-        sb.append(ORDER_BY_GIFT_CERTIFICATE_ID);
-        return sb.toString();
+        return entityManager.createQuery(cQuery).getResultList();
     }
 }
