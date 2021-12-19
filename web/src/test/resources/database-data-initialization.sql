@@ -9,7 +9,8 @@ ALTER TABLE gift_certificate AUTO_INCREMENT = 10;
 insert into tag (id, name)
 values (1, 'tag1'),
        (2, 'tag2'),
-       (3, 'tag3');
+       (3, 'tag3'),
+       (4, 'tag4');
 
 insert into gift_certificate (id, name, description, price, duration, create_date, last_update_date)
 values (1, 'Gif 1', 'description 1', '9.99', 5, '2021-09-15 18:45:30', '2021-09-15 18:45:30'),

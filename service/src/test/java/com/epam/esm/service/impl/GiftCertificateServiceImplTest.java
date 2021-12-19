@@ -143,7 +143,7 @@ public class GiftCertificateServiceImplTest {
         GiftCertificate updateGiftCertificate = certificateProvider.getCorrectGiftCertificateWithOutId();
         Tag tag = tagProvider.getTag();
         Mockito.when(certificateDaoMock.findById(expected.getId())).thenReturn(Optional.of(expected));
-        Mockito.when(certificateDaoMock.update(updateGiftCertificate)).thenReturn(expected);
+        Mockito.when(certificateDaoMock.update(Mockito.any())).thenReturn(expected);
         Mockito.when(tagDaoMock.save(Mockito.any())).thenReturn(tag);
         GiftCertificate actual = service.update(expected.getId(), updateGiftCertificate);
         assertEquals(expected, actual);

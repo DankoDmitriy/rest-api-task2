@@ -67,6 +67,7 @@ public class ControllerAdvice {
                 , HttpStatus.CONFLICT);
     }
 
+//    TODO - uncomment
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
 //        return new ResponseEntity<>(

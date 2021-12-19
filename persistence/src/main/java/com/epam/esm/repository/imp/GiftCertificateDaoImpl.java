@@ -9,10 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -22,7 +20,8 @@ import java.util.Set;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "FROM GiftCertificate";
+    //    private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "FROM GiftCertificate";
+    private static final String SQL_FIND_ALL_GIFT_CERTIFICATES = "SELECT g FROM GiftCertificate g";
 
     private static final String SQL_FIND_GIFT_CERTIFICATE = "SELECT gift.id as gift_id, gift.name as gift_name,"
             + " gift.description, gift.price, gift.duration, gift.create_date, gift.last_update_date,"
@@ -91,13 +90,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         CriteriaQuery<GiftCertificate> cQuery = cb.createQuery(GiftCertificate.class);
         Root<GiftCertificate> root = cQuery.from(GiftCertificate.class);
 
-        ParameterExpression<String> paramGift = cb.parameter(String.class);
-
         String giftCertificateName = searchParams.getGiftCertificateName();
         String giftCertificateDescription = searchParams.getGiftCertificateDescription();
 
 
         List<Predicate> searchParam = new ArrayList<>();
+//        searchParam.add(cb.equal(root.get("name"), giftCertificateName));
         searchParam.add(cb.like(root.get("name"), "%" + giftCertificateName + "%"));
         cQuery.select(root).where(cb.and(searchParam.toArray(new Predicate[searchParam.size()])));
         return entityManager.createQuery(cQuery).getResultList();
