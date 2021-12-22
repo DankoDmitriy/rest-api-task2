@@ -2,6 +2,7 @@ package com.epam.esm.contollers;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.ExceptionResponse;
 import com.epam.esm.validator.ValidationError;
@@ -24,6 +25,8 @@ public class ControllerAdvice {
     private static final String ERROR_CODE_0001 = "Error: 0001";
     private static final String ERROR_CODE_0002 = "Error: 0002";
     private static final String ERROR_CODE_0003 = "Error: 0003";
+    private static final String ERROR_CODE_0004 = "Error: 0004";
+    private static final String ERROR_CODE_0005 = "Error: 0005";
     private static final String ERROR_CODE_0404 = "Error: 0404";
     private static final String ERROR_CODE_0404_MESSAGE = "The resource can not be found ";
 
@@ -67,16 +70,39 @@ public class ControllerAdvice {
                 , HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<ExceptionResponse> handlerException(UnsupportedOperationException exception) {
         return new ResponseEntity<>(
                 new ExceptionResponse(
-                        ERROR_CODE_0404_MESSAGE,
+                        exception.getMessage(),
                         null,
                         LocalDateTime.now().toString(),
-                        ERROR_CODE_0404)
+                        ERROR_CODE_0004)
                 , HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InputPagesParametersIncorrect.class)
+    public ResponseEntity<ExceptionResponse> handlerException(InputPagesParametersIncorrect exception) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(
+                        enumToStringLocaleMessage(exception.getErrorMessage()),
+                        null,
+                        LocalDateTime.now().toString(),
+                        ERROR_CODE_0005)
+                , HttpStatus.BAD_REQUEST);
+    }
+
+
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {
+//        return new ResponseEntity<>(
+//                new ExceptionResponse(
+//                        ERROR_CODE_0404_MESSAGE,
+//                        null,
+//                        LocalDateTime.now().toString(),
+//                        ERROR_CODE_0404)
+//                , HttpStatus.NOT_FOUND);
+//    }
 
     private List<String> enumListToStringList(List<ValidationError> validationErrors) {
         List<String> strings = new ArrayList<>();

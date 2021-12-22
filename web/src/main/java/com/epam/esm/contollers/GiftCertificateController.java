@@ -1,8 +1,9 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
+import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.dto.PageSetup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,8 +30,8 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GiftCertificate>> getAllGiftCertificates(GiftCertificateSearchParams searchParams) {
-        List<GiftCertificate> giftCertificateListItems = giftCertificateService.findAll(searchParams);
+    public ResponseEntity<List<GiftCertificate>> getAllGiftCertificates(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
+        List<GiftCertificate> giftCertificateListItems = giftCertificateService.findAll(searchParams, pageSetup);
         return new ResponseEntity<>(giftCertificateListItems, HttpStatus.OK);
     }
 

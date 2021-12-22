@@ -2,10 +2,14 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.util.PageCalculator;
+import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +24,29 @@ import java.util.Optional;
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
     private final TagValidator validator;
+    private final PageCalculator pageCalculator;
+    private final PaginationValidator paginationValidator;
 
     @Autowired
-    public TagServiceImpl(TagDao tagDao, TagValidator validator) {
+    public TagServiceImpl(TagDao tagDao,
+                          TagValidator validator,
+                          PageCalculator pageCalculator,
+                          PaginationValidator paginationValidator) {
         this.tagDao = tagDao;
         this.validator = validator;
+        this.pageCalculator = pageCalculator;
+        this.paginationValidator = paginationValidator;
     }
 
     @Override
-    public List<Tag> findAll() {
-        return tagDao.findAll();
+    public List<Tag> findAll(PageSetup pageSetup) {
+        Long rowsInDataBase = tagDao.rowsInTable();
+        Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
+        if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+            return tagDao.findAll(startPosition, pageSetup.getSize());
+        } else {
+            throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
+        }
     }
 
     @Override

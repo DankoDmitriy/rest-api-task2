@@ -2,14 +2,19 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.exception.InputPagesParametersIncorrect;
+import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.GiftCertificateDao;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,31 +33,52 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator;
     private final GiftCertificateValidator giftCertificateValidator;
     private final TagValidator tagValidator;
+    private final PageCalculator pageCalculator;
+    private final PaginationValidator paginationValidator;
+
 
     @Autowired
-    public GiftCertificateServiceImpl(
-            GiftCertificateDao giftCertificateDao,
-            TagDao tagDao,
-            GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator,
-            GiftCertificateValidator giftCertificateValidator,
-            TagValidator tagValidator) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao,
+                                      TagDao tagDao,
+                                      GiftCertificateSearchParamsValidator giftCertificateSearchParamsValidator,
+                                      GiftCertificateValidator giftCertificateValidator,
+                                      TagValidator tagValidator,
+                                      PageCalculator pageCalculator,
+                                      PaginationValidator paginationValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
         this.giftCertificateSearchParamsValidator = giftCertificateSearchParamsValidator;
         this.giftCertificateValidator = giftCertificateValidator;
         this.tagValidator = tagValidator;
+        this.pageCalculator = pageCalculator;
+        this.paginationValidator = paginationValidator;
     }
 
+    //    TODO - Duplicate code: in find ALL. Fix PAGINATION IN SEARCH
     @Override
-    public List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams) {
+    public List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
+        Long rowsInDataBase = null;
+        Integer startPosition = null;
         List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
         if (validationErrors.contains(ValidationError.FIND_ALL)) {
-            return giftCertificateDao.findAll();
+            rowsInDataBase = giftCertificateDao.rowsInTable();
+            startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
+            if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+                return giftCertificateDao.findAll(startPosition, pageSetup.getSize());
+            } else {
+                throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
+            }
         } else {
             if (!validationErrors.isEmpty()) {
                 throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
             }
-            return giftCertificateDao.search(searchParams);
+            rowsInDataBase = giftCertificateDao.rowsInTable(searchParams);
+            startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
+            if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+                return giftCertificateDao.search(searchParams, startPosition, pageSetup.getSize());
+            } else {
+                throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
+            }
         }
     }
 
@@ -89,7 +115,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public void delete(Long id) {
         GiftCertificate certificate = findById(id);
-        giftCertificateDao.delete(certificate);
+        if (!giftCertificateDao.isGiftCertificateUsedInOrder(id)) {
+            giftCertificateDao.delete(certificate);
+        } else {
+            throw new UsedEntityException(id);
+        }
     }
 
     @Override

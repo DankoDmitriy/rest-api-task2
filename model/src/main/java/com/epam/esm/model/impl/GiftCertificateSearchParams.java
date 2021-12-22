@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class GiftCertificateSearchParams implements AbstractEntity {
-    private String tagName;
+    private List<String> tags;
     private String giftCertificateName;
     private String giftCertificateDescription;
     private Set<String> sort;
@@ -22,11 +23,11 @@ public class GiftCertificateSearchParams implements AbstractEntity {
                     "sortByCreateDate+",
                     "sortByCreateDate-"));
 
-    public GiftCertificateSearchParams(String tagName,
+    public GiftCertificateSearchParams(List<String> tags,
                                        String giftCertificateName,
                                        String giftCertificateDescription,
                                        Set<String> sort) {
-        this.tagName = tagName;
+        this.tags = tags;
         this.giftCertificateName = giftCertificateName;
         this.giftCertificateDescription = giftCertificateDescription;
         this.sort = sort;

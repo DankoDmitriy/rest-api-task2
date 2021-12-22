@@ -6,18 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The interface Base dao is used for inheritance by interfaces that work with a database.
- * Specifies the minimum required to be set of methods.
+ * The interface Base dao.
  *
  * @param <E> the type parameter
  */
 public interface BaseDao<E extends AbstractEntity> {
     /**
-     * Find all Entities.
+     * Find all list.
      *
+     * @param startPosition the startPosition number
+     * @param rowsLimit     the max result on the startPosition
      * @return the list
      */
-    List<E> findAll();
+    List<E> findAll(Integer startPosition, Integer rowsLimit);
 
     /**
      * Find by id optional.
@@ -38,7 +39,14 @@ public interface BaseDao<E extends AbstractEntity> {
     /**
      * Delete.
      *
-     * @param <E> the e
+     * @param e the e
      */
     void delete(E e);
+
+    /**
+     * Rows in table long.
+     *
+     * @return the long
+     */
+    Long rowsInTable();
 }

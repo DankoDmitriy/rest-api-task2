@@ -2,6 +2,8 @@ package com.epam.esm.data_provider;
 
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 
+import java.util.Arrays;
+
 public class SearchParamsProvider {
 
     public GiftCertificateSearchParams getEmptyParameters() {
@@ -10,7 +12,7 @@ public class SearchParamsProvider {
 
     public GiftCertificateSearchParams getParametersByTagName() {
         GiftCertificateSearchParams searchParams = new GiftCertificateSearchParams();
-        searchParams.setTagName("Tag");
+        searchParams.setTags(Arrays.asList("Tag"));
         return searchParams;
     }
 }

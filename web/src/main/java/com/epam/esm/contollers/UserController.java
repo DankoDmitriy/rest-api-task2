@@ -1,7 +1,7 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.service.TagService;
+import com.epam.esm.model.impl.User;
+import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.PageSetup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,33 +18,33 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TagController {
-    private final TagService tagService;
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UserController {
+    private final UserService userService;
 
     @Autowired
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Tag>> getAllTags(PageSetup pageSetup) {
-        return new ResponseEntity<>(tagService.findAll(pageSetup), HttpStatus.OK);
+    public ResponseEntity<List<User>> getAllUsers(PageSetup pageSetup) {
+        return new ResponseEntity<>(userService.findAll(pageSetup), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tag> getTagById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(tagService.findById(id), HttpStatus.OK);
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
-        return new ResponseEntity<>(tagService.save(tag), HttpStatus.CREATED);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTagById(@PathVariable("id") long id) {
-        tagService.delete(id);
+    public ResponseEntity<Void> deleteUserById(@PathVariable("id") long id) {
+        userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

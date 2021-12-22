@@ -29,12 +29,12 @@ public class GiftCertificateSearchParamsValidatorTest {
                                 ValidationError.FIND_ALL)),
                 Arguments.of(
                         new GiftCertificateSearchParams(
-                                "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddasdasdasdasd"
-                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                        + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasddddddddddddddddddsdasd/asd",
+                                Arrays.asList("asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddasdasasd"
+                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasdaa"
+                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasdaa"
+                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasdaa"
+                                        + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasdaa"
+                                        + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasddddddddddddddddddsdasd/asd"),
                                 "asdasdadsasdasdasdasdasdasdasdsaddddasdddddddddddddddddasdasdasdasd"
                                         + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
                                         + "asdasdadsasdasasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"

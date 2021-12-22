@@ -9,6 +9,7 @@ import java.util.List;
  * The interface Gift certificate dao.
  */
 public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
+
     /**
      * Update gift certificate.
      *
@@ -18,10 +19,16 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
     GiftCertificate update(GiftCertificate giftCertificate);
 
     /**
-     * Search Entities.
+     * Search list.
      *
      * @param parameters the parameters
+     * @param page       the page
+     * @param pageSize   the page size
      * @return the list
      */
-    List<GiftCertificate> search(GiftCertificateSearchParams parameters);
+    List<GiftCertificate> search(GiftCertificateSearchParams parameters, Integer startPosition, Integer rowsLimit);
+
+    Long rowsInTable(GiftCertificateSearchParams searchParams);
+
+    boolean isGiftCertificateUsedInOrder(Long id);
 }

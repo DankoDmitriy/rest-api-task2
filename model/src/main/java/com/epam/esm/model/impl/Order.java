@@ -13,43 +13,37 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "gift_certificates")
+@Table(name = "orders")
 @DynamicUpdate
 @Data
 @NoArgsConstructor
-public class GiftCertificate implements AbstractEntity {
+public class Order implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "cost")
+    private BigDecimal cost;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "purchase_date")
+    private LocalDateTime purchaseDate;
 
-    @Column(name = "price")
-    private BigDecimal price;
-
-    @Column(name = "duration")
-    private Integer duration;
-
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-
-    @Column(name = "last_update_date")
-    private LocalDateTime lastUpdateDate;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany
-    @JoinTable(name = "certificate_tag"
-            , joinColumns = @JoinColumn(name = "gift_certificate_id", referencedColumnName = "id")
-            , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private List<Tag> tags;
+    @JoinTable(name = "order_has_certificate"
+            , joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "gift_certificate_id", referencedColumnName = "id")
+    )
+    private List<GiftCertificate> certificates;
 }

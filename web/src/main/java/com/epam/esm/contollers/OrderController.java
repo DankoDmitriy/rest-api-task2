@@ -1,7 +1,7 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.service.TagService;
+import com.epam.esm.model.impl.Order;
+import com.epam.esm.service.OrderService;
 import com.epam.esm.service.dto.PageSetup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,33 +18,33 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TagController {
-    private final TagService tagService;
+@RequestMapping(value = "/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+public class OrderController {
+    private final OrderService orderService;
 
     @Autowired
-    public TagController(TagService tagService) {
-        this.tagService = tagService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Tag>> getAllTags(PageSetup pageSetup) {
-        return new ResponseEntity<>(tagService.findAll(pageSetup), HttpStatus.OK);
+    public ResponseEntity<List<Order>> getAllOrders(PageSetup pageSetup) {
+        return new ResponseEntity<>(orderService.findAll(pageSetup), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tag> getTagById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(tagService.findById(id), HttpStatus.OK);
+    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
+        return new ResponseEntity<>(orderService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
-        return new ResponseEntity<>(tagService.save(tag), HttpStatus.CREATED);
+    public ResponseEntity<Order> addOrder(@RequestBody Order order) {
+        return new ResponseEntity<>(orderService.save(order), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTagById(@PathVariable("id") long id) {
-        tagService.delete(id);
+    public ResponseEntity<Void> deleteOrderById(@PathVariable("id") long id) {
+        orderService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
