@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
+import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderDoa;
 import com.epam.esm.service.GiftCertificateService;
@@ -11,13 +12,13 @@ import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.ValidationError;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,23 +56,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findById(Long id) {
-        Optional<Order> optionalTag = orderDoa.findById(id);
-        if (!optionalTag.isPresent()) {
+        Optional<Order> optionalOrder = orderDoa.findById(id);
+        if (!optionalOrder.isPresent()) {
             throw new EntityNotFoundException(ValidationError.ORDER_NOT_FOUND_BY_ID, id);
         }
-        return optionalTag.get();
+        return optionalOrder.get();
     }
 
     @Override
     @Transactional
     public Order save(Order order) {
-        order.setUser(userService.findById(order.getUser().getId()));
-        BigDecimal orderCost = BigDecimal.valueOf(0.00);
-        for (int i = 0; i < order.getCertificates().size(); i++) {
-            var certificate = certificateService.findById(order.getCertificates().get(i).getId());
-            orderCost = orderCost.add(certificate.getPrice());
-            order.getCertificates().set(i, certificate);
+        BigDecimal orderCost;
+        orderCost = BigDecimal.valueOf(0.00);
+        List<GiftCertificate> certificatesFromBase = new ArrayList<>();
+        if (order.getCertificates() != null && !order.getCertificates().isEmpty()) {
+            for (int i = 0; i < order.getCertificates().size(); i++) {
+                GiftCertificate certificate;
+                certificate = certificateService.findById(order.getCertificates().get(i).getId());
+                orderCost = orderCost.add(certificate.getPrice());
+                certificatesFromBase.add(certificate);
+            }
+        } else {
+            throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
         }
+        order.setUser(userService.findById(order.getUser().getId()));
+        order.setCertificates(certificatesFromBase);
         order.setCost(orderCost);
         order.setPurchaseDate(LocalDateTime.now());
         return orderDoa.save(order);

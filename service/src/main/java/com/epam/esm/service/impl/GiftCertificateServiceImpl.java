@@ -54,15 +54,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         this.paginationValidator = paginationValidator;
     }
 
-    //    TODO - Duplicate code: in find ALL. Fix PAGINATION IN SEARCH
     @Override
     public List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
         Long rowsInDataBase = null;
-        Integer startPosition = null;
+        Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
         List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
         if (validationErrors.contains(ValidationError.FIND_ALL)) {
             rowsInDataBase = giftCertificateDao.rowsInTable();
-            startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
             if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
                 return giftCertificateDao.findAll(startPosition, pageSetup.getSize());
             } else {
@@ -73,7 +71,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
             }
             rowsInDataBase = giftCertificateDao.rowsInTable(searchParams);
-            startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
             if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
                 return giftCertificateDao.search(searchParams, startPosition, pageSetup.getSize());
             } else {

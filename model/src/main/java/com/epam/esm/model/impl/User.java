@@ -4,6 +4,7 @@ import com.epam.esm.model.AbstractEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Data
 @NoArgsConstructor
-public class User implements AbstractEntity {
+public class User extends RepresentationModel<User> implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

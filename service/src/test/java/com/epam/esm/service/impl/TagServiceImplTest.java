@@ -1,13 +1,15 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.TagDao;
-import com.epam.esm.service.TagService;
 import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.service.impl.TagServiceImpl;
+import com.epam.esm.model.impl.Tag;
+import com.epam.esm.repository.TagDao;
+import com.epam.esm.service.TagService;
+import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.util.PageCalculator;
+import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;
@@ -38,23 +40,38 @@ public class TagServiceImplTest {
     @Mock
     private TagValidator tagValidatorMock;
 
+    @Mock
+    private PageCalculator pageCalculatorMock;
+
+    @Mock
+    private PaginationValidator paginationValidatorMock;
+
     private final TagProvider tagProvider = new TagProvider();
     private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
 
     @Test
     void findAllTest() {
-//        List<Tag> expected = tagProvider.getTagList();
-//        Mockito.when(tagDaoMock.findAll()).thenReturn(expected);
-//        List<Tag> actual = service.findAll();
-//        assertEquals(expected, actual);
+        List<Tag> expected = tagProvider.getTagList();
+        Integer startPosition = expected.size();
+        PageSetup setup = new PageSetup();
+        setup.setPage(1);
+        setup.setSize(10);
+
+        Mockito.when(tagDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+        Mockito.when(tagDaoMock.findAll(0, 10)).thenReturn(expected);
+
+        List<Tag> actual = service.findAll(setup);
+        assertEquals(expected, actual);
     }
 
     @Test
     void findByIdPositiveTest() {
-//        Optional<Tag> expected = Optional.of(tagProvider.getTag());
-//        Mockito.when(tagDaoMock.findById(testTagId)).thenReturn(expected);
-//        Optional<Tag> actual = service.findById(expected.get().getId());
-//        assertEquals(expected, actual);
+        Tag expected = tagProvider.getTag();
+        Mockito.when(tagDaoMock.findById(testTagId)).thenReturn(Optional.of(expected));
+        Tag actual = service.findById(testTagId);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -77,13 +94,13 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void savePNegativeTest() {
-//        Tag tag = new Tag();
-//        tag.setName("a.");
-//        TagService service = new TagServiceImpl(tagDaoMock, new TagValidator());
-//        List<ValidationError> expected = errorsProvider.getErrorTagNameHasIncorrectSymbol();
-//        IncorrectEntityException exception = assertThrows(IncorrectEntityException.class,
-//                () -> service.save(tag));
-//        assertEquals(expected, exception.getValidationErrors());
+    void saveNegativeTest() {
+        Tag tag = new Tag();
+        tag.setName("a.");
+        TagService service = new TagServiceImpl(tagDaoMock, new TagValidator(), pageCalculatorMock, paginationValidatorMock);
+        List<ValidationError> expected = errorsProvider.getErrorTagNameHasIncorrectSymbol();
+        IncorrectEntityException exception = assertThrows(IncorrectEntityException.class,
+                () -> service.save(tag));
+        assertEquals(expected, exception.getValidationErrors());
     }
 }

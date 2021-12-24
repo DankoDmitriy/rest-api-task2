@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
@@ -29,12 +32,18 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(PageSetup pageSetup) {
-        return new ResponseEntity<>(userService.findAll(pageSetup), HttpStatus.OK);
+        List<User> users = userService.findAll(pageSetup);
+        for (User user : users) {
+            user.add(linkTo(methodOn(UserController.class).getUserById(user.getId())).withSelfRel());
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+        User user = userService.findById(id);
+        user.add(linkTo(methodOn(UserController.class).getUserById(id)).withSelfRel());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping

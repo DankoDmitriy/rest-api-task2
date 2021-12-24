@@ -12,8 +12,11 @@ import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.GiftCertificateDao;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;
@@ -48,6 +51,12 @@ public class GiftCertificateServiceImplTest {
     private TagValidator tagValidatorMock;
 
     @Mock
+    private PageCalculator pageCalculatorMock;
+
+    @Mock
+    private PaginationValidator paginationValidatorMock;
+
+    @Mock
     private GiftCertificateSearchParamsValidator paramsValidatorMock;
 
     private final GiftCertificateProvider certificateProvider = new GiftCertificateProvider();
@@ -57,48 +66,65 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     void findAllDaoFindAllPositiveTest() {
-//        List<GiftCertificate> expected = certificateProvider.getEmptyList();
-//        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
-//        List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
-//
-//        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
-//                .thenReturn(validationErrors);
-//        Mockito.when(certificateDaoMock.findAll())
-//                .thenReturn(expected);
-//        List<GiftCertificate> actual = service.findAll(searchParams);
-//        assertEquals(expected, actual);
+        List<GiftCertificate> expected = certificateProvider.getEmptyList();
+        Integer startPosition = expected.size();
+        PageSetup setup = new PageSetup();
+        setup.setPage(1);
+        setup.setSize(10);
+        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
+        List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
+
+        Mockito.when(certificateDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+
+        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
+                .thenReturn(validationErrors);
+        Mockito.when(certificateDaoMock.findAll(0, 10))
+                .thenReturn(expected);
+        List<GiftCertificate> actual = service.findAll(searchParams, setup);
+        assertEquals(expected, actual);
     }
 
     @Test
     void findAllDaoSearchPositiveTest() {
-//        List<GiftCertificate> expected = certificateProvider.getEmptyList();
-//        GiftCertificateSearchParams searchParams = searchParamsProvider.getParametersByTagName();
-//        List<ValidationError> validationErrors = validationErrorsProvider.getEmptyErrors();
-//        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
-//                .thenReturn(validationErrors);
-//        Mockito.when(certificateDaoMock.search(searchParams))
-//                .thenReturn(expected);
-//        List<GiftCertificate> actual = service.findAll(searchParams);
-//        assertEquals(expected, actual);
+        List<GiftCertificate> expected = certificateProvider.getEmptyList();
+        Integer startPosition = expected.size();
+        PageSetup setup = new PageSetup();
+        setup.setPage(1);
+        setup.setSize(10);
+        GiftCertificateSearchParams searchParams = searchParamsProvider.getParametersByTagName();
+        List<ValidationError> validationErrors = validationErrorsProvider.getEmptyErrors();
+
+        Mockito.when(certificateDaoMock.rowsInTable(searchParams)).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+
+        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
+                .thenReturn(validationErrors);
+        Mockito.when(certificateDaoMock.search(searchParams, 0, 10))
+                .thenReturn(expected);
+        List<GiftCertificate> actual = service.findAll(searchParams, setup);
+        assertEquals(expected, actual);
     }
 
     @Test
     void findAllNegativeTest() {
-//        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
-//        List<ValidationError> validationErrors = validationErrorsProvider.getErrorIncorrectTagNameSearch();
-//        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
-//                .thenReturn(validationErrors);
-//        assertThrows(IncorrectEntityException.class, () -> service.findAll(searchParams));
+        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
+        List<ValidationError> validationErrors = validationErrorsProvider.getErrorIncorrectTagNameSearch();
+        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
+                .thenReturn(validationErrors);
+        assertThrows(IncorrectEntityException.class, () -> service.findAll(searchParams, new PageSetup()));
     }
 
     @Test
     void findByIdPositiveTest() {
-//        GiftCertificate expected = certificateProvider.getCorrectGiftCertificate();
-//        Long id = expected.getId();
-//        Mockito.when(certificateDaoMock.findById(id))
-//                .thenReturn(Optional.of(expected));
-//        GiftCertificate actual = service.findById(id);
-//        assertEquals(expected, actual);
+        GiftCertificate expected = certificateProvider.getCorrectGiftCertificate();
+        Long id = expected.getId();
+        Mockito.when(certificateDaoMock.findById(id))
+                .thenReturn(Optional.of(expected));
+        GiftCertificate actual = service.findById(id);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -150,22 +176,24 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     void updateIncorrectEntityExceptionTest() {
-//        GiftCertificate giftFromDb = certificateProvider.getCorrectGiftCertificate();
-//        GiftCertificate updateGiftCertificate = certificateProvider.getCorrectGiftCertificateWithOutId();
-//        updateGiftCertificate.setName("a.");
-//
-//        GiftCertificateService service = new GiftCertificateServiceImpl(
-//                certificateDaoMock,
-//                tagDaoMock,
-//                paramsValidatorMock,
-//                new GiftCertificateValidator(),
-//                tagValidatorMock
-//        );
-//        List<ValidationError> expected = validationErrorsProvider.getErrorGiftCertificateNameHasIncorrectSymbol();
-//        Mockito.when(certificateDaoMock.findById(giftFromDb.getId())).thenReturn(Optional.of(giftFromDb));
-//        IncorrectEntityException actual = assertThrows(IncorrectEntityException.class, () ->
-//                service.update(giftFromDb.getId(), updateGiftCertificate));
-//        assertEquals(expected, actual.getValidationErrors());
+        GiftCertificate giftFromDb = certificateProvider.getCorrectGiftCertificate();
+        GiftCertificate updateGiftCertificate = certificateProvider.getCorrectGiftCertificateWithOutId();
+        updateGiftCertificate.setName("a.");
+
+        GiftCertificateService service = new GiftCertificateServiceImpl(
+                certificateDaoMock,
+                tagDaoMock,
+                paramsValidatorMock,
+                new GiftCertificateValidator(),
+                tagValidatorMock,
+                pageCalculatorMock,
+                paginationValidatorMock
+        );
+        List<ValidationError> expected = validationErrorsProvider.getErrorGiftCertificateNameHasIncorrectSymbol();
+        Mockito.when(certificateDaoMock.findById(giftFromDb.getId())).thenReturn(Optional.of(giftFromDb));
+        IncorrectEntityException actual = assertThrows(IncorrectEntityException.class, () ->
+                service.update(giftFromDb.getId(), updateGiftCertificate));
+        assertEquals(expected, actual.getValidationErrors());
     }
 
     @Test
