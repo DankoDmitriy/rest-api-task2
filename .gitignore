@@ -9,3 +9,4 @@ service/target
 web/target
 .gitignore
 logs
+web/logs
