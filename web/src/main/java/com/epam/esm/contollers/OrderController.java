@@ -1,9 +1,10 @@
 package com.epam.esm.contollers;
 
+import com.epam.esm.hateaos.HateoasBuilder;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.dto.PageSetup;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +22,32 @@ import java.util.List;
 @RequestMapping(value = "/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
     private final OrderService orderService;
+    private final HateoasBuilder hateoasBuilder;
 
-    @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, HateoasBuilder hateoasBuilder) {
         this.orderService = orderService;
+        this.hateoasBuilder = hateoasBuilder;
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders(PageSetup pageSetup) {
-        return new ResponseEntity<>(orderService.findAll(pageSetup), HttpStatus.OK);
+    public ResponseEntity<CustomPage> getAllOrders(PageSetup pageSetup) {
+        CustomPage<Order> customPage = orderService.findAll(pageSetup);
+        List<Order> orderList = customPage.getItems();
+        hateoasBuilder.setLinksOrders(orderList);
+        return new ResponseEntity<>(customPage, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(orderService.findById(id), HttpStatus.OK);
+        Order order = orderService.findById(id);
+        hateoasBuilder.setLinks(order);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Order> addOrder(@RequestBody Order order) {
+        Order orderFromDataBase = orderService.save(order);
+        hateoasBuilder.setLinks(order);
         return new ResponseEntity<>(orderService.save(order), HttpStatus.CREATED);
     }
 

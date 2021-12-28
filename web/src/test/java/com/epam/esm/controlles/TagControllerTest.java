@@ -42,12 +42,32 @@ public class TagControllerTest {
     private static final String URL_GET_TAG_BY_ID = "/api/tags/1";
     private static final String RESULT_GET_TAG_BY_ID = "{\"id\":1,\"name\":\"tag1\"}";
 
-    private static final String URL_GET_ALL_TAGS = "/api/tags/";
-    private static final int RESULT_GET_ALL_TAGS_ARRAY_SIZE = 4;
-    private static final String RESULT_GET_ALL_TAGS = "[{\"id\":1,\"name\":\"tag1\"},"
-            + "{\"id\":2,\"name\":\"tag2\"},"
-            + "{\"id\":3,\"name\":\"tag3\"},"
-            + "{\"id\":4,\"name\":\"tag4\"}]";
+    private static final String URL_GET_ALL_TAGS = "/api/tags/?page=1&size=10";
+    private static final String RESULT_GET_ALL_TAGS = "{\"size\":10," +
+            "\"totalElements\":4," +
+            "\"totalPages\":1," +
+            "\"number\":1," +
+            "\"items\":[" +
+            "{\"id\":1," +
+            "\"name\":\"tag1\"," +
+            "\"links\":" +
+            "[{\"rel\":\"self\",\"href\":\"http://localhost/api/tags/1\"}," +
+            "{\"rel\":\"delete\",\"href\":\"http://localhost/api/tags/1\"}]}," +
+            "{\"id\":2," +
+            "\"name\":\"tag2\"," +
+            "\"links\":" +
+            "[{\"rel\":\"self\",\"href\":\"http://localhost/api/tags/2\"}," +
+            "{\"rel\":\"delete\",\"href\":\"http://localhost/api/tags/2\"}]}," +
+            "{\"id\":3," +
+            "\"name\":\"tag3\"," +
+            "\"links\":" +
+            "[{\"rel\":\"self\",\"href\":\"http://localhost/api/tags/3\"}," +
+            "{\"rel\":\"delete\",\"href\":\"http://localhost/api/tags/3\"}]}," +
+            "{\"id\":4," +
+            "\"name\":\"tag4\"," +
+            "\"links\":" +
+            "[{\"rel\":\"self\",\"href\":\"http://localhost/api/tags/4\"}," +
+            "{\"rel\":\"delete\",\"href\":\"http://localhost/api/tags/4\"}]}]}";
 
     private static final String URL_ADD_TAG = "/api/tags/";
     private static final String RESULT_ADD_TAG_INCORRECT_NAME_ERROR_CODE = "\"errorCode\":\"Error: 0001\"";
@@ -96,8 +116,7 @@ public class TagControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)))
-                .andExpect(jsonPath("$.*", hasSize(RESULT_GET_ALL_TAGS_ARRAY_SIZE)))
+                .andExpect(jsonPath("$.*", isA(Object.class)))
                 .andExpect(content().json(RESULT_GET_ALL_TAGS))
                 .andReturn();
     }

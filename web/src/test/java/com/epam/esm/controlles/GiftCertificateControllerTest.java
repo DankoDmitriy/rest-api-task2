@@ -20,15 +20,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
 import java.util.Map;
 
 import static com.epam.esm.data_provider.GiftCertificateDataProvider.GIFT_CERTIFICATE;
 import static com.epam.esm.data_provider.GiftCertificateDataProvider.RESULT;
-import static com.epam.esm.data_provider.GiftCertificateDataProvider.RESULT_SIZE;
 import static com.epam.esm.data_provider.GiftCertificateDataProvider.URL_REQUEST;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -96,8 +93,7 @@ public class GiftCertificateControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", isA(ArrayList.class)))
-                .andExpect(jsonPath("$.*", hasSize(Integer.valueOf(dataForTest.get(RESULT_SIZE)))))
+                .andExpect(jsonPath("$.*", isA(Object.class)))
                 .andExpect(content().json(dataForTest.get(RESULT)))
                 .andReturn();
     }

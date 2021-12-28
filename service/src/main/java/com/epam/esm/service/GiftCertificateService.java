@@ -1,16 +1,14 @@
 package com.epam.esm.service;
 
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.service.dto.PageSetup;
-
-import java.util.List;
 
 /**
  * The interface Gift certificate service.
  */
 public interface GiftCertificateService extends BaseService<GiftCertificate> {
-
     /**
      * Update gift certificate.
      *
@@ -21,11 +19,11 @@ public interface GiftCertificateService extends BaseService<GiftCertificate> {
     GiftCertificate update(Long id, GiftCertificate giftCertificate);
 
     /**
-     * Find all list.
+     * Find all custom page.
      *
      * @param searchParams the search params
      * @param pageSetup    the page setup
-     * @return the list
+     * @return the custom page
      */
-    List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup);
+    CustomPage findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup);
 }

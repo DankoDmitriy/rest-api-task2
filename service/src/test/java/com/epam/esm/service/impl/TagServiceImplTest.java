@@ -1,9 +1,11 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.TagService;
@@ -48,21 +50,22 @@ public class TagServiceImplTest {
 
     private final TagProvider tagProvider = new TagProvider();
     private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
+    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
     @Test
     void findAllTest() {
-        List<Tag> expected = tagProvider.getTagList();
-        Integer startPosition = expected.size();
+        CustomPage<Tag> expected = customPageProvider.getCustomPageTag();
+        Integer startPosition = expected.getItems().size();
         PageSetup setup = new PageSetup();
         setup.setPage(1);
         setup.setSize(10);
 
-        Mockito.when(tagDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(tagDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
         Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(tagDaoMock.findAll(0, 10)).thenReturn(expected);
+        Mockito.when(tagDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
 
-        List<Tag> actual = service.findAll(setup);
+        CustomPage<Tag> actual = service.findAll(setup);
         assertEquals(expected, actual);
     }
 

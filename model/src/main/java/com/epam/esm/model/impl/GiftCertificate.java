@@ -4,9 +4,11 @@ import com.epam.esm.model.AbstractEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,11 +21,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditListener.class)
 @Table(name = "gift_certificates")
 @DynamicUpdate
 @Data
 @NoArgsConstructor
-public class GiftCertificate implements AbstractEntity {
+public class GiftCertificate extends RepresentationModel<GiftCertificate> implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

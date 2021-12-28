@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderDoa;
@@ -44,11 +45,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAll(PageSetup pageSetup) {
+    public CustomPage findAll(PageSetup pageSetup) {
+        CustomPage<Order> customPage = new CustomPage<>();
         Long rowsInDataBase = orderDoa.rowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
         if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
-            return orderDoa.findAll(startPosition, pageSetup.getSize());
+            pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
+            customPage.setItems(orderDoa.findAll(startPosition, pageSetup.getSize()));
+            return customPage;
         } else {
             throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
         }

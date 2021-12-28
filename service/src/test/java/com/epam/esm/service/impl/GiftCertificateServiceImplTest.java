@@ -1,11 +1,13 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.GiftCertificateProvider;
 import com.epam.esm.data_provider.SearchParamsProvider;
 import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.model.impl.Tag;
@@ -63,48 +65,51 @@ public class GiftCertificateServiceImplTest {
     private final SearchParamsProvider searchParamsProvider = new SearchParamsProvider();
     private final ValidationErrorsProvider validationErrorsProvider = new ValidationErrorsProvider();
     private final TagProvider tagProvider = new TagProvider();
+    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
     @Test
     void findAllDaoFindAllPositiveTest() {
-        List<GiftCertificate> expected = certificateProvider.getEmptyList();
-        Integer startPosition = expected.size();
+        CustomPage<GiftCertificate> expected = customPageProvider.getCustomPageGiftCertificate();
+        Integer startPosition = expected.getItems().size();
         PageSetup setup = new PageSetup();
         setup.setPage(1);
         setup.setSize(10);
         GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
         List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
 
-        Mockito.when(certificateDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(certificateDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
         Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
 
         Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
                 .thenReturn(validationErrors);
         Mockito.when(certificateDaoMock.findAll(0, 10))
-                .thenReturn(expected);
-        List<GiftCertificate> actual = service.findAll(searchParams, setup);
+                .thenReturn(expected.getItems());
+
+        CustomPage<GiftCertificate> actual = service.findAll(searchParams, setup);
         assertEquals(expected, actual);
     }
 
     @Test
     void findAllDaoSearchPositiveTest() {
-        List<GiftCertificate> expected = certificateProvider.getEmptyList();
-        Integer startPosition = expected.size();
+        CustomPage<GiftCertificate> expected = customPageProvider.getCustomPageGiftCertificate();
+        Integer startPosition = expected.getItems().size();
         PageSetup setup = new PageSetup();
         setup.setPage(1);
         setup.setSize(10);
         GiftCertificateSearchParams searchParams = searchParamsProvider.getParametersByTagName();
         List<ValidationError> validationErrors = validationErrorsProvider.getEmptyErrors();
 
-        Mockito.when(certificateDaoMock.rowsInTable(searchParams)).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(certificateDaoMock.rowsInTable(searchParams)).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
         Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
 
         Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
                 .thenReturn(validationErrors);
         Mockito.when(certificateDaoMock.search(searchParams, 0, 10))
-                .thenReturn(expected);
-        List<GiftCertificate> actual = service.findAll(searchParams, setup);
+                .thenReturn(expected.getItems());
+
+        CustomPage<GiftCertificate> actual = service.findAll(searchParams, setup);
         assertEquals(expected, actual);
     }
 

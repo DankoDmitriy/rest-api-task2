@@ -3,6 +3,7 @@ package com.epam.esm.model.impl;
 import com.epam.esm.model.AbstractEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -11,7 +12,9 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class GiftCertificateSearchParams implements AbstractEntity {
+public class GiftCertificateSearchParams
+        extends RepresentationModel<GiftCertificateSearchParams>
+        implements AbstractEntity {
     private List<String> tags;
     private String giftCertificateName;
     private String giftCertificateDescription;

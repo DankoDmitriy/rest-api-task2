@@ -1,6 +1,6 @@
 package com.epam.esm.controlles;
 
-import com.epam.esm.data_provider.UserDataProvider;
+import com.epam.esm.data_provider.OrderDataProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.ServletContext;
 import java.util.Map;
 
-import static com.epam.esm.data_provider.UserDataProvider.RESULT;
-import static com.epam.esm.data_provider.UserDataProvider.URL_REQUEST;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.isA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,13 +33,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("/application-test.properties")
 @Sql(value = {"/database-data-initialization.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/database-data-initialization.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class UserControllerTest {
+public class OrderControllerTest {
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
 
-    private final UserDataProvider provider = new UserDataProvider();
+    private final OrderDataProvider provider = new OrderDataProvider();
 
     @BeforeEach
     public void setup() throws Exception {
@@ -54,40 +52,29 @@ public class UserControllerTest {
         ServletContext servletContext = webApplicationContext.getServletContext();
         Assertions.assertNotNull(servletContext);
         Assertions.assertTrue(servletContext instanceof MockServletContext);
-        Assertions.assertNotNull(webApplicationContext.getBean("tagController"));
+        Assertions.assertNotNull(webApplicationContext.getBean("giftCertificateController"));
     }
 
     @Test
-    public void getUserByIdPositiveTest() throws Exception {
-        Map<String, String> dataForTest = provider.getUserByIdPositiveTest();
-        this.mockMvc.perform(get(dataForTest.get(UserDataProvider.URL_REQUEST)))
+    public void getOrderByIdPositiveTest() throws Exception {
+        Map<String, String> dataForTest = provider.getOrderByIdPositiveTest();
+        this.mockMvc.perform(get(dataForTest.get(OrderDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(dataForTest.get(UserDataProvider.RESULT)))
+                .andExpect(content().json(dataForTest.get(OrderDataProvider.RESULT)))
                 .andReturn();
     }
 
     @Test
-    public void getUserByIdNotFoundTest() throws Exception {
-        Map<String, String> dataForTest = provider.getUserByIdNotFoundTest();
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(containsString(dataForTest.get(RESULT))))
-                .andReturn();
-    }
-
-    @Test
-    public void getAllUsersTest() throws Exception {
-        Map<String, String> dataForTest = provider.getAllUsersTest();
-        this.mockMvc.perform(get(dataForTest.get(UserDataProvider.URL_REQUEST)))
+    public void getAllOrdersTest() throws Exception {
+        Map<String, String> dataForTest = provider.getAllOrdersTest();
+        this.mockMvc.perform(get(dataForTest.get(OrderDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.*", isA(Object.class)))
-                .andExpect(content().json(dataForTest.get(UserDataProvider.RESULT)))
+                .andExpect(content().json(dataForTest.get(OrderDataProvider.RESULT)))
                 .andReturn();
     }
 }

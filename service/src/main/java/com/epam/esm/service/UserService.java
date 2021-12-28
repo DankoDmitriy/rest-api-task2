@@ -1,10 +1,18 @@
 package com.epam.esm.service;
 
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.User;
 import com.epam.esm.service.dto.PageSetup;
 
-import java.util.List;
-
+/**
+ * The interface User service.
+ */
 public interface UserService extends BaseService<User> {
-    List<User> findAll(PageSetup pageSetup);
+    /**
+     * Find all custom page.
+     *
+     * @param pageSetup the page setup
+     * @return the custom page
+     */
+    CustomPage findAll(PageSetup pageSetup);
 }

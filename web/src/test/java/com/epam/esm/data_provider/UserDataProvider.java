@@ -9,7 +9,7 @@ public class UserDataProvider {
     private static final String URL_GET_GIFT_CERTIFICATE_BY_ID_NOT_FOUND = "/api/users/100";
     private static final String NOT_FOUND_DATA_ERROR_CODE = "\"errorCode\":\"Error: 0002\"";
 
-    private static final String URL_GET_ALL_USERS = "/api/users/";
+    private static final String URL_GET_ALL_USERS = "/api/users/?page=1&size=10";
 
     public static final String URL_REQUEST = "url";
     public static final String RESULT = "result";
@@ -34,21 +34,25 @@ public class UserDataProvider {
     }
 
     public Map<String, String> getAllUsersTest() {
-        String resultSize = "3";
-        String listResult = "[" +
-                "{" +
-                "\"id\":1," +
-                "\"name\":\"User1\"" +
-                "}," +
-                "{" +
-                "\"id\":2," +
-                "\"name\":\"User2\"" +
-                "}," +
-                "{" +
-                "\"id\":3," +
-                "\"name\":\"User3\"" +
-                "}" +
-                "]";
+        String resultSize = "5";
+        String listResult = "{" +
+                "\"size\":10," +
+                "\"totalElements\":3," +
+                "\"totalPages\":1," +
+                "\"number\":1," +
+                "\"items\":[" +
+                "{\"id\":1," +
+                "\"name\":\"User1\"," +
+                "\"links\":[" +
+                "{\"rel\":\"self\"," +
+                "\"href\":\"http://localhost/api/users/1\"}]}," +
+                "{\"id\":2," +
+                "\"name\":\"User2\"," +
+                "\"links\":[{\"rel\":\"self\",\"href\":\"http://localhost/api/users/2\"}]}," +
+                "{\"id\":3," +
+                "\"name\":\"User3\"," +
+                "\"links\":[{\"rel\":\"self\",\"href\":\"http://localhost/api/users/3\"}]}]" +
+                "}";
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put(URL_REQUEST, URL_GET_ALL_USERS);
         resultMap.put(RESULT, listResult);

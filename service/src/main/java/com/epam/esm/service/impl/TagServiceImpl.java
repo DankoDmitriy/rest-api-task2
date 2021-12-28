@@ -4,6 +4,7 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.TagService;
@@ -39,11 +40,14 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAll(PageSetup pageSetup) {
+    public CustomPage findAll(PageSetup pageSetup) {
+        CustomPage<Tag> customPage = new CustomPage<>();
         Long rowsInDataBase = tagDao.rowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
         if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
-            return tagDao.findAll(startPosition, pageSetup.getSize());
+            pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
+            customPage.setItems(tagDao.findAll(startPosition, pageSetup.getSize()));
+            return customPage;
         } else {
             throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
         }

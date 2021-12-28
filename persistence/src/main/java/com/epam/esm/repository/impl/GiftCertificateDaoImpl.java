@@ -139,9 +139,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     private void setOrderParameters(CriteriaBuilder cb,
-                            CriteriaQuery<GiftCertificate> cQuery,
-                            Root<GiftCertificate> root,
-                            GiftCertificateSearchParams searchParams) {
+                                    CriteriaQuery<GiftCertificate> cQuery,
+                                    Root<GiftCertificate> root,
+                                    GiftCertificateSearchParams searchParams) {
         if (searchParams.getSort() != null && searchParams.getSort().size() > 0) {
             Set<String> sort = searchParams.getSort();
             for (String s : sort) {

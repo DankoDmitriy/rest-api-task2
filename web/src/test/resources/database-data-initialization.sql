@@ -2,13 +2,13 @@ delete from certificate_tag;
 delete from tags;
 delete from order_has_certificate;
 delete from gift_certificates;
-delete from `orders`;
+delete from orders;
 delete from users;
 
-ALTER TABLE tag AUTO_INCREMENT = 10;
+ALTER TABLE tags AUTO_INCREMENT = 10;
 ALTER TABLE certificate_tag AUTO_INCREMENT = 10;
-ALTER TABLE gift_certificate AUTO_INCREMENT = 10;
-ALTER TABLE user AUTO_INCREMENT = 10;
+ALTER TABLE gift_certificates AUTO_INCREMENT = 10;
+ALTER TABLE users AUTO_INCREMENT = 10;
 
 insert into tags (id, name)
 values (1, 'tag1'),

@@ -4,6 +4,7 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.model.impl.Tag;
@@ -55,14 +56,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
+    public CustomPage findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
         Long rowsInDataBase = null;
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
         List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
+        CustomPage<GiftCertificate> customPage = new CustomPage<>();
         if (validationErrors.contains(ValidationError.FIND_ALL)) {
             rowsInDataBase = giftCertificateDao.rowsInTable();
             if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
-                return giftCertificateDao.findAll(startPosition, pageSetup.getSize());
+                pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
+                customPage.setItems(giftCertificateDao.findAll(startPosition, pageSetup.getSize()));
+                return customPage;
             } else {
                 throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
             }
@@ -71,8 +75,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
             }
             rowsInDataBase = giftCertificateDao.rowsInTable(searchParams);
+            pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
             if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
-                return giftCertificateDao.search(searchParams, startPosition, pageSetup.getSize());
+                customPage.setItems(giftCertificateDao.search(searchParams, startPosition, pageSetup.getSize()));
+                return customPage;
             } else {
                 throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
             }

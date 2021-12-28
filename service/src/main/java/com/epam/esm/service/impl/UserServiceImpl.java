@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.User;
 import com.epam.esm.repository.UserDao;
 import com.epam.esm.service.UserService;
@@ -11,8 +12,8 @@ import com.epam.esm.validator.PaginationValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,11 +49,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll(PageSetup pageSetup) {
+    public CustomPage findAll(PageSetup pageSetup) {
+        CustomPage<User> customPage = new CustomPage<>();
         Long rowsInDataBase = userDao.rowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
         if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
-            return userDao.findAll(startPosition, pageSetup.getSize());
+            pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
+            customPage.setItems(userDao.findAll(startPosition, pageSetup.getSize()));
+            return customPage;
         } else {
             throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
         }

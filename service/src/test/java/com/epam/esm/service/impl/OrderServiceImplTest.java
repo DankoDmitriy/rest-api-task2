@@ -1,8 +1,10 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.OrderProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
+import com.epam.esm.model.impl.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderDoa;
@@ -46,6 +48,7 @@ public class OrderServiceImplTest {
     private PaginationValidator paginationValidatorMock;
 
     private final OrderProvider provider = new OrderProvider();
+    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
     @Test
     void findByIdPositiveTest() {
@@ -66,18 +69,18 @@ public class OrderServiceImplTest {
 
     @Test
     public void findAllPositiveTest() {
-        List<Order> expected = provider.getOrderList();
-        Integer startPosition = expected.size();
+        CustomPage<Order> expected = customPageProvider.getCustomPageOrder();
+        Integer startPosition = expected.getItems().size();
         PageSetup setup = new PageSetup();
         setup.setPage(1);
         setup.setSize(10);
 
-        Mockito.when(orderDoaMock.rowsInTable()).thenReturn(Long.valueOf(expected.size()));
+        Mockito.when(orderDoaMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
         Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected);
+        Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected.getItems());
 
-        List<Order> actual = service.findAll(setup);
+        CustomPage<Order> actual = service.findAll(setup);
         assertEquals(expected, actual);
     }
 
