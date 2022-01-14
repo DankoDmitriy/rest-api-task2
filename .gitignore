@@ -8,3 +8,5 @@ service/src/main/webapp
 service/target
 web/target
 .gitignore
+logs
+web/logs

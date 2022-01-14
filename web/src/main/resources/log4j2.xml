@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" monitorInterval="43200">
+    <Properties>
+        <!--Here has made pattern for Appenders format string and VARs for configuration-->
+        <property name="LOG_FOLDER">logs</property>
+        <property name="pattern_cmd">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{5} - %m%n</property>
+        <property name="pattern_file">%d{yyyy-MM-dd HH:mm:ss} [%t] [%M] [%L] %-5level %logger{5} - %m%n</property>
+    </Properties>
+    <Appenders>
+        <!--Appender for printing log in console-->
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_cmd}"/>
+        </Console>
+        <!--Appender for LOGS in FILES-->
+        <RollingFile name="TxtFile" fileName="${LOG_FOLDER}/log.txt" append="true"
+                     filePattern="${LOG_FOLDER}/${date:yyyy-MM-dd}/%d{yyyy-MM-dd_HH-mm}_%i.txt">
+            <PatternLayout pattern="${pattern_file}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="512 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="15"/>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <!--Loger LEVEL-->
+        <Root level="INFO">
+            <!--ENABLES LOGGERS-->
+            <AppenderRef ref="STDOUT" level="debug"/>
+            <AppenderRef ref="TxtFile" level="debug"/>
+        </Root>
+    </Loggers>
+</Configuration>

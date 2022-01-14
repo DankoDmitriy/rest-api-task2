@@ -3,8 +3,8 @@ package com.epam.esm.exception;
 import com.epam.esm.validator.ValidationError;
 
 public class EntityNotFoundException extends RuntimeException {
-    private ValidationError errorMessage;
-    private Long id;
+    private final ValidationError errorMessage;
+    private final Long id;
 
     public EntityNotFoundException(ValidationError errorMessage, Long id) {
         this.errorMessage = errorMessage;

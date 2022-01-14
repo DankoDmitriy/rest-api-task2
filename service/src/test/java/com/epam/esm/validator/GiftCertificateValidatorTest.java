@@ -4,7 +4,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +16,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GiftCertificateValidatorTest {
+
+    private final static String FILE_WITH_TEST_DATA = "src/test/resources/testDataForGiftCertificateValidatorTest.txt";
+
     private final GiftCertificateValidator validator = new GiftCertificateValidator();
 
     @ParameterizedTest
@@ -23,7 +29,8 @@ public class GiftCertificateValidatorTest {
         assertEquals(expected, actual);
     }
 
-    private static Stream<Arguments> dataForValidateName() {
+    private static Stream<Arguments> dataForValidateName() throws IOException {
+        String testData = new String(Files.readAllBytes(Paths.get(FILE_WITH_TEST_DATA)));
         return Stream.of(
                 Arguments.of("Gig 1", new ArrayList<ValidationError>()),
                 Arguments.of(null,
@@ -33,10 +40,7 @@ public class GiftCertificateValidatorTest {
                         Arrays.asList(
                                 ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_SHORT,
                                 ValidationError.GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS)),
-                Arguments.of("asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdasdasdasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdaasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdasd/asd",
+                Arguments.of(testData,
                         Arrays.asList(
                                 ValidationError.GIFT_CERTIFICATE_NAME_LENGTH_IS_LONG,
                                 ValidationError.GIFT_CERTIFICATE_NAME_HAVE_NOT_CORRECT_SYMBOLS)
@@ -52,7 +56,8 @@ public class GiftCertificateValidatorTest {
         assertEquals(expected, actual);
     }
 
-    private static Stream<Arguments> dataForValidateDescription() {
+    private static Stream<Arguments> dataForValidateDescription() throws IOException {
+        String testData = new String(Files.readAllBytes(Paths.get(FILE_WITH_TEST_DATA)));
         return Stream.of(
                 Arguments.of("description", new ArrayList<ValidationError>()),
                 Arguments.of(null,
@@ -62,10 +67,7 @@ public class GiftCertificateValidatorTest {
                         Arrays.asList(
                                 ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_SHORT,
                                 ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS)),
-                Arguments.of("asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdasdasdasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsassdasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdaasdasd"
-                                + "asdasdadsasdasdasdasdasdasdasdasdddddddddddasdddddddddddddddddddddasdadsasdasd/asd",
+                Arguments.of(testData,
                         Arrays.asList(
                                 ValidationError.GIFT_CERTIFICATE_DESCRIPTION_LENGTH_IS_LONG,
                                 ValidationError.GIFT_CERTIFICATE_DESCRIPTION_HAVE_NOT_CORRECT_SYMBOLS)
