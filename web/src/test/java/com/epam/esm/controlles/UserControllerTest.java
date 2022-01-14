@@ -59,35 +59,35 @@ public class UserControllerTest {
 
     @Test
     public void getUserByIdPositiveTest() throws Exception {
-        Map<String, String> dataForTest = provider.getUserByIdPositiveTest();
-        this.mockMvc.perform(get(dataForTest.get(UserDataProvider.URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getUserByIdPositiveTest();
+        this.mockMvc.perform(get(expectedResult.get(UserDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(dataForTest.get(UserDataProvider.RESULT)))
+                .andExpect(content().json(expectedResult.get(UserDataProvider.RESULT)))
                 .andReturn();
     }
 
     @Test
     public void getUserByIdNotFoundTest() throws Exception {
-        Map<String, String> dataForTest = provider.getUserByIdNotFoundTest();
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getUserByIdNotFoundTest();
+        this.mockMvc.perform(get(expectedResult.get(URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(containsString(dataForTest.get(RESULT))))
+                .andExpect(content().string(containsString(expectedResult.get(RESULT))))
                 .andReturn();
     }
 
     @Test
     public void getAllUsersTest() throws Exception {
-        Map<String, String> dataForTest = provider.getAllUsersTest();
-        this.mockMvc.perform(get(dataForTest.get(UserDataProvider.URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getAllUsersTest();
+        this.mockMvc.perform(get(expectedResult.get(UserDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.*", isA(Object.class)))
-                .andExpect(content().json(dataForTest.get(UserDataProvider.RESULT)))
+                .andExpect(content().json(expectedResult.get(UserDataProvider.RESULT)))
                 .andReturn();
     }
 }

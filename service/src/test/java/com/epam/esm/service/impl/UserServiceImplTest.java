@@ -4,12 +4,12 @@ import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.UserProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.User;
 import com.epam.esm.repository.UserDao;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ public class UserServiceImplTest {
     private PageCalculator pageCalculatorMock;
 
     @Mock
-    private PaginationValidator paginationValidatorMock;
+    private PaginationVerifier paginationValidatorMock;
 
     private final UserProvider provider = new UserProvider();
     private final CustomPageProvider customPageProvider = new CustomPageProvider();
@@ -66,9 +66,9 @@ public class UserServiceImplTest {
         setup.setPage(1);
         setup.setSize(10);
 
-        Mockito.when(userDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+        Mockito.when(userDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+//        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
         Mockito.when(userDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
 
         CustomPage<User> actual = service.findAll(setup);
@@ -83,7 +83,7 @@ public class UserServiceImplTest {
         setup.setPage(-1);
         setup.setSize(-10);
 
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(false);
 
         assertThrows(InputPagesParametersIncorrect.class, () -> service.findAll(setup));

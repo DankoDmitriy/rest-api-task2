@@ -9,8 +9,8 @@ public interface TagDao extends BaseDao<Tag> {
     /**
      * Is tag used in gift certificate boolean.
      *
-     * @param id the id
-     * @return the boolean
+     * @param id tag ID
+     * @return return true if tag used in gift certificates else return false
      */
     boolean isTagUsedInGiftCertificate(Long id);
 }

@@ -3,8 +3,8 @@ package com.epam.esm.validator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaginationValidator {
-    public boolean validate(Long rowsInDataBase, Integer pageNumber, Integer startPosition) {
+public class PaginationVerifier {
+    public boolean verifyPagination(Long rowsInDataBase, Integer pageNumber, Integer startPosition) {
         if (pageNumber < 0) {
             return false;
         }

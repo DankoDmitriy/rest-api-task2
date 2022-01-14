@@ -28,18 +28,18 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
     List<GiftCertificate> search(GiftCertificateSearchParams parameters, Integer startPosition, Integer rowsLimit);
 
     /**
-     * Rows in table long.
+     * Count rows in table by parameters
      *
      * @param searchParams the search params
      * @return the long
      */
-    Long rowsInTable(GiftCertificateSearchParams searchParams);
+    Long countRowsInTable(GiftCertificateSearchParams searchParams);
 
     /**
      * Is gift certificate used in order boolean.
      *
-     * @param id the id
-     * @return the boolean
+     * @param id giftCertificate ID
+     * @return return true if gift certificates used in orders else return false
      */
     boolean isGiftCertificateUsedInOrder(Long id);
 }

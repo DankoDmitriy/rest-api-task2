@@ -57,24 +57,24 @@ public class OrderControllerTest {
 
     @Test
     public void getOrderByIdPositiveTest() throws Exception {
-        Map<String, String> dataForTest = provider.getOrderByIdPositiveTest();
-        this.mockMvc.perform(get(dataForTest.get(OrderDataProvider.URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getOrderByIdPositiveTest();
+        this.mockMvc.perform(get(expectedResult.get(OrderDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(dataForTest.get(OrderDataProvider.RESULT)))
+                .andExpect(content().json(expectedResult.get(OrderDataProvider.RESULT)))
                 .andReturn();
     }
 
     @Test
     public void getAllOrdersTest() throws Exception {
-        Map<String, String> dataForTest = provider.getAllOrdersTest();
-        this.mockMvc.perform(get(dataForTest.get(OrderDataProvider.URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getAllOrdersTest();
+        this.mockMvc.perform(get(expectedResult.get(OrderDataProvider.URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.*", isA(Object.class)))
-                .andExpect(content().json(dataForTest.get(OrderDataProvider.RESULT)))
+                .andExpect(content().json(expectedResult.get(OrderDataProvider.RESULT)))
                 .andReturn();
     }
 }

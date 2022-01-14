@@ -4,13 +4,13 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
     private final TagValidator validator;
     private final PageCalculator pageCalculator;
-    private final PaginationValidator paginationValidator;
+    private final PaginationVerifier paginationValidator;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao,
                           TagValidator validator,
                           PageCalculator pageCalculator,
-                          PaginationValidator paginationValidator) {
+                          PaginationVerifier paginationValidator) {
         this.tagDao = tagDao;
         this.validator = validator;
         this.pageCalculator = pageCalculator;
@@ -42,9 +42,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public CustomPage findAll(PageSetup pageSetup) {
         CustomPage<Tag> customPage = new CustomPage<>();
-        Long rowsInDataBase = tagDao.rowsInTable();
+        Long rowsInDataBase = tagDao.countRowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
-        if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+        if (paginationValidator.verifyPagination(rowsInDataBase, pageSetup.getPage(), startPosition)) {
             pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
             customPage.setItems(tagDao.findAll(startPosition, pageSetup.getSize()));
             return customPage;

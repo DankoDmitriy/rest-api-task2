@@ -66,35 +66,35 @@ public class GiftCertificateControllerTest {
 
     @Test
     public void getGiftCertificateByIdPositiveTest() throws Exception {
-        Map<String, String> dataForTest = provider.getGiftCertificateByIdPositiveTest();
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getGiftCertificateByIdPositiveTest();
+        this.mockMvc.perform(get(expectedResult.get(URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(dataForTest.get(RESULT)))
+                .andExpect(content().json(expectedResult.get(RESULT)))
                 .andReturn();
     }
 
     @Test
     public void getGiftCertificateByIdNotFoundTest() throws Exception {
-        Map<String, String> dataForTest = provider.getGiftCertificateByIdNotFoundTest();
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getGiftCertificateByIdNotFoundTest();
+        this.mockMvc.perform(get(expectedResult.get(URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(containsString(dataForTest.get(RESULT))))
+                .andExpect(content().string(containsString(expectedResult.get(RESULT))))
                 .andReturn();
     }
 
     @Test
     public void getAllGiftCertificatesTest() throws Exception {
-        Map<String, String> dataForTest = provider.getAllGiftCertificatesTest();
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
+        Map<String, String> expectedResult = provider.getAllGiftCertificatesTest();
+        this.mockMvc.perform(get(expectedResult.get(URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.*", isA(Object.class)))
-                .andExpect(content().json(dataForTest.get(RESULT)))
+                .andExpect(content().json(expectedResult.get(RESULT)))
                 .andReturn();
     }
 
@@ -102,10 +102,10 @@ public class GiftCertificateControllerTest {
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void addGiftCertificateTest() throws Exception {
-        Map<String, Object> dataForTest = provider.addGiftCertificateTest();
-        GiftCertificate certificate = (GiftCertificate) dataForTest.get(GIFT_CERTIFICATE);
+        Map<String, Object> expectedResult = provider.addGiftCertificateTest();
+        GiftCertificate certificate = (GiftCertificate) expectedResult.get(GIFT_CERTIFICATE);
         ObjectMapper objectMapper = new ObjectMapper();
-        this.mockMvc.perform(post((String) dataForTest.get(URL_REQUEST))
+        this.mockMvc.perform(post((String) expectedResult.get(URL_REQUEST))
                         .content(objectMapper.writeValueAsString(certificate))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -116,39 +116,39 @@ public class GiftCertificateControllerTest {
                 .andExpect(content().string(containsString(certificate.getDescription())))
                 .andExpect(content().string(containsString(certificate.getPrice().toString())))
                 .andExpect(content().string(containsString(certificate.getDuration().toString())))
-                .andExpect(content().string(containsString((String) dataForTest.get(RESULT))));
+                .andExpect(content().string(containsString((String) expectedResult.get(RESULT))));
     }
 
     @Test
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void addGiftCertificateNegativeTest() throws Exception {
-        Map<String, Object> dataForTest = provider.addGiftCertificateNegativeTest();
-        GiftCertificate certificate = (GiftCertificate) dataForTest.get(GIFT_CERTIFICATE);
+        Map<String, Object> expectedResult = provider.addGiftCertificateNegativeTest();
+        GiftCertificate certificate = (GiftCertificate) expectedResult.get(GIFT_CERTIFICATE);
         ObjectMapper objectMapper = new ObjectMapper();
-        this.mockMvc.perform(post((String) dataForTest.get(URL_REQUEST))
+        this.mockMvc.perform(post((String) expectedResult.get(URL_REQUEST))
                         .content(objectMapper.writeValueAsString(certificate))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(containsString((String) dataForTest.get(RESULT))));
+                .andExpect(content().string(containsString((String) expectedResult.get(RESULT))));
     }
 
     @Test
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void deleteGiftCertificateByIdTest() throws Exception {
-        Map<String, String> dataForTest = provider.deleteGiftCertificateByIdTest();
+        Map<String, String> expectedResult = provider.deleteGiftCertificateByIdTest();
 
-        this.mockMvc.perform(delete(dataForTest.get(URL_REQUEST)))
+        this.mockMvc.perform(delete(expectedResult.get(URL_REQUEST)))
                 .andDo(print());
-        this.mockMvc.perform(get(dataForTest.get(URL_REQUEST)))
+        this.mockMvc.perform(get(expectedResult.get(URL_REQUEST)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(containsString(dataForTest.get(RESULT))))
+                .andExpect(content().string(containsString(expectedResult.get(RESULT))))
                 .andReturn();
     }
 
@@ -156,10 +156,10 @@ public class GiftCertificateControllerTest {
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void updateGiftCertificateByIdTest() throws Exception {
-        Map<String, Object> dataForTest = provider.updateGiftCertificateByIdTest();
-        GiftCertificate certificate = (GiftCertificate) dataForTest.get(GIFT_CERTIFICATE);
+        Map<String, Object> expectedResult = provider.updateGiftCertificateByIdTest();
+        GiftCertificate certificate = (GiftCertificate) expectedResult.get(GIFT_CERTIFICATE);
         ObjectMapper objectMapper = new ObjectMapper();
-        this.mockMvc.perform(patch((String) dataForTest.get(URL_REQUEST))
+        this.mockMvc.perform(patch((String) expectedResult.get(URL_REQUEST))
                         .content(objectMapper.writeValueAsString(certificate))
                         .contentType(MediaType.APPLICATION_JSON)
                 )

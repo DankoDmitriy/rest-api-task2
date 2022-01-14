@@ -46,7 +46,7 @@ public class OrderDaoImpl implements OrderDoa {
     }
 
     @Override
-    public Long rowsInTable() {
+    public Long countRowsInTable() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cQuery = cb.createQuery(Long.class);
         cQuery.select(cb.count(cQuery.from(Order.class)));

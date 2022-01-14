@@ -1,6 +1,5 @@
 package com.epam.esm.model.impl;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +31,6 @@ public class AuditListener {
     }
 
     private void audit(String operation, Object entity) {
-        logger.log(Level.INFO, operation + ": " + entity);
+        logger.info("{} : {}", operation, entity);
     }
 }

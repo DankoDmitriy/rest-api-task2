@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 public interface BaseDao<E extends AbstractEntity> {
     /**
-     * Find all list.
+     * Find all Entities.
      *
      * @param startPosition the startPosition number
      * @param rowsLimit     the max result on the startPosition
@@ -23,7 +23,7 @@ public interface BaseDao<E extends AbstractEntity> {
     /**
      * Find by id optional.
      *
-     * @param id the id
+     * @param id entity ID
      * @return the optional
      */
     Optional<E> findById(Long id);
@@ -44,9 +44,9 @@ public interface BaseDao<E extends AbstractEntity> {
     void delete(E e);
 
     /**
-     * Rows in table long.
+     * Count rows in table.
      *
      * @return the long
      */
-    Long rowsInTable();
+    Long countRowsInTable();
 }

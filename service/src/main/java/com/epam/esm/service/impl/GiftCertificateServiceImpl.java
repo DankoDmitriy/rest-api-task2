@@ -4,7 +4,7 @@ import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
 import com.epam.esm.exception.UsedEntityException;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.model.impl.Tag;
@@ -15,7 +15,7 @@ import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateValidator giftCertificateValidator;
     private final TagValidator tagValidator;
     private final PageCalculator pageCalculator;
-    private final PaginationValidator paginationValidator;
+    private final PaginationVerifier paginationValidator;
 
 
     @Autowired
@@ -45,7 +45,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                                       GiftCertificateValidator giftCertificateValidator,
                                       TagValidator tagValidator,
                                       PageCalculator pageCalculator,
-                                      PaginationValidator paginationValidator) {
+                                      PaginationVerifier paginationValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
         this.giftCertificateSearchParamsValidator = giftCertificateSearchParamsValidator;
@@ -62,8 +62,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         List<ValidationError> validationErrors = giftCertificateSearchParamsValidator.validateSearchParams(searchParams);
         CustomPage<GiftCertificate> customPage = new CustomPage<>();
         if (validationErrors.contains(ValidationError.FIND_ALL)) {
-            rowsInDataBase = giftCertificateDao.rowsInTable();
-            if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+            rowsInDataBase = giftCertificateDao.countRowsInTable();
+            if (paginationValidator.verifyPagination(rowsInDataBase, pageSetup.getPage(), startPosition)) {
                 pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
                 customPage.setItems(giftCertificateDao.findAll(startPosition, pageSetup.getSize()));
                 return customPage;
@@ -74,15 +74,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             if (!validationErrors.isEmpty()) {
                 throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
             }
-            rowsInDataBase = giftCertificateDao.rowsInTable(searchParams);
+            rowsInDataBase = giftCertificateDao.countRowsInTable(searchParams);
             pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
-            if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+            if (paginationValidator.verifyPagination(rowsInDataBase, pageSetup.getPage(), startPosition)) {
                 customPage.setItems(giftCertificateDao.search(searchParams, startPosition, pageSetup.getSize()));
                 return customPage;
             } else {
                 throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
             }
         }
+//        return customPage;
     }
 
     @Override
@@ -128,14 +129,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate update(Long id, GiftCertificate giftCertificate) {
-        List<ValidationError> validationErrors = new ArrayList<>();
         GiftCertificate updatedCertificate = findById(id);
 
-        checkGiftCertificateBeforeUpdate(updatedCertificate, giftCertificate, validationErrors);
+        checkGiftCertificateBeforeUpdate(updatedCertificate, giftCertificate);
 
-        if (!validationErrors.isEmpty()) {
-            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
-        }
         if (giftCertificate.getTags() != null && giftCertificate.getTags().size() > 0) {
             attachTagToGiftCertificate(giftCertificate.getTags());
             updatedCertificate.setTags(giftCertificate.getTags());
@@ -152,8 +149,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private void checkGiftCertificateBeforeUpdate(
             GiftCertificate updatedCertificate,
-            GiftCertificate certificate,
-            List<ValidationError> validationErrors) {
+            GiftCertificate certificate) {
+        List<ValidationError> validationErrors = new ArrayList<>();
+
         if (certificate.getName() != null
                 && !certificate.getName().equals(updatedCertificate.getName())) {
             giftCertificateValidator.validateName(certificate.getName(), validationErrors);
@@ -178,5 +176,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             updatedCertificate.setPrice(certificate.getPrice());
         }
         validationErrors.addAll(tagValidator.validateTagNameList(certificate.getTags()));
+
+        if (!validationErrors.isEmpty()) {
+            throw new IncorrectEntityException(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS, validationErrors);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.esm.contollers;
 
 import com.epam.esm.hateaos.HateoasBuilder;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.PageSetup;
@@ -43,7 +43,7 @@ public class TagController {
     public ResponseEntity<Tag> getTagById(@PathVariable("id") long id) {
         Tag tag = tagService.findById(id);
         hateoasBuilder.setLinks(tag);
-        return new ResponseEntity<>(tagService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(tag, HttpStatus.OK);
     }
 
     @PostMapping

@@ -1,6 +1,6 @@
 package com.epam.esm.data_provider;
 
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.model.impl.Tag;

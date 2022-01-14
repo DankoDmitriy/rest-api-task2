@@ -87,11 +87,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         Root<Order> root = cQuery.from(Order.class);
         cQuery.select(root).where(cb.equal(root.join(ORDER_CERTIFICATES).get(ORDER_CERTIFICATES_ID), id));
         List<Order> orders = entityManager.createQuery(cQuery).setMaxResults(MINIMUM_SELECT_LIMIT).getResultList();
-        return orders.isEmpty() || orders == null ? false : true;
+        return orders == null ? false : true || orders.isEmpty();
     }
 
     @Override
-    public Long rowsInTable() {
+    public Long countRowsInTable() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cQuery = cb.createQuery(Long.class);
         cQuery.select(cb.count(cQuery.from(GiftCertificate.class)));
@@ -99,7 +99,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public Long rowsInTable(GiftCertificateSearchParams searchParams) {
+    public Long countRowsInTable(GiftCertificateSearchParams searchParams) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cQuery = cb.createQuery(Long.class);
         Root<GiftCertificate> root = cQuery.from(GiftCertificate.class);

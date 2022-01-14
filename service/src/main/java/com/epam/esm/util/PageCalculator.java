@@ -1,6 +1,6 @@
 package com.epam.esm.util;
 
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.service.dto.PageSetup;
 import org.springframework.stereotype.Component;
 

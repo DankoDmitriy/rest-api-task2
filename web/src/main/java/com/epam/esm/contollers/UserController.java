@@ -1,8 +1,7 @@
 package com.epam.esm.contollers;
 
 import com.epam.esm.hateaos.HateoasBuilder;
-import com.epam.esm.model.impl.CustomPage;
-import com.epam.esm.model.impl.Tag;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.User;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.PageSetup;

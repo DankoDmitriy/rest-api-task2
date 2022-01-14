@@ -2,17 +2,16 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.User;
 import com.epam.esm.repository.UserDao;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,10 +19,10 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PageCalculator pageCalculator;
-    private final PaginationValidator paginationValidator;
+    private final PaginationVerifier paginationValidator;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PageCalculator pageCalculator, PaginationValidator paginationValidator) {
+    public UserServiceImpl(UserDao userDao, PageCalculator pageCalculator, PaginationVerifier paginationValidator) {
         this.userDao = userDao;
         this.pageCalculator = pageCalculator;
         this.paginationValidator = paginationValidator;
@@ -51,9 +50,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public CustomPage findAll(PageSetup pageSetup) {
         CustomPage<User> customPage = new CustomPage<>();
-        Long rowsInDataBase = userDao.rowsInTable();
+        Long rowsInDataBase = userDao.countRowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
-        if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+        if (paginationValidator.verifyPagination(rowsInDataBase, pageSetup.getPage(), startPosition)) {
             pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
             customPage.setItems(userDao.findAll(startPosition, pageSetup.getSize()));
             return customPage;

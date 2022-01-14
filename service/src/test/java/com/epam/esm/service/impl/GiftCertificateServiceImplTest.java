@@ -7,7 +7,7 @@ import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.model.impl.Tag;
@@ -18,7 +18,7 @@ import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
 import com.epam.esm.validator.GiftCertificateValidator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ public class GiftCertificateServiceImplTest {
     private PageCalculator pageCalculatorMock;
 
     @Mock
-    private PaginationValidator paginationValidatorMock;
+    private PaginationVerifier paginationValidatorMock;
 
     @Mock
     private GiftCertificateSearchParamsValidator paramsValidatorMock;
@@ -77,9 +77,9 @@ public class GiftCertificateServiceImplTest {
         GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
         List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
 
-        Mockito.when(certificateDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+        Mockito.when(certificateDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
 
         Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
                 .thenReturn(validationErrors);
@@ -100,9 +100,9 @@ public class GiftCertificateServiceImplTest {
         GiftCertificateSearchParams searchParams = searchParamsProvider.getParametersByTagName();
         List<ValidationError> validationErrors = validationErrorsProvider.getEmptyErrors();
 
-        Mockito.when(certificateDaoMock.rowsInTable(searchParams)).thenReturn(Long.valueOf(expected.getItems().size()));
+        Mockito.when(certificateDaoMock.countRowsInTable(searchParams)).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
 
         Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
                 .thenReturn(validationErrors);

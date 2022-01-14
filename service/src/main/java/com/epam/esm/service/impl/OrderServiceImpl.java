@@ -2,7 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderDoa;
@@ -11,7 +11,7 @@ import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,14 +29,14 @@ public class OrderServiceImpl implements OrderService {
     private final GiftCertificateService certificateService;
     private final UserService userService;
     private final PageCalculator pageCalculator;
-    private final PaginationValidator paginationValidator;
+    private final PaginationVerifier paginationValidator;
 
     @Autowired
     public OrderServiceImpl(OrderDoa orderDoa,
                             GiftCertificateService certificateService,
                             UserService userService,
                             PageCalculator pageCalculator,
-                            PaginationValidator paginationValidator) {
+                            PaginationVerifier paginationValidator) {
         this.orderDoa = orderDoa;
         this.certificateService = certificateService;
         this.userService = userService;
@@ -47,9 +47,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public CustomPage findAll(PageSetup pageSetup) {
         CustomPage<Order> customPage = new CustomPage<>();
-        Long rowsInDataBase = orderDoa.rowsInTable();
+        Long rowsInDataBase = orderDoa.countRowsInTable();
         Integer startPosition = pageCalculator.calculator(pageSetup.getPage(), pageSetup.getSize());
-        if (paginationValidator.validate(rowsInDataBase, pageSetup.getPage(), startPosition)) {
+        if (paginationValidator.verifyPagination(rowsInDataBase, pageSetup.getPage(), startPosition)) {
             pageCalculator.calculator(customPage, pageSetup, rowsInDataBase);
             customPage.setItems(orderDoa.findAll(startPosition, pageSetup.getSize()));
             return customPage;
@@ -70,24 +70,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order save(Order order) {
-        BigDecimal orderCost;
-        orderCost = BigDecimal.valueOf(0.00);
-        List<GiftCertificate> certificatesFromBase = new ArrayList<>();
         if (order.getCertificates() != null && !order.getCertificates().isEmpty()) {
+            BigDecimal orderCost;
+            orderCost = BigDecimal.valueOf(0.00);
+            List<GiftCertificate> certificatesFromBase = new ArrayList<>();
+
             for (int i = 0; i < order.getCertificates().size(); i++) {
                 GiftCertificate certificate;
                 certificate = certificateService.findById(order.getCertificates().get(i).getId());
                 orderCost = orderCost.add(certificate.getPrice());
                 certificatesFromBase.add(certificate);
             }
+
+            order.setUser(userService.findById(order.getUser().getId()));
+            order.setCertificates(certificatesFromBase);
+            order.setCost(orderCost);
+            order.setPurchaseDate(LocalDateTime.now());
+
+            return orderDoa.save(order);
         } else {
             throw new InputPagesParametersIncorrect(ValidationError.PROBLEM_WITH_INPUT_PARAMETERS);
         }
-        order.setUser(userService.findById(order.getUser().getId()));
-        order.setCertificates(certificatesFromBase);
-        order.setCost(orderCost);
-        order.setPurchaseDate(LocalDateTime.now());
-        return orderDoa.save(order);
     }
 
     @Override

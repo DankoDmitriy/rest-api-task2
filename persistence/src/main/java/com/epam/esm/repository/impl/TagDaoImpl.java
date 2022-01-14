@@ -60,7 +60,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Long rowsInTable() {
+    public Long countRowsInTable() {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cQuery = cb.createQuery(Long.class);
         cQuery.select(cb.count(cQuery.from(Tag.class)));

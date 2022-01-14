@@ -5,13 +5,13 @@ import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.repository.TagDao;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.TagValidator;
 import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class TagServiceImplTest {
     private PageCalculator pageCalculatorMock;
 
     @Mock
-    private PaginationValidator paginationValidatorMock;
+    private PaginationVerifier paginationValidatorMock;
 
     private final TagProvider tagProvider = new TagProvider();
     private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
@@ -60,9 +60,9 @@ public class TagServiceImplTest {
         setup.setPage(1);
         setup.setSize(10);
 
-        Mockito.when(tagDaoMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+        Mockito.when(tagDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
         Mockito.when(tagDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
 
         CustomPage<Tag> actual = service.findAll(setup);

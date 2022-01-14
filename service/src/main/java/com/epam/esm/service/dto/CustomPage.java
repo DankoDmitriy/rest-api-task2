@@ -1,4 +1,4 @@
-package com.epam.esm.model.impl;
+package com.epam.esm.service.dto;
 
 import com.epam.esm.model.AbstractEntity;
 import lombok.Data;

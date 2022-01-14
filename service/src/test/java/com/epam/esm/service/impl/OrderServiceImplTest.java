@@ -4,7 +4,7 @@ import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.OrderProvider;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.InputPagesParametersIncorrect;
-import com.epam.esm.model.impl.CustomPage;
+import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderDoa;
@@ -12,7 +12,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationValidator;
+import com.epam.esm.validator.PaginationVerifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,7 +45,7 @@ public class OrderServiceImplTest {
     private PageCalculator pageCalculatorMock;
 
     @Mock
-    private PaginationValidator paginationValidatorMock;
+    private PaginationVerifier paginationValidatorMock;
 
     private final OrderProvider provider = new OrderProvider();
     private final CustomPageProvider customPageProvider = new CustomPageProvider();
@@ -75,9 +75,9 @@ public class OrderServiceImplTest {
         setup.setPage(1);
         setup.setSize(10);
 
-        Mockito.when(orderDoaMock.rowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+        Mockito.when(orderDoaMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
         Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+//        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
         Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected.getItems());
 
         CustomPage<Order> actual = service.findAll(setup);
@@ -92,7 +92,7 @@ public class OrderServiceImplTest {
         setup.setPage(-1);
         setup.setSize(-10);
 
-        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(false);
 
         assertThrows(InputPagesParametersIncorrect.class, () -> service.findAll(setup));

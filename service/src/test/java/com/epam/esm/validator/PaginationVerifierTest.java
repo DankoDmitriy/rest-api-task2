@@ -8,13 +8,13 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PaginationValidatorTest {
-    private final PaginationValidator validator = new PaginationValidator();
+public class PaginationVerifierTest {
+    private final PaginationVerifier validator = new PaginationVerifier();
 
     @ParameterizedTest
     @MethodSource("fullTest")
     void validateTest(Long rowsInDataBase, Integer pageNumber, Integer startPosition, boolean expected) {
-        boolean actual = validator.validate(rowsInDataBase, pageNumber, startPosition);
+        boolean actual = validator.verifyPagination(rowsInDataBase, pageNumber, startPosition);
         assertEquals(expected, actual);
     }
 
