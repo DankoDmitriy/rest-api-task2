@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,6 +27,7 @@ import java.util.List;
 @Table(name = "orders")
 @DynamicUpdate
 @Data
+@Builder
 @NoArgsConstructor
 public class Order extends RepresentationModel<Order> implements AbstractEntity {
     @Id

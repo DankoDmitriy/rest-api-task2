@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLInsert;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
+@Builder
 @EntityListeners(AuditListener.class)
 @Table(name = "tags")
 @SQLInsert(sql = "INSERT INTO Tags (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)")

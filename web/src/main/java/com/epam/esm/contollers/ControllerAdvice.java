@@ -11,6 +11,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,6 +31,7 @@ public class ControllerAdvice {
     private static final String ERROR_CODE_0005 = "Error: 0005";
     private static final String ERROR_CODE_0404 = "Error: 0404";
     private static final String ERROR_CODE_0404_MESSAGE = "The resource can not be found ";
+    private static final String INPUT_DATA_IS_NOT_CORRECT = "input.parameter.is.not.correct";
 
     private final ResourceBundleMessageSource messageSource;
 
@@ -81,6 +84,27 @@ public class ControllerAdvice {
                 , HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> handlerException(MethodArgumentNotValidException exception) {
+
+        List<String> errors = new ArrayList<String>();
+        for (FieldError error : exception.getBindingResult().getFieldErrors()) {
+            errors.add(error.getField() + ": " + error.getDefaultMessage());
+        }
+        ExceptionResponse response = new ExceptionResponse();
+        response.setIncorrectParameters(errors);
+        response.setErrorCode(ERROR_CODE_0005);
+        response.setErrorTime(LocalDateTime.now().toString());
+        response.setErrorMessage(stringToStringLocaleMessage(INPUT_DATA_IS_NOT_CORRECT));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    private String stringToStringLocaleMessage(String message) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return messageSource.getMessage(message, null, locale);
+    }
+
+//    TODO - delete this handler after transfer full application on Spring Validator (ERROR_CODE_0005)
     @ExceptionHandler(InputPagesParametersIncorrect.class)
     public ResponseEntity<ExceptionResponse> handlerException(InputPagesParametersIncorrect exception) {
         return new ResponseEntity<>(

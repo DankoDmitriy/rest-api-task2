@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 @Table(name = "users")
 @DynamicUpdate
 @Data
+@Builder
 @SQLInsert(sql = "INSERT INTO Users (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)")
 @NoArgsConstructor
 public class User extends RepresentationModel<User> implements AbstractEntity {
