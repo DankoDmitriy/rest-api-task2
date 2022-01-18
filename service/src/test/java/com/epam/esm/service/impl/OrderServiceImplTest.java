@@ -1,7 +1,29 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.data_provider.OrderDtoProvider;
+import com.epam.esm.data_provider.OrderProvider;
+import com.epam.esm.exception.EntityNotFoundException;
+import com.epam.esm.model.impl.Order;
+import com.epam.esm.repository.OrderRepository;
+import com.epam.esm.service.DtoToEntityConverterService;
+import com.epam.esm.service.EntityToDtoConverterService;
+import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.UserService;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.OrderDto;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,90 +31,90 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceImplTest {
 
-//    @InjectMocks
-//    OrderServiceImpl service;
-//
-//    @Mock
-//    private OrderDoa orderDoaMock;
-//
-//    @Mock
-//    private GiftCertificateService certificateServiceMock;
-//
-//    @Mock
-//    private UserService userServiceMock;
-//
-//    @Mock
-//    private PageCalculator pageCalculatorMock;
-//
-//    @Mock
-//    private PaginationVerifier paginationValidatorMock;
-//
-//    private final OrderProvider provider = new OrderProvider();
-//    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+    @InjectMocks
+    OrderServiceImpl service;
 
-//    @Test
-//    void findByIdPositiveTest() {
-//        Order expected = provider.getOrder();
-//        Mockito.when(orderDoaMock.findById(expected.getId())).thenReturn(Optional.of(expected));
-//        Order actual = service.findById(expected.getId());
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void findByIdNegativeTest() {
-//        Order expected = provider.getOrder();
-//        Mockito.when(orderDoaMock.findById(expected.getId())).thenReturn(Optional.empty());
-//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-//                () -> service.findById(expected.getId()));
-//        assertEquals(expected.getId(), exception.getId());
-//    }
-//
-//    @Test
-//    public void findAllPositiveTest() {
-//        CustomPage<Order> expected = customPageProvider.getCustomPageOrder();
-//        Integer startPosition = expected.getItems().size();
-//        PageSetup setup = new PageSetup();
-//        setup.setPage(1);
-//        setup.setSize(10);
-//
-//        Mockito.when(orderDoaMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
-//        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-////        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-//        Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected.getItems());
-//
-//        CustomPage<Order> actual = service.findAll(setup);
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    public void findAllNegativeTest() {
-//        List<Order> expected = provider.getOrderList();
-//        Integer startPosition = expected.size();
-//        PageSetup setup = new PageSetup();
-//        setup.setPage(-1);
-//        setup.setSize(-10);
-//
-//        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
-//                .thenReturn(false);
-//
-//        assertThrows(InputPagesParametersIncorrect.class, () -> service.findAll(setup));
-//    }
-//
-//    @Test
-//    public void savePositiveTest() {
-//        Order expected = provider.getOrder();
-//        GiftCertificate certificate = expected.getCertificates().get(0);
-//        Mockito.when(userServiceMock.findById(expected.getUser().getId())).thenReturn(expected.getUser());
-//        Mockito.when(certificateServiceMock.findById(certificate.getId())).thenReturn(certificate);
-//        Mockito.when(orderDoaMock.save(expected)).thenReturn(expected);
-//        Order actual = service.save(expected);
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    public void saveNegativeTest() {
-//        Order expected = provider.getOrder();
-//        expected.setCertificates(null);
-//        assertThrows(InputPagesParametersIncorrect.class, () -> service.save(expected));
-//    }
+    @Mock
+    private GiftCertificateService certificateService;
+
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @Mock
+    private DtoToEntityConverterService dtoToEntityConverterService;
+
+    @Mock
+    private EntityToDtoConverterService entityToDtoConverterService;
+
+    private final OrderProvider orderProvider = new OrderProvider();
+    private final OrderDtoProvider orderDtoProvider = new OrderDtoProvider();
+
+    @Test
+    void findByIdPositiveTest() {
+        OrderDto expected = orderDtoProvider.getOrder();
+        Order order = orderProvider.getOrder();
+
+        Mockito.when(orderRepository.findById(expected.getId())).thenReturn(Optional.of(order));
+        Mockito.when(entityToDtoConverterService.convert(Mockito.any(Order.class))).thenReturn(expected);
+
+        OrderDto actual = service.findById(expected.getId());
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findByIdNegativeTest() {
+        Optional<Order> expected = Optional.empty();
+        OrderDto orderDto = orderDtoProvider.getOrder();
+
+        Mockito.when(orderRepository.findById(orderDto.getId())).thenReturn(expected);
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> service.findById(orderDto.getId()));
+
+        assertEquals(orderDto.getId(), exception.getId());
+    }
+
+    @Test
+    public void findAllPositiveTest() {
+        List<Order> orders = orderProvider.getOrderList();
+        List<OrderDto> orderDtos = orderDtoProvider.getOrderList();
+        Page<Order> page = new PageImpl<>(orders);
+        Pageable pageable = PageRequest.of(0, 10);
+        CustomPageDto<OrderDto> expected = new CustomPageDto(10, 1L, 1, 0, orderDtos);
+
+        Mockito.when(orderRepository.findAll(pageable)).thenReturn(page);
+        for (int i = 0; i < orders.size(); i++) {
+            Mockito.when(entityToDtoConverterService.convert(orders.get(i))).thenReturn(orderDtos.get(i));
+        }
+
+        CustomPageDto actual = service.findAll(pageable);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void savePositiveTest() {
+        Order orderWithOutId = orderProvider.getOrderWithOutId();
+        Order order = orderProvider.getOrder();
+        OrderDto orderDtoTagWithOutId = orderDtoProvider.getOrderWithOutId();
+        OrderDto expected = orderDtoProvider.getOrder();
+
+        Mockito.when(orderRepository.save(orderWithOutId)).thenReturn(order);
+        Mockito.when(dtoToEntityConverterService.convert(orderDtoTagWithOutId)).thenReturn(orderWithOutId);
+        Mockito.when(entityToDtoConverterService.convert(Mockito.any(Order.class))).thenReturn(expected);
+
+        for (int i = 0; i < orderDtoTagWithOutId.getGiftCertificateDtoList().size(); i++) {
+            Mockito.when(certificateService.findById(orderDtoTagWithOutId.getGiftCertificateDtoList().get(i).getId()))
+                    .thenReturn(expected.getGiftCertificateDtoList().get(i));
+        }
+
+        Mockito.when(userService.findById(orderDtoTagWithOutId.getUserDto().getId())).thenReturn(expected.getUserDto());
+
+        OrderDto actual = service.save(orderDtoTagWithOutId);
+        assertEquals(expected, actual);
+    }
 }

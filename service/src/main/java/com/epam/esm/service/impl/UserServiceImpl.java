@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         Optional<User> optionalTag = userRepository.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new EntityNotFoundException(ValidationError.TAG_NOT_FOUND_BY_ID, id);
+            throw new EntityNotFoundException(ValidationError.USER_NOT_FOUND_BY_ID, id);
         } else {
             return entityToDtoConverterService.convert(optionalTag.get());
         }

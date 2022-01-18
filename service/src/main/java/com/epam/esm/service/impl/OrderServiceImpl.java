@@ -68,7 +68,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto save(OrderDto orderDto) {
-
         BigDecimal orderCost = BigDecimal.valueOf(0.00);
         List<GiftCertificateDto> certificatesFromBase = new ArrayList<>();
 
