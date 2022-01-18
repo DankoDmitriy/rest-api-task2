@@ -104,7 +104,7 @@ public class ControllerAdvice {
         return messageSource.getMessage(message, null, locale);
     }
 
-//    TODO - delete this handler after transfer full application on Spring Validator (ERROR_CODE_0005)
+    //    TODO - delete this handler after transfer full application on Spring Validator (ERROR_CODE_0005)
     @ExceptionHandler(InputPagesParametersIncorrect.class)
     public ResponseEntity<ExceptionResponse> handlerException(InputPagesParametersIncorrect exception) {
         return new ResponseEntity<>(
@@ -115,7 +115,6 @@ public class ControllerAdvice {
                         ERROR_CODE_0005)
                 , HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handlerException(Exception exception) {

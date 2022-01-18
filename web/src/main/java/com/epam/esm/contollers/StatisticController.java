@@ -1,7 +1,7 @@
 package com.epam.esm.contollers;
 
-import com.epam.esm.model.impl.Tag;
 import com.epam.esm.service.StatisticsService;
+import com.epam.esm.service.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ public class StatisticController {
     }
 
     @GetMapping("/popular-tag")
-    public ResponseEntity<Tag> getTagById() {
+    public ResponseEntity<TagDto> getTagById() {
         return new ResponseEntity<>(service.popularTag(), HttpStatus.OK);
     }
 }

@@ -1,11 +1,12 @@
 package com.epam.esm.contollers;
 
 import com.epam.esm.hateaos.HateoasBuilder;
-import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.Tag;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,24 +31,22 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomPage> getAllTags(PageSetup pageSetup) {
-        CustomPage<Tag> customPage = tagService.findAll(pageSetup);
-        List<Tag> tagList = customPage.getItems();
-        hateoasBuilder.setLinksTags(tagList);
-        return new ResponseEntity<>(customPage, HttpStatus.OK);
+    public ResponseEntity<CustomPageDto> getAllTags(Pageable pageable) {
+        CustomPageDto customPageDto = tagService.findAllTagsPage(pageable);
+        return new ResponseEntity<>(customPageDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tag> getTagById(@PathVariable("id") long id) {
-        Tag tag = tagService.findById(id);
-        hateoasBuilder.setLinks(tag);
+    public ResponseEntity<TagDto> getTagById(@PathVariable("id") long id) {
+        TagDto tag = tagService.findById(id);
+//        hateoasBuilder.setLinks(tag);
         return new ResponseEntity<>(tag, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Tag> addTag(@RequestBody Tag tag) {
-        Tag tagFromDataBase = tagService.save(tag);
-        hateoasBuilder.setLinks(tagFromDataBase);
+    public ResponseEntity<TagDto> addTag(@RequestBody TagDto tag) {
+        TagDto tagFromDataBase = tagService.save(tag);
+//        hateoasBuilder.setLinks(tagFromDataBase);
         return new ResponseEntity<>(tagFromDataBase, HttpStatus.CREATED);
     }
 

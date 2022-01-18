@@ -1,6 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.AbstractEntity;
+import com.epam.esm.service.dto.AbstractDto;
 
 /**
  * The interface Base service is used for inheritance by interfaces that work with a database.
@@ -8,7 +8,7 @@ import com.epam.esm.model.AbstractEntity;
  *
  * @param <E> the type parameter
  */
-public interface BaseService<E extends AbstractEntity> {
+public interface BaseService<E extends AbstractDto> {
     /**
      * Find by id optional.
      *

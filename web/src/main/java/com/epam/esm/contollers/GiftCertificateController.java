@@ -1,12 +1,12 @@
 package com.epam.esm.contollers;
 
 import com.epam.esm.hateaos.HateoasBuilder;
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.GiftCertificateDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/giftCertificates", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,24 +32,24 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomPage> getAllGiftCertificates(GiftCertificateSearchParams searchParams, PageSetup pageSetup) {
-        CustomPage<GiftCertificate> customPage = giftCertificateService.findAll(searchParams, pageSetup);
-        List<GiftCertificate> certificates = customPage.getItems();
-        hateoasBuilder.setLinksGiftCertificates(certificates);
+    public ResponseEntity<CustomPageDto> getAllGiftCertificates(GiftCertificateSearchParams searchParams, Pageable pageable) {
+        CustomPageDto<GiftCertificateDto> customPage = giftCertificateService.findAll(searchParams, pageable);
+//        List<GiftCertificate> certificates = customPage.getItems();
+//        hateoasBuilder.setLinksGiftCertificates(certificates);
         return new ResponseEntity<>(customPage, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificate> getGiftCertificateById(@PathVariable("id") long id) {
-        GiftCertificate certificate = giftCertificateService.findById(id);
-        hateoasBuilder.setLinks(certificate);
+    public ResponseEntity<GiftCertificateDto> getGiftCertificateById(@PathVariable("id") long id) {
+        GiftCertificateDto certificate = giftCertificateService.findById(id);
+//        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<GiftCertificate> addGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
-        GiftCertificate certificate = giftCertificateService.save(giftCertificate);
-        hateoasBuilder.setLinks(certificate);
+    public ResponseEntity<GiftCertificateDto> addGiftCertificate(@RequestBody GiftCertificateDto giftCertificate) {
+        GiftCertificateDto certificate = giftCertificateService.save(giftCertificate);
+//        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.CREATED);
     }
 
@@ -62,10 +60,10 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GiftCertificate> updateGiftCertificate(@RequestBody GiftCertificate giftCertificate,
-                                                                 @PathVariable("id") long id) {
-        GiftCertificate certificate = giftCertificateService.update(id, giftCertificate);
-        hateoasBuilder.setLinks(certificate);
+    public ResponseEntity<GiftCertificateDto> updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificate,
+                                                                    @PathVariable("id") long id) {
+        GiftCertificateDto certificate = giftCertificateService.update(id, giftCertificate);
+//        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 }

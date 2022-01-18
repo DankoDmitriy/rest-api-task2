@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ import javax.persistence.Table;
 @Builder
 @SQLInsert(sql = "INSERT INTO Users (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends RepresentationModel<User> implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,21 +18,22 @@ public class GiftCertificateSearchParams
     private List<String> tags;
     private String giftCertificateName;
     private String giftCertificateDescription;
-    private Set<String> sort;
-    private Set<String> sortTypes = new HashSet<>(
-            Arrays.asList(
-                    "sortByGiftCertificateName-",
-                    "sortByGiftCertificateName+",
-                    "sortByCreateDate+",
-                    "sortByCreateDate-"));
+//    private Set<String> sorts;
+//    private Set<String> sortTypes = new HashSet<>(
+//            Arrays.asList(
+//                    "sortByGiftCertificateName-",
+//                    "sortByGiftCertificateName+",
+//                    "sortByCreateDate+",
+//                    "sortByCreateDate-"));
 
     public GiftCertificateSearchParams(List<String> tags,
                                        String giftCertificateName,
-                                       String giftCertificateDescription,
-                                       Set<String> sort) {
+                                       String giftCertificateDescription
+//            , Set<String> sort
+    ) {
         this.tags = tags;
         this.giftCertificateName = giftCertificateName;
         this.giftCertificateDescription = giftCertificateDescription;
-        this.sort = sort;
+//        this.sorts = sort;
     }
 }

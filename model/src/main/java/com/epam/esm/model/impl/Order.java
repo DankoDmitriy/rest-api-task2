@@ -1,6 +1,7 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Order extends RepresentationModel<Order> implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

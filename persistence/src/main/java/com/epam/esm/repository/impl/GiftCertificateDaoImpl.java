@@ -142,24 +142,24 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                                     CriteriaQuery<GiftCertificate> cQuery,
                                     Root<GiftCertificate> root,
                                     GiftCertificateSearchParams searchParams) {
-        if (searchParams.getSort() != null && searchParams.getSort().size() > 0) {
-            Set<String> sort = searchParams.getSort();
-            for (String s : sort) {
-                switch (s) {
-                    case "sortByGiftCertificateName-":
-                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_NAME)));
-                        break;
-                    case "sortByGiftCertificateName+":
-                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_NAME)));
-                        break;
-                    case "sortByCreateDate+":
-                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
-                        break;
-                    case "sortByCreateDate-":
-                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
-                        break;
-                }
-            }
-        }
+//        if (searchParams.getSorts() != null && searchParams.getSorts().size() > 0) {
+//            Set<String> sort = searchParams.getSorts();
+//            for (String s : sort) {
+//                switch (s) {
+//                    case "sortByGiftCertificateName-":
+//                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_NAME)));
+//                        break;
+//                    case "sortByGiftCertificateName+":
+//                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_NAME)));
+//                        break;
+//                    case "sortByCreateDate+":
+//                        cQuery.orderBy(cb.asc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
+//                        break;
+//                    case "sortByCreateDate-":
+//                        cQuery.orderBy(cb.desc(root.get(GIFT_CERTIFICATE_CREATE_DATE)));
+//                        break;
+//                }
+//            }
+//        }
     }
 }

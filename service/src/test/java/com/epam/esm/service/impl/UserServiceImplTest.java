@@ -40,62 +40,62 @@ public class UserServiceImplTest {
     private final UserProvider provider = new UserProvider();
     private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
-    @Test
-    public void findByIdPositiveTest() {
-        User expected = provider.getUser();
-        Mockito.when(userDaoMock.findById(expected.getId())).thenReturn(Optional.of(expected));
-        User actual = service.findById(expected.getId());
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void findByIdNegativeTest() {
-        Optional<User> expected = Optional.empty();
-        User user = provider.getUser();
-        Mockito.when(userDaoMock.findById(user.getId())).thenReturn(expected);
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> service.findById(user.getId()));
-        assertEquals(user.getId(), exception.getId());
-    }
-
-    @Test
-    public void findAllPositiveTest() {
-        CustomPage<User> expected = customPageProvider.getCustomPageUser();
-        Integer startPosition = expected.getItems().size();
-        PageSetup setup = new PageSetup();
-        setup.setPage(1);
-        setup.setSize(10);
-
-        Mockito.when(userDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
-        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-//        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(userDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
-
-        CustomPage<User> actual = service.findAll(setup);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void findAllNegativeTest() {
-        List<User> expected = provider.getUserList();
-        Integer startPosition = expected.size();
-        PageSetup setup = new PageSetup();
-        setup.setPage(-1);
-        setup.setSize(-10);
-
-        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
-                .thenReturn(false);
-
-        assertThrows(InputPagesParametersIncorrect.class, () -> service.findAll(setup));
-    }
-
-    @Test
-    public void saveTest() {
-        assertThrows(UnsupportedOperationException.class, () -> service.save(null));
-    }
-
-    @Test
-    public void deleteTest() {
-        assertThrows(UnsupportedOperationException.class, () -> service.delete(null));
-    }
+//    @Test
+//    public void findByIdPositiveTest() {
+//        User expected = provider.getUser();
+//        Mockito.when(userDaoMock.findById(expected.getId())).thenReturn(Optional.of(expected));
+//        User actual = service.findById(expected.getId());
+//        assertEquals(expected, actual);
+//    }
+//
+//    @Test
+//    public void findByIdNegativeTest() {
+//        Optional<User> expected = Optional.empty();
+//        User user = provider.getUser();
+//        Mockito.when(userDaoMock.findById(user.getId())).thenReturn(expected);
+//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+//                () -> service.findById(user.getId()));
+//        assertEquals(user.getId(), exception.getId());
+//    }
+//
+//    @Test
+//    public void findAllPositiveTest() {
+//        CustomPage<User> expected = customPageProvider.getCustomPageUser();
+//        Integer startPosition = expected.getItems().size();
+//        PageSetup setup = new PageSetup();
+//        setup.setPage(1);
+//        setup.setSize(10);
+//
+//        Mockito.when(userDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+//        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+////        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+//        Mockito.when(userDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
+//
+//        CustomPage<User> actual = service.findAll(setup);
+//        assertEquals(expected, actual);
+//    }
+//
+//    @Test
+//    public void findAllNegativeTest() {
+//        List<User> expected = provider.getUserList();
+//        Integer startPosition = expected.size();
+//        PageSetup setup = new PageSetup();
+//        setup.setPage(-1);
+//        setup.setSize(-10);
+//
+//        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
+//                .thenReturn(false);
+//
+//        assertThrows(InputPagesParametersIncorrect.class, () -> service.findAll(setup));
+//    }
+//
+//    @Test
+//    public void saveTest() {
+//        assertThrows(UnsupportedOperationException.class, () -> service.save(null));
+//    }
+//
+//    @Test
+//    public void deleteTest() {
+//        assertThrows(UnsupportedOperationException.class, () -> service.delete(null));
+//    }
 }
