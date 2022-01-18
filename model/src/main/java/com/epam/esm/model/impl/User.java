@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLInsert;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +25,7 @@ import javax.persistence.Table;
 @SQLInsert(sql = "INSERT INTO Users (name) VALUES(?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends RepresentationModel<User> implements AbstractEntity {
+public class User implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

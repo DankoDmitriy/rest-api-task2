@@ -3,26 +3,14 @@ package com.epam.esm.service.impl;
 import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.TagProvider;
 import com.epam.esm.data_provider.ValidationErrorsProvider;
-import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.TagDao;
-import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.PaginationVerifier;
 import com.epam.esm.validator.TagValidator;
-import com.epam.esm.validator.ValidationError;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

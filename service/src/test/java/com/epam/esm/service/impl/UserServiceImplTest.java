@@ -2,23 +2,12 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.data_provider.CustomPageProvider;
 import com.epam.esm.data_provider.UserProvider;
-import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.InputPagesParametersIncorrect;
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.User;
-import com.epam.esm.repository.UserDao;
-import com.epam.esm.service.dto.PageSetup;
 import com.epam.esm.util.PageCalculator;
 import com.epam.esm.validator.PaginationVerifier;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
