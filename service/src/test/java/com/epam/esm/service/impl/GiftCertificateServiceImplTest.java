@@ -1,18 +1,6 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.data_provider.CustomPageProvider;
-import com.epam.esm.data_provider.GiftCertificateProvider;
-import com.epam.esm.data_provider.SearchParamsProvider;
-import com.epam.esm.data_provider.TagProvider;
-import com.epam.esm.data_provider.ValidationErrorsProvider;
-import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.GiftCertificateSearchParamsValidator;
-import com.epam.esm.validator.GiftCertificateValidator;
-import com.epam.esm.validator.PaginationVerifier;
-import com.epam.esm.validator.TagValidator;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

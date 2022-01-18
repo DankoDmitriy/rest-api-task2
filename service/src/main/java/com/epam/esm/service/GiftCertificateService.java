@@ -1,8 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
-import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import org.springframework.data.domain.Pageable;
