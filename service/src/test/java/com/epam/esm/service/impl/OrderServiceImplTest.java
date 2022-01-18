@@ -17,26 +17,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceImplTest {
 
-    @InjectMocks
-    OrderServiceImpl service;
-
-    @Mock
-    private OrderDoa orderDoaMock;
-
-    @Mock
-    private GiftCertificateService certificateServiceMock;
-
-    @Mock
-    private UserService userServiceMock;
-
-    @Mock
-    private PageCalculator pageCalculatorMock;
-
-    @Mock
-    private PaginationVerifier paginationValidatorMock;
-
-    private final OrderProvider provider = new OrderProvider();
-    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+//    @InjectMocks
+//    OrderServiceImpl service;
+//
+//    @Mock
+//    private OrderDoa orderDoaMock;
+//
+//    @Mock
+//    private GiftCertificateService certificateServiceMock;
+//
+//    @Mock
+//    private UserService userServiceMock;
+//
+//    @Mock
+//    private PageCalculator pageCalculatorMock;
+//
+//    @Mock
+//    private PaginationVerifier paginationValidatorMock;
+//
+//    private final OrderProvider provider = new OrderProvider();
+//    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
 //    @Test
 //    void findByIdPositiveTest() {

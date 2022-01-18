@@ -14,20 +14,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
-    @InjectMocks
-    UserServiceImpl service;
-
-    @Mock
-    private UserDao userDaoMock;
-
-    @Mock
-    private PageCalculator pageCalculatorMock;
-
-    @Mock
-    private PaginationVerifier paginationValidatorMock;
-
-    private final UserProvider provider = new UserProvider();
-    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+//    @InjectMocks
+//    UserServiceImpl service;
+//
+//    @Mock
+//    private UserDao userDaoMock;
+//
+//    @Mock
+//    private PageCalculator pageCalculatorMock;
+//
+//    @Mock
+//    private PaginationVerifier paginationValidatorMock;
+//
+//    private final UserProvider provider = new UserProvider();
+//    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
 //    @Test
 //    public void findByIdPositiveTest() {

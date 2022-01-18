@@ -1,7 +1,6 @@
 package com.epam.esm.contollers;
 
 import com.epam.esm.hateaos.HateoasBuilder;
-import com.epam.esm.model.impl.Tag;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.TagDto;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/tags", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
@@ -33,20 +35,22 @@ public class TagController {
     @GetMapping
     public ResponseEntity<CustomPageDto> getAllTags(Pageable pageable) {
         CustomPageDto customPageDto = tagService.findAllTagsPage(pageable);
+        List<TagDto> tagDtos = customPageDto.getItems();
+        hateoasBuilder.setLinksTags(tagDtos);
         return new ResponseEntity<>(customPageDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TagDto> getTagById(@PathVariable("id") long id) {
         TagDto tag = tagService.findById(id);
-//        hateoasBuilder.setLinks(tag);
+        hateoasBuilder.setLinks(tag);
         return new ResponseEntity<>(tag, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<TagDto> addTag(@RequestBody TagDto tag) {
+    public ResponseEntity<TagDto> addTag(@Valid @RequestBody TagDto tag) {
         TagDto tagFromDataBase = tagService.save(tag);
-//        hateoasBuilder.setLinks(tagFromDataBase);
+        hateoasBuilder.setLinks(tagFromDataBase);
         return new ResponseEntity<>(tagFromDataBase, HttpStatus.CREATED);
     }
 

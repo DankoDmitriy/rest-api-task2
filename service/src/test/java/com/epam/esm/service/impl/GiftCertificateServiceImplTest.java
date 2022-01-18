@@ -21,35 +21,35 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class GiftCertificateServiceImplTest {
 
-    @InjectMocks
-    private GiftCertificateServiceImpl service;
-
-    @Mock
-    private GiftCertificateDao certificateDaoMock;
-
-    @Mock
-    private TagDao tagDaoMock;
-
-    @Mock
-    private GiftCertificateValidator certificateValidatorMock;
-
-    @Mock
-    private TagValidator tagValidatorMock;
-
-    @Mock
-    private PageCalculator pageCalculatorMock;
-
-    @Mock
-    private PaginationVerifier paginationValidatorMock;
-
-    @Mock
-    private GiftCertificateSearchParamsValidator paramsValidatorMock;
-
-    private final GiftCertificateProvider certificateProvider = new GiftCertificateProvider();
-    private final SearchParamsProvider searchParamsProvider = new SearchParamsProvider();
-    private final ValidationErrorsProvider validationErrorsProvider = new ValidationErrorsProvider();
-    private final TagProvider tagProvider = new TagProvider();
-    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+//    @InjectMocks
+//    private GiftCertificateServiceImpl service;
+//
+//    @Mock
+//    private GiftCertificateDao certificateDaoMock;
+//
+//    @Mock
+//    private TagDao tagDaoMock;
+//
+//    @Mock
+//    private GiftCertificateValidator certificateValidatorMock;
+//
+//    @Mock
+//    private TagValidator tagValidatorMock;
+//
+//    @Mock
+//    private PageCalculator pageCalculatorMock;
+//
+//    @Mock
+//    private PaginationVerifier paginationValidatorMock;
+//
+//    @Mock
+//    private GiftCertificateSearchParamsValidator paramsValidatorMock;
+//
+//    private final GiftCertificateProvider certificateProvider = new GiftCertificateProvider();
+//    private final SearchParamsProvider searchParamsProvider = new SearchParamsProvider();
+//    private final ValidationErrorsProvider validationErrorsProvider = new ValidationErrorsProvider();
+//    private final TagProvider tagProvider = new TagProvider();
+//    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
 //    @Test
 //    void findAllDaoFindAllPositiveTest() {

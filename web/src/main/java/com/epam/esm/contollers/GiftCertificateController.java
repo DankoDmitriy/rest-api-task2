@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/giftCertificates", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GiftCertificateController {
@@ -32,24 +35,26 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomPageDto> getAllGiftCertificates(GiftCertificateSearchParams searchParams, Pageable pageable) {
+    public ResponseEntity<CustomPageDto> getAllGiftCertificates(GiftCertificateSearchParams searchParams,
+                                                                Pageable pageable) {
         CustomPageDto<GiftCertificateDto> customPage = giftCertificateService.findAll(searchParams, pageable);
-//        List<GiftCertificate> certificates = customPage.getItems();
-//        hateoasBuilder.setLinksGiftCertificates(certificates);
+        List<GiftCertificateDto> certificates = customPage.getItems();
+        hateoasBuilder.setLinksGiftCertificates(certificates);
         return new ResponseEntity<>(customPage, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateDto> getGiftCertificateById(@PathVariable("id") long id) {
         GiftCertificateDto certificate = giftCertificateService.findById(id);
-//        hateoasBuilder.setLinks(certificate);
+        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<GiftCertificateDto> addGiftCertificate(@RequestBody GiftCertificateDto giftCertificate) {
+    public ResponseEntity<GiftCertificateDto> addGiftCertificate(@Valid @RequestBody
+                                                                         GiftCertificateDto giftCertificate) {
         GiftCertificateDto certificate = giftCertificateService.save(giftCertificate);
-//        hateoasBuilder.setLinks(certificate);
+        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.CREATED);
     }
 
@@ -60,10 +65,11 @@ public class GiftCertificateController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GiftCertificateDto> updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificate,
-                                                                    @PathVariable("id") long id) {
+    public ResponseEntity<GiftCertificateDto> updateGiftCertificate(
+            @Valid @RequestBody GiftCertificateDto giftCertificate,
+            @PathVariable("id") long id) {
         GiftCertificateDto certificate = giftCertificateService.update(id, giftCertificate);
-//        hateoasBuilder.setLinks(certificate);
+        hateoasBuilder.setLinks(certificate);
         return new ResponseEntity<>(certificate, HttpStatus.OK);
     }
 }

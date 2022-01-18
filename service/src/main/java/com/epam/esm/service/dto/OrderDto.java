@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +19,6 @@ public class OrderDto extends RepresentationModel<OrderDto> implements AbstractD
 
     private static final int ID_MIN_SIZE = 1;
 
-    @Size(min = ID_MIN_SIZE, message = "{id.size}")
     private Long id;
     private BigDecimal cost;
     private LocalDateTime purchaseDate;

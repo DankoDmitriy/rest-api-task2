@@ -17,28 +17,28 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTest {
-    private final Long testTagId = 1L;
-    private final String testIncorrectName = ".,-*";
-    private final String testCorrectName = "Tag name";
-
-    @InjectMocks
-    private TagServiceImpl service;
-
-    @Mock
-    private TagDao tagDaoMock;
-
-    @Mock
-    private TagValidator tagValidatorMock;
-
-    @Mock
-    private PageCalculator pageCalculatorMock;
-
-    @Mock
-    private PaginationVerifier paginationValidatorMock;
-
-    private final TagProvider tagProvider = new TagProvider();
-    private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
-    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+//    private final Long testTagId = 1L;
+//    private final String testIncorrectName = ".,-*";
+//    private final String testCorrectName = "Tag name";
+//
+//    @InjectMocks
+//    private TagServiceImpl service;
+//
+//    @Mock
+//    private TagDao tagDaoMock;
+//
+//    @Mock
+//    private TagValidator tagValidatorMock;
+//
+//    @Mock
+//    private PageCalculator pageCalculatorMock;
+//
+//    @Mock
+//    private PaginationVerifier paginationValidatorMock;
+//
+//    private final TagProvider tagProvider = new TagProvider();
+//    private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
+//    private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
 //    @Test
 //    void findAllTest() {

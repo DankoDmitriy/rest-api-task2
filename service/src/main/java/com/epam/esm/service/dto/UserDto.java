@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -15,10 +14,8 @@ import javax.validation.constraints.Size;
 @Builder
 public class UserDto extends RepresentationModel<UserDto> implements AbstractDto {
 
-    private static final int ID_MIN_SIZE = 1;
     private static final String USER_NAME_SYMBOL_REGEXP = "^[a-zA-Z0-9\\s]{2,45}$";
 
-    @Size(min = ID_MIN_SIZE, message = "{id.size}")
     private Long id;
 
     @Pattern(regexp = USER_NAME_SYMBOL_REGEXP, message = "{user.name.properties}")
