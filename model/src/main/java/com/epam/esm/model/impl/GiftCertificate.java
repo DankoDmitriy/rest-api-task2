@@ -1,10 +1,11 @@
 package com.epam.esm.model.impl;
 
 import com.epam.esm.model.AbstractEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +26,10 @@ import java.util.List;
 @Table(name = "gift_certificates")
 @DynamicUpdate
 @Data
+@Builder
 @NoArgsConstructor
-public class GiftCertificate extends RepresentationModel<GiftCertificate> implements AbstractEntity {
+@AllArgsConstructor
+public class GiftCertificate implements AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

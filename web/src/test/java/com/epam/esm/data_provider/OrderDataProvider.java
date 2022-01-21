@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class OrderDataProvider {
     private static final String URL_GET_ORDER_BY_ID = "/api/orders/1";
-    private static final String URL_GET_ALL_ORDERS = "/api/orders/?page=1&size=10";
+    private static final String URL_GET_ALL_ORDERS = "/api/orders/?page=0&size=10";
 
     public static final String URL_REQUEST = "url";
     public static final String RESULT = "result";
@@ -16,19 +16,19 @@ public class OrderDataProvider {
                 "id\":1," +
                 "\"cost\":9.99," +
                 "\"purchaseDate\":\"2021-09-15T18:45:30\"," +
-                "\"user\":" +
+                "\"userDto\":" +
                 "{\"id\":1," +
                 "\"name\":\"User1\"," +
                 "\"_links\":" +
                 "{\"self\":{\"href\":\"http://localhost/api/users/1\"}}}," +
-                "\"certificates\":[" +
+                "\"giftCertificateDtoList\":[" +
                 "{\"id\":1," +
                 "\"name\":\"Gif 1\"," +
                 "\"description\":\"description 1\"," +
                 "\"price\":9.99,\"duration\":5," +
                 "\"createDate\":\"2021-09-15T18:45:30\"," +
                 "\"lastUpdateDate\":\"2021-09-15T18:45:30\"," +
-                "\"tags\":[" +
+                "\"tagDtoList\":[" +
                 "{\"id\":1," +
                 "\"name\":\"tag1\"," +
                 "\"_links\":" +
@@ -63,17 +63,17 @@ public class OrderDataProvider {
                 "\"size\":10," +
                 "\"totalElements\":1," +
                 "\"totalPages\":1," +
-                "\"number\":1," +
+                "\"number\":0," +
                 "\"items\":[" +
                 "{\"id\":1," +
                 "\"cost\":9.99," +
                 "\"purchaseDate\":\"2021-09-15T18:45:30\"," +
-                "\"user\":" +
+                "\"userDto\":" +
                 "{\"id\":1," +
                 "\"name\":\"User1\"," +
                 "\"links\":" +
                 "[{\"rel\":\"self\",\"href\":\"http://localhost/api/users/1\"}]}," +
-                "\"certificates\":" +
+                "\"giftCertificateDtoList\":" +
                 "[{\"id\":1," +
                 "\"name\":\"Gif 1\"," +
                 "\"description\":\"description 1\"," +
@@ -81,7 +81,7 @@ public class OrderDataProvider {
                 "\"duration\":5," +
                 "\"createDate\":\"2021-09-15T18:45:30\"," +
                 "\"lastUpdateDate\":\"2021-09-15T18:45:30\"," +
-                "\"tags\":" +
+                "\"tagDtoList\":" +
                 "[{\"id\":1," +
                 "\"name\":\"tag1\"," +
                 "\"links\":[" +

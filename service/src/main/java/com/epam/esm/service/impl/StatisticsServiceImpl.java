@@ -1,22 +1,26 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.StatisticsDao;
+import com.epam.esm.repository.StatisticRepository;
+import com.epam.esm.service.EntityToDtoConverterService;
 import com.epam.esm.service.StatisticsService;
+import com.epam.esm.service.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
-    private final StatisticsDao statisticsDao;
+    private final StatisticRepository statisticRepository;
+    private final EntityToDtoConverterService entityToDtoConverterService;
 
     @Autowired
-    public StatisticsServiceImpl(StatisticsDao statisticsDao) {
-        this.statisticsDao = statisticsDao;
+    public StatisticsServiceImpl(StatisticRepository statisticRepository,
+                                 EntityToDtoConverterService entityToDtoConverterService) {
+        this.statisticRepository = statisticRepository;
+        this.entityToDtoConverterService = entityToDtoConverterService;
     }
 
     @Override
-    public Tag popularTag() {
-        return statisticsDao.findPopularTag().get();
+    public TagDto popularTag() {
+        return entityToDtoConverterService.convert(statisticRepository.findPopularTag().get());
     }
 }

@@ -3,7 +3,7 @@ package com.epam.esm.data_provider;
 import com.epam.esm.model.impl.Order;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class OrderProvider {
@@ -26,6 +26,6 @@ public class OrderProvider {
     }
 
     public List<Order> getOrderList() {
-        return Collections.singletonList(getOrder());
+        return Arrays.asList(getOrder());
     }
 }

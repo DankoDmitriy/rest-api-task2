@@ -1,25 +1,27 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.data_provider.CustomPageProvider;
+import com.epam.esm.data_provider.TagDtoProvider;
 import com.epam.esm.data_provider.TagProvider;
-import com.epam.esm.data_provider.ValidationErrorsProvider;
 import com.epam.esm.exception.EntityNotFoundException;
-import com.epam.esm.exception.IncorrectEntityException;
-import com.epam.esm.service.dto.CustomPage;
 import com.epam.esm.model.impl.Tag;
-import com.epam.esm.repository.TagDao;
-import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.PageSetup;
-import com.epam.esm.util.PageCalculator;
-import com.epam.esm.validator.PaginationVerifier;
-import com.epam.esm.validator.TagValidator;
-import com.epam.esm.validator.ValidationError;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.TagRepository;
+import com.epam.esm.service.DtoToEntityConverterService;
+import com.epam.esm.service.EntityToDtoConverterService;
+import com.epam.esm.service.converter.DtoToTagConverter;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,81 +31,82 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTest {
-    private final Long testTagId = 1L;
-    private final String testIncorrectName = ".,-*";
-    private final String testCorrectName = "Tag name";
 
     @InjectMocks
     private TagServiceImpl service;
 
     @Mock
-    private TagDao tagDaoMock;
+    private TagRepository tagRepository;
 
     @Mock
-    private TagValidator tagValidatorMock;
+    private GiftCertificateRepository certificateRepository;
 
     @Mock
-    private PageCalculator pageCalculatorMock;
+    private DtoToEntityConverterService dtoToEntityConverterService;
 
     @Mock
-    private PaginationVerifier paginationValidatorMock;
+    private EntityToDtoConverterService entityToDtoConverterService;
 
     private final TagProvider tagProvider = new TagProvider();
-    private final ValidationErrorsProvider errorsProvider = new ValidationErrorsProvider();
-    private final CustomPageProvider customPageProvider = new CustomPageProvider();
+    private final TagDtoProvider tagDtoProvider = new TagDtoProvider();
 
     @Test
     void findAllTest() {
-        CustomPage<Tag> expected = customPageProvider.getCustomPageTag();
-        Integer startPosition = expected.getItems().size();
-        PageSetup setup = new PageSetup();
-        setup.setPage(1);
-        setup.setSize(10);
+        List<Tag> tags = tagProvider.getTagList();
+        List<TagDto> tagsDto = tagDtoProvider.getTagList();
+        Page<Tag> usersPage = new PageImpl<>(tags);
+        Pageable pageable = PageRequest.of(0, 10);
+        CustomPageDto<UserDto> expected = new CustomPageDto(10, 1L, 1, 0, tagsDto);
 
-        Mockito.when(tagDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
-        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(tagDaoMock.findAll(0, 10)).thenReturn(expected.getItems());
+        Mockito.when(tagRepository.findAll(pageable)).thenReturn(usersPage);
+        for (int i = 0; i < tags.size(); i++) {
+            Mockito.when(entityToDtoConverterService.convert(tags.get(i))).thenReturn(tagsDto.get(i));
+        }
 
-        CustomPage<Tag> actual = service.findAll(setup);
+        CustomPageDto actual = service.findAllTagsPage(pageable);
+
         assertEquals(expected, actual);
     }
 
     @Test
     void findByIdPositiveTest() {
-        Tag expected = tagProvider.getTag();
-        Mockito.when(tagDaoMock.findById(testTagId)).thenReturn(Optional.of(expected));
-        Tag actual = service.findById(testTagId);
+        DtoToTagConverter converter = new DtoToTagConverter();
+        TagDto expected = tagDtoProvider.getTag();
+        Tag tag = tagProvider.getTag();
+
+        Mockito.when(tagRepository.findById(expected.getId())).thenReturn(Optional.of(tag));
+        Mockito.when(entityToDtoConverterService.convert(converter.convert(expected))).thenReturn(expected);
+
+        TagDto actual = service.findById(expected.getId());
+
         assertEquals(expected, actual);
     }
 
     @Test
     void findByIdNegativeTest() {
         Optional<Tag> expected = Optional.empty();
-        Tag tag = tagProvider.getTag();
-        Mockito.when(tagDaoMock.findById(tag.getId())).thenReturn(expected);
+        TagDto tagDto = tagDtoProvider.getTag();
+
+        Mockito.when(tagRepository.findById(tagDto.getId())).thenReturn(expected);
+
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> service.findById(testTagId));
-        assertEquals(testTagId, exception.getId());
+                () -> service.findById(tagDto.getId()));
+
+        assertEquals(tagDto.getId(), exception.getId());
     }
 
     @Test
     void savePositiveTest() {
-        Tag tag = tagProvider.getTagWithOutId();
-        Tag expected = tagProvider.getTag();
-        Mockito.when(tagDaoMock.save(tag)).thenReturn(expected);
-        Tag actual = service.save(tag);
-        assertEquals(expected, actual);
-    }
+        Tag tagWithOutId = tagProvider.getTagWithOutId();
+        Tag tag = tagProvider.getTag();
+        TagDto tagDtoTagWithOutId = tagDtoProvider.getTagWithOutId();
+        TagDto expected = tagDtoProvider.getTag();
 
-    @Test
-    void saveNegativeTest() {
-        Tag tag = new Tag();
-        tag.setName("a.");
-        TagService service = new TagServiceImpl(tagDaoMock, new TagValidator(), pageCalculatorMock, paginationValidatorMock);
-        List<ValidationError> expected = errorsProvider.getErrorTagNameHasIncorrectSymbol();
-        IncorrectEntityException exception = assertThrows(IncorrectEntityException.class,
-                () -> service.save(tag));
-        assertEquals(expected, exception.getValidationErrors());
+        Mockito.when(tagRepository.save(tagWithOutId)).thenReturn(tag);
+        Mockito.when(entityToDtoConverterService.convert(tag)).thenReturn(expected);
+        Mockito.when(dtoToEntityConverterService.convert(tagDtoTagWithOutId)).thenReturn(tagWithOutId);
+
+        TagDto actual = service.save(tagDtoTagWithOutId);
+        assertEquals(expected, actual);
     }
 }

@@ -2,7 +2,7 @@ package com.epam.esm.data_provider;
 
 import com.epam.esm.model.impl.User;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserProvider {
@@ -19,6 +19,6 @@ public class UserProvider {
     }
 
     public List<User> getUserList() {
-        return Collections.singletonList(getUser());
+        return Arrays.asList(getUser());
     }
 }

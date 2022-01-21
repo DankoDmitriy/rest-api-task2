@@ -1,29 +1,29 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.GiftCertificateSearchParams;
-import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.GiftCertificateDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The interface Gift certificate service.
  */
-public interface GiftCertificateService extends BaseService<GiftCertificate> {
+public interface GiftCertificateService extends BaseService<GiftCertificateDto> {
     /**
      * Update gift certificate.
      *
      * @param id              the id
-     * @param giftCertificate the gift certificate
-     * @return the gift certificate
+     * @param giftCertificateDto the gift certificate dto
+     * @return the gift certificate dto
      */
-    GiftCertificate update(Long id, GiftCertificate giftCertificate);
+    GiftCertificateDto update(Long id, GiftCertificateDto giftCertificateDto);
 
     /**
      * Find all custom page.
      *
      * @param searchParams the search params
-     * @param pageSetup    the page setup
+     * @param pageable    the Pageable
      * @return the custom page
      */
-    CustomPage findAll(GiftCertificateSearchParams searchParams, PageSetup pageSetup);
+    CustomPageDto findAll(GiftCertificateSearchParams searchParams, Pageable pageable);
 }

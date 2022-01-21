@@ -1,18 +1,18 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.User;
-import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.UserDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The interface User service.
  */
-public interface UserService extends BaseService<User> {
+public interface UserService extends BaseService<UserDto> {
     /**
      * Find all custom page.
      *
      * @param pageSetup the page setup
      * @return the custom page
      */
-    CustomPage findAll(PageSetup pageSetup);
+    CustomPageDto findAllUsersPage(Pageable pageable);
 }

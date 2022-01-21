@@ -6,11 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class GiftCertificateProvider {
-
     private final TagProvider tagProvider = new TagProvider();
 
     public List<GiftCertificate> getEmptyList() {
@@ -18,7 +16,7 @@ public class GiftCertificateProvider {
     }
 
     public List<GiftCertificate> getList() {
-        return Collections.singletonList(getCorrectGiftCertificate());
+        return Arrays.asList(getCorrectGiftCertificate());
     }
 
     public GiftCertificate getCorrectGiftCertificate() {
@@ -38,5 +36,4 @@ public class GiftCertificateProvider {
         certificate.setTags(tagProvider.getTagList());
         return certificate;
     }
-
 }

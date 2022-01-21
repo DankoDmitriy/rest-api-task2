@@ -1,18 +1,18 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.dto.CustomPage;
-import com.epam.esm.model.impl.Tag;
-import com.epam.esm.service.dto.PageSetup;
+import com.epam.esm.service.dto.CustomPageDto;
+import com.epam.esm.service.dto.TagDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The interface Tag service.
  */
-public interface TagService extends BaseService<Tag> {
+public interface TagService extends BaseService<TagDto> {
     /**
-     * Find all custom page.
+     * Find all tags page custom page dto.
      *
-     * @param pageSetup the page setup
-     * @return the custom page
+     * @param pageable the pageable
+     * @return the custom page dto
      */
-    CustomPage findAll(PageSetup pageSetup);
+    CustomPageDto findAllTagsPage(Pageable pageable);
 }
