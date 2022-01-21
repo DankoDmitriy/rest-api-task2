@@ -42,11 +42,11 @@ public class TagControllerTest {
     private static final String URL_GET_TAG_BY_ID = "/api/tags/1";
     private static final String RESULT_GET_TAG_BY_ID = "{\"id\":1,\"name\":\"tag1\"}";
 
-    private static final String URL_GET_ALL_TAGS = "/api/tags/?page=1&size=10";
+    private static final String URL_GET_ALL_TAGS = "/api/tags/?page=0&size=10";
     private static final String RESULT_GET_ALL_TAGS = "{\"size\":10," +
             "\"totalElements\":4," +
             "\"totalPages\":1," +
-            "\"number\":1," +
+            "\"number\":0," +
             "\"items\":[" +
             "{\"id\":1," +
             "\"name\":\"tag1\"," +
@@ -70,7 +70,7 @@ public class TagControllerTest {
             "{\"rel\":\"delete\",\"href\":\"http://localhost/api/tags/4\"}]}]}";
 
     private static final String URL_ADD_TAG = "/api/tags/";
-    private static final String RESULT_ADD_TAG_INCORRECT_NAME_ERROR_CODE = "\"errorCode\":\"Error: 0001\"";
+    private static final String RESULT_ADD_TAG_INCORRECT_NAME_ERROR_CODE = "\"errorCode\":\"Error: 0005\"";
 
     private static final String URL_POSITIVE_DELETE_TAG_BY_ID = "/api/tags/4";
     private static final String RESULT_POSITIVE_DELETE_TAG_BY_ID_ERROR_CODE = "\"errorCode\":\"Error: 0002\"";

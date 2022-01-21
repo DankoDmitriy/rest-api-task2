@@ -2,6 +2,7 @@ package com.epam.esm.controlles;
 
 import com.epam.esm.data_provider.GiftCertificateDataProvider;
 import com.epam.esm.model.impl.GiftCertificate;
+import com.epam.esm.service.dto.GiftCertificateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,7 +104,7 @@ public class GiftCertificateControllerTest {
     @Sql(value = "/database-data-initialization.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void addGiftCertificateTest() throws Exception {
         Map<String, Object> expectedResult = provider.addGiftCertificateTest();
-        GiftCertificate certificate = (GiftCertificate) expectedResult.get(GIFT_CERTIFICATE);
+        GiftCertificateDto certificate = (GiftCertificateDto) expectedResult.get(GIFT_CERTIFICATE);
         ObjectMapper objectMapper = new ObjectMapper();
         this.mockMvc.perform(post((String) expectedResult.get(URL_REQUEST))
                         .content(objectMapper.writeValueAsString(certificate))

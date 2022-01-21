@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.constant.ErrorMessagesConstant;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.Tag;
@@ -10,7 +11,6 @@ import com.epam.esm.service.EntityToDtoConverterService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.TagDto;
-import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -77,7 +77,7 @@ public class TagServiceImpl implements TagService {
     private Tag findTagById(Long id) {
         Optional<Tag> optionalTag = tagRepository.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new EntityNotFoundException(ValidationError.TAG_NOT_FOUND_BY_ID, id);
+            throw new EntityNotFoundException(ErrorMessagesConstant.TAG_NOT_FOUND_BY_ID, id);
         } else {
             return optionalTag.get();
         }

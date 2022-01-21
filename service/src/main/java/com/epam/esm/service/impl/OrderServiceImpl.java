@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.constant.ErrorMessagesConstant;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.model.impl.Order;
 import com.epam.esm.repository.OrderRepository;
@@ -11,7 +12,6 @@ import com.epam.esm.service.UserService;
 import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.OrderDto;
-import com.epam.esm.validator.ValidationError;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
     private Order findOrderById(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (!optionalOrder.isPresent()) {
-            throw new EntityNotFoundException(ValidationError.ORDER_NOT_FOUND_BY_ID, id);
+            throw new EntityNotFoundException(ErrorMessagesConstant.ORDER_NOT_FOUND_BY_ID, id);
         } else {
             return optionalOrder.get();
         }

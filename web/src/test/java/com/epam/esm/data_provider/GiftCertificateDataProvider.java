@@ -2,6 +2,8 @@ package com.epam.esm.data_provider;
 
 import com.epam.esm.model.impl.GiftCertificate;
 import com.epam.esm.model.impl.Tag;
+import com.epam.esm.service.dto.GiftCertificateDto;
+import com.epam.esm.service.dto.TagDto;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -14,11 +16,11 @@ public class GiftCertificateDataProvider {
     private static final String URL_GET_GIFT_CERTIFICATE_BY_ID_NOT_FOUND = "/api/giftCertificates/100";
     private static final String NOT_FOUND_DATA_ERROR_CODE = "\"errorCode\":\"Error: 0002\"";
 
-    private static final String URL_GET_ALL_GIFT_CERTIFICATES = "/api/giftCertificates/?page=1&size=10";
+    private static final String URL_GET_ALL_GIFT_CERTIFICATES = "/api/giftCertificates/?page=0&size=10";
 
     private static final String URL_ADD_GIFT_CERTIFICATE = "/api/giftCertificates/";
     private static final String ADD_GIFT_CERTIFICATE_EXPECTED_ID = "10";
-    private static final String ADD_ERROR_CODE = "\"errorCode\":\"Error: 0001\"";
+    private static final String ADD_ERROR_CODE = "\"errorCode\":\"Error: 0005\"";
 
     private static final String URL_DELETE_GIFT_CERTIFICATE_BY_ID = "/api/giftCertificates/2";
     private static final String DELETE_ERROR_CODE = "\"errorCode\":\"Error: 0002\"";
@@ -40,7 +42,7 @@ public class GiftCertificateDataProvider {
                 "\"duration\":5," +
                 "\"createDate\":\"2021-09-15T18:45:30\"," +
                 "\"lastUpdateDate\":\"2021-09-15T18:45:30\"," +
-                "\"tags\":" +
+                "\"tagDtoList\":" +
                 "[" +
                 "{\"id\":1,\"name\":\"tag1\"}," +
                 "{\"id\":2,\"name\":\"tag2\"}," +
@@ -66,7 +68,7 @@ public class GiftCertificateDataProvider {
                 "\"size\":10," +
                 "\"totalElements\":2," +
                 "\"totalPages\":1," +
-                "\"number\":1," +
+                "\"number\":0," +
                 "\"items\":[" +
                 "{\"" +
                 "id\":1," +
@@ -76,7 +78,7 @@ public class GiftCertificateDataProvider {
                 "\"duration\":5," +
                 "\"createDate\":\"2021-09-15T18:45:30\"," +
                 "\"lastUpdateDate\":\"2021-09-15T18:45:30\"," +
-                "\"tags\":[{" +
+                "\"tagDtoList\":[{" +
                 "\"id\":1," +
                 "\"name\":\"tag1\"," +
                 "\"links\":[" +
@@ -102,7 +104,7 @@ public class GiftCertificateDataProvider {
                 "\"duration\":10," +
                 "\"createDate\":\"2021-09-15T18:45:30\"," +
                 "\"lastUpdateDate\":\"2021-09-15T18:45:30\"," +
-                "\"tags\":[" +
+                "\"tagDtoList\":[" +
                 "{\"id\":1," +
                 "\"name\":\"tag1\"," +
                 "\"links\":[" +
@@ -125,14 +127,15 @@ public class GiftCertificateDataProvider {
     }
 
     public Map<String, Object> addGiftCertificateTest() {
-        GiftCertificate certificate = new GiftCertificate();
+        GiftCertificateDto certificate = new GiftCertificateDto();
         certificate.setName("Gift 3");
         certificate.setDescription("description 3");
         certificate.setPrice(new BigDecimal(5.00));
         certificate.setDuration(100);
-        Tag tag = new Tag();
+        TagDto tag = new TagDto();
+        tag.setId(1L);
         tag.setName("tag1");
-        certificate.setTags(Arrays.asList(tag));
+        certificate.setTagDtoList(Arrays.asList(tag));
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(URL_REQUEST, URL_ADD_GIFT_CERTIFICATE);

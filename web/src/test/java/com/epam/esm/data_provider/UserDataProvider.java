@@ -9,7 +9,7 @@ public class UserDataProvider {
     private static final String URL_GET_GIFT_CERTIFICATE_BY_ID_NOT_FOUND = "/api/users/100";
     private static final String NOT_FOUND_DATA_ERROR_CODE = "\"errorCode\":\"Error: 0002\"";
 
-    private static final String URL_GET_ALL_USERS = "/api/users/?page=1&size=10";
+    private static final String URL_GET_ALL_USERS = "/api/users/?page=0&size=10";
 
     public static final String URL_REQUEST = "url";
     public static final String RESULT = "result";
@@ -39,7 +39,7 @@ public class UserDataProvider {
                 "\"size\":10," +
                 "\"totalElements\":3," +
                 "\"totalPages\":1," +
-                "\"number\":1," +
+                "\"number\":0," +
                 "\"items\":[" +
                 "{\"id\":1," +
                 "\"name\":\"User1\"," +

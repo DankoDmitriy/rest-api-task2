@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.constant.ErrorMessagesConstant;
 import com.epam.esm.exception.EntityNotFoundException;
 import com.epam.esm.exception.UsedEntityException;
 import com.epam.esm.model.impl.GiftCertificate;
@@ -14,7 +15,6 @@ import com.epam.esm.service.EntityToDtoConverterService;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
-import com.epam.esm.validator.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -139,7 +139,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificate findCertificateById(Long id) {
         Optional<GiftCertificate> optionalTag = certificateRepository.findById(id);
         if (!optionalTag.isPresent()) {
-            throw new EntityNotFoundException(ValidationError.GIFT_CERTIFICATE_NOT_FOUND_BY_ID, id);
+            throw new EntityNotFoundException(ErrorMessagesConstant.GIFT_CERTIFICATE_NOT_FOUND_BY_ID, id);
         } else {
             return optionalTag.get();
         }
