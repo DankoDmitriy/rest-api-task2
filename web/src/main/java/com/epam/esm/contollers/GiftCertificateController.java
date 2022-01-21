@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -51,6 +52,7 @@ public class GiftCertificateController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_giftCertificate:write')")
     public ResponseEntity<GiftCertificateDto> addGiftCertificate(@Valid @RequestBody
                                                                          GiftCertificateDto giftCertificate) {
         GiftCertificateDto certificate = giftCertificateService.save(giftCertificate);
@@ -59,6 +61,7 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_giftCertificate:write')")
     public ResponseEntity<Void> deleteGiftCertificateById(@PathVariable("id") Long id) {
         giftCertificateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

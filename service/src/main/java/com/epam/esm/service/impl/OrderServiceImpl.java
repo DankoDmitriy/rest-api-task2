@@ -95,6 +95,22 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(Order);
     }
 
+    @Override
+    public CustomPageDto findAllOrdersByUserId(Long id, Pageable pageable) {
+        Page<Order> page = orderRepository.findAllByUser_Id(id, pageable);
+        return CustomPageDto.builder()
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .number(page.getNumber())
+                .size(pageable.getPageSize())
+                .items(
+                        page.getContent()
+                                .stream()
+                                .map(entityToDtoConverterService::convert)
+                                .collect(Collectors.toList()))
+                .build();
+    }
+
     private Order findOrderById(Long id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (!optionalOrder.isPresent()) {

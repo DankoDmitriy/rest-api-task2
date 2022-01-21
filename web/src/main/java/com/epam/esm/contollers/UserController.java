@@ -6,13 +6,10 @@ import com.epam.esm.service.dto.CustomPageDto;
 import com.epam.esm.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.expression.spel.ast.OpEQ;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_user:read')")
     public ResponseEntity<CustomPageDto> getAllUsers(Pageable pageable) {
         CustomPageDto<UserDto> customPage = userService.findAllUsersPage(pageable);
         List<UserDto> users = customPage.getItems();
@@ -47,16 +43,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("authentication.name eq T(String).valueOf(#id)")
+    @PreAuthorize("authentication.name eq T(String).valueOf(#id) or hasAuthority('SCOPE_user:write') ")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getPrincipal();
         UserDto user = userService.findById(id);
         hateoasBuilder.setLinks(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
     public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto user) {
         UserDto userFromDataBase = userService.save(user);
         hateoasBuilder.setLinks(userFromDataBase);
@@ -64,6 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

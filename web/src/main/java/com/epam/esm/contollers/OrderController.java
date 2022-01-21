@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_order:read')")
     public ResponseEntity<CustomPageDto> getAllOrders(Pageable pageable) {
         CustomPageDto<OrderDto> customPage = orderService.findAll(pageable);
         List<OrderDto> orderList = customPage.getItems();
@@ -39,13 +41,24 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_order:read')")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable("id") long id) {
         OrderDto order = orderService.findById(id);
         hateoasBuilder.setLinks(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
+    @GetMapping("/my/{id}")
+    @PreAuthorize("authentication.name eq T(String).valueOf(#id) or hasAuthority('SCOPE_order:read') ")
+    public ResponseEntity<CustomPageDto> getOrderByUserId(@PathVariable("id") long id, Pageable pageable) {
+        CustomPageDto<OrderDto> customPage = orderService.findAllOrdersByUserId(id, pageable);
+        List<OrderDto> orderList = customPage.getItems();
+        hateoasBuilder.setLinksOrders(orderList);
+        return new ResponseEntity<>(customPage, HttpStatus.OK);
+    }
+
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_order:write')")
     public ResponseEntity<OrderDto> addOrder(@Valid @RequestBody OrderDto orderDto) {
         OrderDto orderFromDataBase = orderService.save(orderDto);
         hateoasBuilder.setLinks(orderFromDataBase);
@@ -53,6 +66,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_order:read')")
     public ResponseEntity<Void> deleteOrderById(@PathVariable("id") long id) {
         orderService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 
-import javax.ws.rs.HttpMethod;
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -24,18 +23,16 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authz -> authz
-                        .antMatchers("/api/**").permitAll()
-//                        .antMatchers("/api/auth/**").permitAll()
-//                        .antMatchers("/api/user").hasAuthority("SCOPE_user:read")
-//                        .antMatchers("/api/ADMIN").hasAuthority("SCOPE_user:write")
+                        .antMatchers("/api/auth/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/api/giftCertificates/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/api/tags/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/api/statistics/**").permitAll()
                         .anyRequest().authenticated())
-//                .oauth2ResourceServer(oauth2 -> oauth2.jwt()) - работало
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
-
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
