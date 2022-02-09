@@ -7,7 +7,9 @@
     <groupId>com.epam.esm</groupId>
     <artifactId>web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <!--    TODO war по умолчанию-->
+    <!--    <packaging>war</packaging>-->
+    <packaging>jar</packaging>
 
     <name>web Maven Webapp</name>
 
@@ -32,4 +34,23 @@
         </dependency>
     </dependencies>
 
+    <!--    TODO-->
+        <build>
+            <finalName>gift_system</finalName>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </build>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 </project>

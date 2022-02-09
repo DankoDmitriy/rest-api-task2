@@ -67,22 +67,22 @@ public class OrderServiceImplTest {
         assertEquals(expected.getId(), exception.getId());
     }
 
-    @Test
-    public void findAllPositiveTest() {
-        CustomPage<Order> expected = customPageProvider.getCustomPageOrder();
-        Integer startPosition = expected.getItems().size();
-        PageSetup setup = new PageSetup();
-        setup.setPage(1);
-        setup.setSize(10);
-
-        Mockito.when(orderDoaMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
-        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-//        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected.getItems());
-
-        CustomPage<Order> actual = service.findAll(setup);
-        assertEquals(expected, actual);
-    }
+//    @Test
+//    public void findAllPositiveTest() {
+//        CustomPage<Order> expected = customPageProvider.getCustomPageOrder();
+//        Integer startPosition = expected.getItems().size();
+//        PageSetup setup = new PageSetup();
+//        setup.setPage(1);
+//        setup.setSize(10);
+//
+//        Mockito.when(orderDoaMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+//        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+////        Mockito.when(paginationValidatorMock.validate(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+//        Mockito.when(orderDoaMock.findAll(0, 10)).thenReturn(expected.getItems());
+//
+//        CustomPage<Order> actual = service.findAll(setup);
+//        assertEquals(expected, actual);
+//    }
 
     @Test
     public void findAllNegativeTest() {

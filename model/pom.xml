@@ -6,7 +6,9 @@
 
   <artifactId>model</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <groupId>com.epam.esm</groupId>
+<!--  TODO-->
+  <packaging>jar</packaging>
 
   <name>model Maven Webapp</name>
 

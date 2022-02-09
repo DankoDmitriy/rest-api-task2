@@ -7,7 +7,8 @@
     <groupId>com.epam.esm</groupId>
     <artifactId>service</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <!--  TODO-->
+        <packaging>jar</packaging>
 
     <name>service Maven Webapp</name>
 

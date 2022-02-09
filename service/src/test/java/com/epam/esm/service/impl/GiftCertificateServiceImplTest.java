@@ -67,28 +67,28 @@ public class GiftCertificateServiceImplTest {
     private final TagProvider tagProvider = new TagProvider();
     private final CustomPageProvider customPageProvider = new CustomPageProvider();
 
-    @Test
-    void findAllDaoFindAllPositiveTest() {
-        CustomPage<GiftCertificate> expected = customPageProvider.getCustomPageGiftCertificate();
-        Integer startPosition = expected.getItems().size();
-        PageSetup setup = new PageSetup();
-        setup.setPage(1);
-        setup.setSize(10);
-        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
-        List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
-
-        Mockito.when(certificateDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
-        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
-        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-
-        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
-                .thenReturn(validationErrors);
-        Mockito.when(certificateDaoMock.findAll(0, 10))
-                .thenReturn(expected.getItems());
-
-        CustomPage<GiftCertificate> actual = service.findAll(searchParams, setup);
-        assertEquals(expected, actual);
-    }
+//    @Test
+//    void findAllDaoFindAllPositiveTest() {
+//        CustomPage<GiftCertificate> expected = customPageProvider.getCustomPageGiftCertificate();
+//        Integer startPosition = expected.getItems().size();
+//        PageSetup setup = new PageSetup();
+//        setup.setPage(1);
+//        setup.setSize(10);
+//        GiftCertificateSearchParams searchParams = searchParamsProvider.getEmptyParameters();
+//        List<ValidationError> validationErrors = validationErrorsProvider.getFindAllErrors();
+//
+//        Mockito.when(certificateDaoMock.countRowsInTable()).thenReturn(Long.valueOf(expected.getItems().size()));
+//        Mockito.when(pageCalculatorMock.calculator(setup.getPage(), setup.getSize())).thenReturn(0);
+//        Mockito.when(paginationValidatorMock.verifyPagination(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
+//
+//        Mockito.when(paramsValidatorMock.validateSearchParams(searchParams))
+//                .thenReturn(validationErrors);
+//        Mockito.when(certificateDaoMock.findAll(0, 10))
+//                .thenReturn(expected.getItems());
+//
+//        CustomPage<GiftCertificate> actual = service.findAll(searchParams, setup);
+//        assertEquals(expected, actual);
+//    }
 
     @Test
     void findAllDaoSearchPositiveTest() {
