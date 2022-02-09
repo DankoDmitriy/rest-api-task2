@@ -8,8 +8,8 @@
     <artifactId>web</artifactId>
     <version>1.0-SNAPSHOT</version>
     <!--    TODO war по умолчанию-->
-    <!--    <packaging>war</packaging>-->
-    <packaging>jar</packaging>
+        <packaging>war</packaging>
+<!--    <packaging>jar</packaging>-->
 
     <name>web Maven Webapp</name>
 
